@@ -1,0 +1,147 @@
+
+--- Inspecting Payout Tables for EU ---
+Found 21 mobile tournaments.
+
+Tourney: epicgames_S38_BlitzMobileCup_EU | Window: S38_BlitzMobileCup_Week1Qualifier1_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_EU | Window: S38_BlitzMobileCup_Week1Qualifier2_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_EU | Window: S38_BlitzMobileCup_Week1Qualifier3_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_EU | Window: S38_BlitzMobileCup_Week1Qualifier4_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_EU | Window: S38_BlitzMobileCup_Week1Qualifier5_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_EU | Window: S38_BlitzMobileCup_Week1Qualifier6_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_EU | Window: S38_BlitzMobileCup_Week2Qualifier1_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_EU | Window: S38_BlitzMobileCup_Week2Qualifier2_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_EU | Window: S38_BlitzMobileCup_Week2Qualifier3_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_EU | Window: S38_BlitzMobileCup_Week2Qualifier4_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_EU | Window: S38_BlitzMobileCup_Week2Qualifier5_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_EU | Window: S38_BlitzMobileCup_Week2Qualifier6_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_BlitzMobileCupDecQual_EU | Window: S39_BlitzMobileCup_DecQualifier1_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_BlitzMobileCupDecQual_EU | Window: S39_BlitzMobileCup_DecQualifier2_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_MobileSeriesCupJanQual_EU | Window: S39_MobileSeriesCup_JanQualifier3_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_MobileSeriesCupJanQual_EU | Window: S39_MobileSeriesCup_JanQualifier4_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_MobileSeriesCupFebQual_EU | Window: S39_MobileSeriesCup_FebQualifier5_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_MobileSeriesCupFebQual_EU | Window: S39_MobileSeriesCup_FebQualifier6_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_MobileSeriesCupMarQual_EU | Window: S39_MobileSeriesCup_MarQualifier7_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S40_MobileSeriesCupQual_EU | Window: S40_MobileSeriesCup_MarQualifier8_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S40_MobileSeriesCupQual_EU | Window: S40_MobileSeriesCup_MarQualifier9_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S40_MobileSeriesCupQual_EU | Window: S40_MobileSeriesCup_MarQualifier10_EU
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S40_MobileSeriesCupQual_EU | Window: S40_MobileSeriesCup_MarQualifier11_EU
+  No payoutTables found in window metadata.
+
+--- Inspecting Payout Tables for NAC ---
+Found 21 mobile tournaments.
+
+Tourney: epicgames_S38_BlitzMobileCup_NAC | Window: S38_BlitzMobileCup_Week1Qualifier1_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_NAC | Window: S38_BlitzMobileCup_Week1Qualifier2_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_NAC | Window: S38_BlitzMobileCup_Week1Qualifier3_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_NAC | Window: S38_BlitzMobileCup_Week1Qualifier4_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_NAC | Window: S38_BlitzMobileCup_Week1Qualifier5_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_NAC | Window: S38_BlitzMobileCup_Week1Qualifier6_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_NAC | Window: S38_BlitzMobileCup_Week2Qualifier1_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_NAC | Window: S38_BlitzMobileCup_Week2Qualifier2_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_NAC | Window: S38_BlitzMobileCup_Week2Qualifier3_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_NAC | Window: S38_BlitzMobileCup_Week2Qualifier4_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_NAC | Window: S38_BlitzMobileCup_Week2Qualifier5_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S38_BlitzMobileCup_NAC | Window: S38_BlitzMobileCup_Week2Qualifier6_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_BlitzMobileCupDecQual_NAC | Window: S39_BlitzMobileCup_DecQualifier1_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_BlitzMobileCupDecQual_NAC | Window: S39_BlitzMobileCup_DecQualifier2_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_BlitzMobileCupDecQual_NAC | Window: S39_BlitzMobileCup_DecQualifier2_NAC_mg
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_MobileSeriesCupJanQual_NAC | Window: S39_MobileSeriesCup_JanQualifier3_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_MobileSeriesCupJanQual_NAC | Window: S39_MobileSeriesCup_JanQualifier4_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_MobileSeriesCupFebQual_NAC | Window: S39_MobileSeriesCup_FebQualifier5_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_MobileSeriesCupFebQual_NAC | Window: S39_MobileSeriesCup_FebQualifier6_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S39_MobileSeriesCupMarQual_NAC | Window: S39_MobileSeriesCup_MarQualifier7_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S40_MobileSeriesCupQual_NAC | Window: S40_MobileSeriesCup_MarQualifier8_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S40_MobileSeriesCupQual_NAC | Window: S40_MobileSeriesCup_MarQualifier9_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S40_MobileSeriesCupQual_NAC | Window: S40_MobileSeriesCup_MarQualifier10_NAC
+  No payoutTables found in window metadata.
+
+Tourney: epicgames_S40_MobileSeriesCupQual_NAC | Window: S40_MobileSeriesCup_MarQualifier11_NAC
+  No payoutTables found in window metadata.

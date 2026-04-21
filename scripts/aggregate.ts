@@ -27,30 +27,82 @@ function resolveCountryCode(token: string): string {
 
 const PRIZE_TABLES: Record<string, Array<{ rank: number, prize: number }>> = {
   'EU': [
-    { rank: 1, prize: 2500 }, { rank: 2, prize: 1500 }, { rank: 3, prize: 1000 },
-    { rank: 4, prize: 800 }, ...Array.from({ length: 6 }, (_, i) => ({ rank: 5 + i, prize: 400 })),
-    ...Array.from({ length: 5 }, (_, i) => ({ rank: 11 + i, prize: 250 }))
+    { rank: 1, prize: 1000 },
+    { rank: 2, prize: 900 },
+    { rank: 3, prize: 800 },
+    { rank: 4, prize: 700 },
+    { rank: 8, prize: 500 },
+    { rank: 12, prize: 200 },
+    { rank: 16, prize: 100 },
   ],
   'NAC': [
-    { rank: 1, prize: 1500 }, { rank: 2, prize: 1000 }, { rank: 3, prize: 800 },
-    { rank: 4, prize: 400 }, ...Array.from({ length: 6 }, (_, i) => ({ rank: 5 + i, prize: 250 })),
-    ...Array.from({ length: 5 }, (_, i) => ({ rank: 11 + i, prize: 200 }))
+    { rank: 1, prize: 1000 },
+    { rank: 2, prize: 900 },
+    { rank: 3, prize: 800 },
+    { rank: 4, prize: 700 },
+    { rank: 8, prize: 500 },
+    { rank: 12, prize: 200 },
+    { rank: 16, prize: 100 },
   ],
   'NAW': [
-    { rank: 1, prize: 1500 }, { rank: 2, prize: 1000 }, { rank: 3, prize: 800 },
-    { rank: 4, prize: 400 }, ...Array.from({ length: 6 }, (_, i) => ({ rank: 5 + i, prize: 250 })),
-    ...Array.from({ length: 5 }, (_, i) => ({ rank: 11 + i, prize: 200 }))
+    { rank: 1, prize: 700 },
+    { rank: 2, prize: 600 },
+    { rank: 3, prize: 500 },
+    { rank: 4, prize: 400 },
+    { rank: 8, prize: 250 },
+    { rank: 12, prize: 200 },
+    { rank: 16, prize: 100 },
   ],
-  'DEFAULT': [
-    { rank: 1, prize: 1000 }, { rank: 2, prize: 800 }, { rank: 3, prize: 400 },
-    ...Array.from({ length: 7 }, (_, i) => ({ rank: 4 + i, prize: 250 }))
+  'BR': [
+    { rank: 1, prize: 700 },
+    { rank: 2, prize: 600 },
+    { rank: 3, prize: 500 },
+    { rank: 4, prize: 400 },
+    { rank: 8, prize: 250 },
+    { rank: 12, prize: 200 },
+    { rank: 16, prize: 100 },
+  ],
+  'ASIA': [
+    { rank: 1, prize: 700 },
+    { rank: 2, prize: 600 },
+    { rank: 3, prize: 500 },
+    { rank: 4, prize: 400 },
+    { rank: 8, prize: 250 },
+    { rank: 12, prize: 200 },
+    { rank: 16, prize: 100 },
+  ],
+  'ME': [
+    { rank: 1, prize: 700 },
+    { rank: 2, prize: 600 },
+    { rank: 3, prize: 500 },
+    { rank: 4, prize: 400 },
+    { rank: 8, prize: 250 },
+    { rank: 12, prize: 200 },
+    { rank: 16, prize: 100 },
+  ],
+  'OCE': [
+    { rank: 1, prize: 700 },
+    { rank: 2, prize: 600 },
+    { rank: 3, prize: 500 },
+    { rank: 4, prize: 400 },
+    { rank: 8, prize: 250 },
+    { rank: 12, prize: 200 },
+    { rank: 16, prize: 100 },
   ]
 };
 
+const DEFAULT_PRIZE_TABLE = [
+  { rank: 1, prize: 100 },
+  { rank: 16, prize: 100 },
+];
+
 function calculatePrize(rank: number, region: string): number {
-  const table = PRIZE_TABLES[region] || PRIZE_TABLES['DEFAULT'];
-  const entry = table.find(e => e.rank === rank);
-  return entry ? entry.prize : 0;
+  // FIX: Use bracket-based lookup (rank <= t.rank) instead of exact match.
+  // Exact match causes ranks 5-7, 9-11 etc. to return $0 since they aren't
+  // explicitly listed in the prize table.
+  const table = PRIZE_TABLES[region] || DEFAULT_PRIZE_TABLE;
+  const match = [...table].sort((a, b) => a.rank - b.rank).find(t => rank <= t.rank);
+  return match ? match.prize : 0;
 }
 
 async function aggregateMobileEarnings() {

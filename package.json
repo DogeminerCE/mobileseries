@@ -4,12 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "tsx server.ts",
     "build": "vite build",
     "preview": "vite preview",
+    "aggregate": "tsx scripts/aggregate.ts",
     "clean": "rm -rf dist",
-    "lint": "tsc --noEmit",
-    "aggregate": "tsx scripts/aggregate.ts"
+    "lint": "tsc --noEmit"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",

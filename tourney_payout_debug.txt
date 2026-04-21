@@ -1,0 +1,8 @@
+
+--- Inspecting Payout Tables for EU ---
+
+Tourney: epicgames_S37_BlitzMobileCup_EU
+
+Tourney: epicgames_S37_BlitzMobileCupWeekly_EU
+
+Tourney: epicgames_S37_AxeOfChampsBlitzMobileCup_EU

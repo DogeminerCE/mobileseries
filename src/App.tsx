@@ -6,7 +6,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "motion/react";
 import { Trophy, Globe, DollarSign, Activity, Smartphone, Loader2, AlertCircle, RefreshCcw, Youtube, Twitter, MessageSquare } from "lucide-react";
-import { GoogleGenAI, Type } from "@google/genai";
 
 interface Player {
   rank: number;
@@ -35,95 +34,47 @@ export default function App() {
 
   const [dataSource, setDataSource] = useState<string>('syncing');
 
-  const fetchWithAI = async () => {
+  const fetchLeaderboard = async (isRetry = false) => {
+    if (!isRetry) setLoading(true);
+    setError(null);
     try {
-      const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey) throw new Error("AI Key not available");
-
-      const ai = new GoogleGenAI({ apiKey });
-      
-      const prompt = `
-        Search for the top 30 earners in the "Fortnite Mobile Series" or Fortnite Android tournaments for the years 2025 and 2026.
-        Combine earnings from Fortnite Tracker, Esportsearnings, and other competitive sources.
-        
-        Return a JSON list of players with:
-        rank (int), name (string), earningsUSD (number), countryCode (string, ISO like US, GB, EU), 
-        lastActiveTournament (string), lastActiveDate (ISO date string).
-      `;
-
-      const result = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: prompt,
-        config: {
-          tools: [{ googleSearch: {} }],
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: Type.OBJECT,
-            properties: {
-              players: {
-                type: Type.ARRAY,
-                items: {
-                  type: Type.OBJECT,
-                  properties: {
-                    rank: { type: Type.NUMBER },
-                    name: { type: Type.STRING },
-                    earningsUSD: { type: Type.NUMBER },
-                    countryCode: { type: Type.STRING },
-                    lastActiveTournament: { type: Type.STRING },
-                    lastActiveDate: { type: Type.STRING }
-                  },
-                  required: ["rank", "name", "earningsUSD", "countryCode"]
-                }
-              }
-            }
-          }
+      // Check frontend cache first (30 min TTL — matches GitHub Actions cron frequency)
+      const cached = localStorage.getItem('leaderboard_cache_v2');
+      if (cached && !isRetry) {
+        const { players: cachedPlayers, timestamp } = JSON.parse(cached);
+        if (Date.now() - timestamp < 30 * 60 * 1000) {
+          setPlayers(cachedPlayers);
+          setLastUpdated(new Date(timestamp).toLocaleTimeString());
+          setDataSource('local-cache');
+          setLoading(false);
+          return;
         }
-      });
+      }
 
-      const text = result.text;
-      if (!text) throw new Error("Empty AI response");
-      
-      const data = JSON.parse(text);
+      // Fetch the static pre-aggregated JSON (built by GitHub Actions)
+      const response = await fetch('/leaderboard.json');
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+
       if (data.players && data.players.length > 0) {
         setPlayers(data.players);
-        setLastUpdated(new Date().toLocaleTimeString());
-        setDataSource('ai-integrated');
-        
-        // Frontend Cache
+        setLastUpdated(new Date(data.lastUpdated || Date.now()).toLocaleTimeString());
+        setDataSource(data.source || 'osirion-aggregated');
+        setLoading(false);
+
+        // Cache locally
         localStorage.setItem('leaderboard_cache_v2', JSON.stringify({
           players: data.players,
           timestamp: Date.now()
         }));
+      } else {
+        throw new Error('Empty leaderboard response');
       }
 
-    } catch (err) {
-      console.error("AI Fetch Failure:", err);
-      throw err;
-    }
-  };
-
-  const fetchLeaderboard = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch('/leaderboard.json');
-      if (!response.ok) throw new Error("JSON payload not generated yet.");
-      const data = await response.json();
-
-      setPlayers(data.players);
-      setLastUpdated(new Date().toLocaleTimeString());
-      setDataSource(data.source || 'github-actions');
-      setLoading(false);
     } catch (err) {
       console.error("Fetch Error:", err);
-      // Final attempt: if error, try AI anyway
-      try {
-        await fetchWithAI();
-        setLoading(false);
-      } catch (aiErr) {
-        setError("Unable to sync live data. Please check connection.");
-        setLoading(false);
-      }
+      setError("Unable to load leaderboard data. Please try again.");
+      setLoading(false);
     }
   };
 
@@ -450,7 +401,7 @@ export default function App() {
       {/* Persistent Footer */}
       <footer className="w-full py-4 text-center border-t border-white/5 bg-[#0A0A0B]">
         <span className="text-[10px] font-mono opacity-20 uppercase tracking-[0.4em]">
-          Powered by Gemini • Real-time Data: Osirion API
+          Real-time Data: Osirion API • Updated every 30 min
         </span>
       </footer>
     </div>

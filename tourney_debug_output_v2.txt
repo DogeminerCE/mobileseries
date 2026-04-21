@@ -1,0 +1,190 @@
+
+--- Fetching tournaments for region: EU ---
+Found 30 mobile-related tournaments in EU.
+ID: epicgames_S37_BlitzMobileCup_EU | Title: Blitz Mobile Cup | Regions: EU
+ID: epicgames_S37_BlitzMobileCupWeekly_EU | Title: Blitz Mobile Cup | Regions: EU
+ID: epicgames_S37_AxeOfChampsBlitzMobileCup_EU | Title: Axe of Champions Blitz Cup (Mobile) | Regions: EU
+ID: epicgames_S37_SurfWitchBlitzMobileCup_EU | Title: Champion Surf Witch FNCS Blitz Cup (Mobile) | Regions: EU
+ID: epicgames_S38_TouchOnlyMobileCup_EU | Title: Touch-Only Test Cup | Regions: EU
+ID: epicgames_S38_BlitzMobileCup_EU | Title: Blitz Mobile Cup | Regions: EU
+ID: epicgames_S38_StrangerThingsMobileCup_EU | Title: Stranger Things Cup Blitz (Mobile) | Regions: EU
+ID: epicgames_S39_BlitzMobileCupDec_EU | Title: Mobile Series | Regions: EU
+ID: epicgames_S39_BlitzMobileCupDecQual_EU | Title: Mobile Series | Regions: EU
+ID: epicgames_S39_MobileSeriesJan_EU | Title: Mobile Series | Regions: EU
+ID: epicgames_S39_MobileSeriesCupJanQual_EU | Title: Mobile Series | Regions: EU
+ID: epicgames_S39_MobileSeriesFeb_EU | Title: Mobile Series | Regions: EU
+ID: epicgames_S39_MobileSeriesCupFebQual_EU | Title: Mobile Series | Regions: EU
+ID: epicgames_S39_SoloLevelingMobileCup_EU | Title: Solo Leveling: Arise Mobile Cup | Regions: EU
+ID: epicgames_S39_MobileSeriesMar_EU | Title: Mobile Series | Regions: EU
+ID: epicgames_S39_MobileSeriesCupMarQual_EU | Title: Mobile Series | Regions: EU
+ID: epicgames_S40_MobileSeriesMar_EU | Title: Mobile Series | Regions: EU
+ID: epicgames_S40_MobileSeriesCupQual_EU | Title: Mobile Series | Regions: EU
+ID: epicgames_S40_MobileSeriesApr_EU | Title: Mobile Series | Regions: EU
+ID: epicgames_S40_TripleThreatMobileCup_EU | Title: Triple Threat Mobile Cup | Regions: EU
+ID: epicgames_S40_MobileSeriesMay_EU | Title: Mobile Series | Regions: EU
+
+--- Fetching tournaments for region: NAC ---
+Found 30 mobile-related tournaments in NAC.
+ID: epicgames_S37_BlitzMobileCup_NAC | Title: Blitz Mobile Cup | Regions: NAC
+ID: epicgames_S37_BlitzMobileCupWeekly_NAC | Title: Blitz Mobile Cup | Regions: NAC
+ID: epicgames_S37_AxeOfChampsBlitzMobileCup_NAC | Title: Axe of Champions Blitz Cup (Mobile) | Regions: NAC
+ID: epicgames_S37_SurfWitchBlitzMobileCup_NAC | Title: Champion Surf Witch FNCS Blitz Cup (Mobile) | Regions: NAC
+ID: epicgames_S38_TouchOnlyMobileCup_NAC | Title: Touch-Only Test Cup | Regions: NAC
+ID: epicgames_S38_BlitzMobileCup_NAC | Title: Blitz Mobile Cup | Regions: NAC
+ID: epicgames_S38_StrangerThingsMobileCup_NAC | Title: Stranger Things Cup Blitz (Mobile) | Regions: NAC
+ID: epicgames_S39_BlitzMobileCupDec_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_BlitzMobileCupDecQual_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_MobileSeriesJan_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_MobileSeriesCupJanQual_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_MobileSeriesFeb_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_MobileSeriesCupFebQual_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_SoloLevelingMobileCup_NAC | Title: Solo Leveling: Arise Mobile Cup | Regions: NAC
+ID: epicgames_S39_MobileSeriesMar_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_MobileSeriesCupMarQual_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S40_MobileSeriesMar_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S40_MobileSeriesCupQual_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S40_MobileSeriesApr_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S40_TripleThreatMobileCup_NAC | Title: Triple Threat Mobile Cup | Regions: NAC
+ID: epicgames_S40_MobileSeriesMay_NAC | Title: Mobile Series | Regions: NAC
+
+--- Fetching tournaments for region: NAE ---
+Found 30 mobile-related tournaments in NAE.
+ID: epicgames_S37_BlitzMobileCup_NAC | Title: Blitz Mobile Cup | Regions: NAC
+ID: epicgames_S37_BlitzMobileCupWeekly_NAC | Title: Blitz Mobile Cup | Regions: NAC
+ID: epicgames_S37_AxeOfChampsBlitzMobileCup_NAC | Title: Axe of Champions Blitz Cup (Mobile) | Regions: NAC
+ID: epicgames_S37_SurfWitchBlitzMobileCup_NAC | Title: Champion Surf Witch FNCS Blitz Cup (Mobile) | Regions: NAC
+ID: epicgames_S38_TouchOnlyMobileCup_NAC | Title: Touch-Only Test Cup | Regions: NAC
+ID: epicgames_S38_BlitzMobileCup_NAC | Title: Blitz Mobile Cup | Regions: NAC
+ID: epicgames_S38_StrangerThingsMobileCup_NAC | Title: Stranger Things Cup Blitz (Mobile) | Regions: NAC
+ID: epicgames_S39_BlitzMobileCupDec_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_BlitzMobileCupDecQual_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_MobileSeriesJan_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_MobileSeriesCupJanQual_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_MobileSeriesFeb_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_MobileSeriesCupFebQual_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_SoloLevelingMobileCup_NAC | Title: Solo Leveling: Arise Mobile Cup | Regions: NAC
+ID: epicgames_S39_MobileSeriesMar_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S39_MobileSeriesCupMarQual_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S40_MobileSeriesMar_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S40_MobileSeriesCupQual_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S40_MobileSeriesApr_NAC | Title: Mobile Series | Regions: NAC
+ID: epicgames_S40_TripleThreatMobileCup_NAC | Title: Triple Threat Mobile Cup | Regions: NAC
+ID: epicgames_S40_MobileSeriesMay_NAC | Title: Mobile Series | Regions: NAC
+
+--- Fetching tournaments for region: NAW ---
+Found 29 mobile-related tournaments in NAW.
+ID: epicgames_S37_BlitzMobileCup_NAW | Title: Blitz Mobile Cup | Regions: NAW
+ID: epicgames_S37_BlitzMobileCupWeekly_NAW | Title: Blitz Mobile Cup | Regions: NAW
+ID: epicgames_S37_AxeOfChampsBlitzMobileCup_NAW | Title: Axe of Champions Blitz Cup (Mobile) | Regions: NAW
+ID: epicgames_S37_SurfWitchBlitzMobileCup_NAW | Title: Champion Surf Witch FNCS Blitz Cup (Mobile) | Regions: NAW
+ID: epicgames_S38_TouchOnlyMobileCup_NAW | Title: Touch-Only Test Cup | Regions: NAW
+ID: epicgames_S38_BlitzMobileCup_NAW | Title: Blitz Mobile Cup | Regions: NAW
+ID: epicgames_S38_StrangerThingsMobileCup_NAC | Title: Stranger Things Cup Blitz (Mobile) | Regions: NAC
+ID: epicgames_S39_BlitzMobileCupDec_NAW | Title: Mobile Series | Regions: NAW
+ID: epicgames_S39_BlitzMobileCupDecQual_NAW | Title: Mobile Series | Regions: NAW
+ID: epicgames_S39_MobileSeriesJan_NAW | Title: Mobile Series | Regions: NAW
+ID: epicgames_S39_MobileSeriesCupJanQual_NAW | Title: Mobile Series | Regions: NAW
+ID: epicgames_S39_MobileSeriesFeb_NAW | Title: Mobile Series | Regions: NAW
+ID: epicgames_S39_MobileSeriesCupFebQual_NAW | Title: Mobile Series | Regions: NAW
+ID: epicgames_S39_SoloLevelingMobileCup_NAW | Title: Solo Leveling: Arise Mobile Cup | Regions: NAW
+ID: epicgames_S39_MobileSeriesMar_NAW | Title: Mobile Series | Regions: NAW
+ID: epicgames_S39_MobileSeriesCupMarQual_NAW | Title: Mobile Series | Regions: NAW
+ID: epicgames_S40_MobileSeriesMar_NAW | Title: Mobile Series | Regions: NAW
+ID: epicgames_S40_MobileSeriesCupQual_NAW | Title: Mobile Series | Regions: NAW
+ID: epicgames_S40_MobileSeriesApr_NAW | Title: Mobile Series | Regions: NAW
+ID: epicgames_S40_TripleThreatMobileCup_NAW | Title: Triple Threat Mobile Cup | Regions: NAW
+ID: epicgames_S40_MobileSeriesMay_NAW | Title: Mobile Series | Regions: NAW
+
+--- Fetching tournaments for region: BR ---
+Found 29 mobile-related tournaments in BR.
+ID: epicgames_S37_BlitzMobileCup_BR | Title: Blitz Mobile Cup | Regions: BR
+ID: epicgames_S37_BlitzMobileCupWeekly_BR | Title: Blitz Mobile Cup | Regions: BR
+ID: epicgames_S37_AxeOfChampsBlitzMobileCup_BR | Title: Axe of Champions Blitz Cup (Mobile) | Regions: BR
+ID: epicgames_S37_SurfWitchBlitzMobileCup_BR | Title: Champion Surf Witch FNCS Blitz Cup (Mobile) | Regions: BR
+ID: epicgames_S38_TouchOnlyMobileCup_BR | Title: Touch-Only Test Cup | Regions: BR
+ID: epicgames_S38_BlitzMobileCup_BR | Title: Blitz Mobile Cup | Regions: BR
+ID: epicgames_S38_StrangerThingsMobileCup_BR | Title: Stranger Things Cup Blitz (Mobile) | Regions: BR
+ID: epicgames_S39_BlitzMobileCupDec_BR | Title: Mobile Series | Regions: BR
+ID: epicgames_S39_BlitzMobileCupDecQual_BR | Title: Mobile Series | Regions: BR
+ID: epicgames_S39_MobileSeriesJan_BR | Title: Mobile Series | Regions: BR
+ID: epicgames_S39_MobileSeriesCupJanQual_BR | Title: Mobile Series | Regions: BR
+ID: epicgames_S39_MobileSeriesFeb_BR | Title: Mobile Series | Regions: BR
+ID: epicgames_S39_MobileSeriesCupFebQual_BR | Title: Mobile Series | Regions: BR
+ID: epicgames_S39_SoloLevelingMobileCup_BR | Title: Solo Leveling: Arise Mobile Cup | Regions: BR
+ID: epicgames_S39_MobileSeriesMar_BR | Title: Mobile Series | Regions: BR
+ID: epicgames_S39_MobileSeriesCupMarQual_BR | Title: Mobile Series | Regions: BR
+ID: epicgames_S40_MobileSeriesMar_BR | Title: Mobile Series | Regions: BR
+ID: epicgames_S40_MobileSeriesCupQual_BR | Title: Mobile Series | Regions: BR
+ID: epicgames_S40_MobileSeriesApr_BR | Title: Mobile Series | Regions: BR
+ID: epicgames_S40_TripleThreatMobileCup_BR | Title: Triple Threat Mobile Cup | Regions: BR
+ID: epicgames_S40_MobileSeriesMay_BR | Title: Mobile Series | Regions: BR
+
+--- Fetching tournaments for region: ASIA ---
+Found 28 mobile-related tournaments in ASIA.
+ID: epicgames_S37_BlitzMobileCup_ASIA | Title: Blitz Mobile Cup | Regions: ASIA
+ID: epicgames_S37_BlitzMobileCupWeekly_ASIA | Title: Blitz Mobile Cup | Regions: ASIA
+ID: epicgames_S37_AxeOfChampsBlitzMobileCup_ASIA | Title: Axe of Champions Blitz Cup (Mobile) | Regions: ASIA
+ID: epicgames_S37_SurfWitchBlitzMobileCup_ASIA | Title: Champion Surf Witch FNCS Blitz Cup (Mobile) | Regions: ASIA
+ID: epicgames_S38_TouchOnlyMobileCup_ASIA | Title: Touch-Only Test Cup | Regions: ASIA
+ID: epicgames_S38_BlitzMobileCup_ASIA | Title: Blitz Mobile Cup | Regions: ASIA
+ID: epicgames_S39_BlitzMobileCupDec_ASIA | Title: Mobile Series | Regions: ASIA
+ID: epicgames_S39_BlitzMobileCupDecQual_ASIA | Title: Mobile Series | Regions: ASIA
+ID: epicgames_S39_MobileSeriesJan_ASIA | Title: Mobile Series | Regions: ASIA
+ID: epicgames_S39_MobileSeriesCupJanQual_ASIA | Title: Mobile Series | Regions: ASIA
+ID: epicgames_S39_MobileSeriesFeb_ASIA | Title: Mobile Series | Regions: ASIA
+ID: epicgames_S39_MobileSeriesCupFebQual_ASIA | Title: Mobile Series | Regions: ASIA
+ID: epicgames_S39_SoloLevelingMobileCup_ASIA | Title: Solo Leveling: Arise Mobile Cup | Regions: ASIA
+ID: epicgames_S39_MobileSeriesMar_ASIA | Title: Mobile Series | Regions: ASIA
+ID: epicgames_S39_MobileSeriesCupMarQual_ASIA | Title: Mobile Series | Regions: ASIA
+ID: epicgames_S40_MobileSeriesMar_ASIA | Title: Mobile Series | Regions: ASIA
+ID: epicgames_S40_MobileSeriesCupQual_ASIA | Title: Mobile Series | Regions: ASIA
+ID: epicgames_S40_MobileSeriesApr_ASIA | Title: Mobile Series | Regions: ASIA
+ID: epicgames_S40_TripleThreatMobileCup_ASIA | Title: Triple Threat Mobile Cup | Regions: ASIA
+ID: epicgames_S40_MobileSeriesMay_ASIA | Title: Mobile Series | Regions: ASIA
+
+--- Fetching tournaments for region: OCE ---
+Found 28 mobile-related tournaments in OCE.
+ID: epicgames_S37_BlitzMobileCup_OCE | Title: Blitz Mobile Cup | Regions: OCE
+ID: epicgames_S37_BlitzMobileCupWeekly_OCE | Title: Blitz Mobile Cup | Regions: OCE
+ID: epicgames_S37_AxeOfChampsBlitzMobileCup_OCE | Title: Axe of Champions Blitz Cup (Mobile) | Regions: OCE
+ID: epicgames_S37_SurfWitchBlitzMobileCup_OCE | Title: Champion Surf Witch FNCS Blitz Cup (Mobile) | Regions: OCE
+ID: epicgames_S38_TouchOnlyMobileCup_OCE | Title: Touch-Only Test Cup | Regions: OCE
+ID: epicgames_S38_BlitzMobileCup_OCE | Title: Blitz Mobile Cup | Regions: OCE
+ID: epicgames_S39_BlitzMobileCupDec_OCE | Title: Mobile Series | Regions: OCE
+ID: epicgames_S39_BlitzMobileCupDecQual_OCE | Title: Mobile Series | Regions: OCE
+ID: epicgames_S39_MobileSeriesJan_OCE | Title: Mobile Series | Regions: OCE
+ID: epicgames_S39_MobileSeriesCupJanQual_OCE | Title: Mobile Series | Regions: OCE
+ID: epicgames_S39_MobileSeriesFeb_OCE | Title: Mobile Series | Regions: OCE
+ID: epicgames_S39_MobileSeriesCupFebQual_OCE | Title: Mobile Series | Regions: OCE
+ID: epicgames_S39_SoloLevelingMobileCup_OCE | Title: Solo Leveling: Arise Mobile Cup | Regions: OCE
+ID: epicgames_S39_MobileSeriesMar_OCE | Title: Mobile Series | Regions: OCE
+ID: epicgames_S39_MobileSeriesCupMarQual_OCE | Title: Mobile Series | Regions: OCE
+ID: epicgames_S40_MobileSeriesMar_OCE | Title: Mobile Series | Regions: OCE
+ID: epicgames_S40_MobileSeriesCupQual_OCE | Title: Mobile Series | Regions: OCE
+ID: epicgames_S40_MobileSeriesApr_OCE | Title: Mobile Series | Regions: OCE
+ID: epicgames_S40_TripleThreatMobileCup_OCE | Title: Triple Threat Mobile Cup | Regions: OCE
+ID: epicgames_S40_MobileSeriesMay_OCE | Title: Mobile Series | Regions: OCE
+
+--- Fetching tournaments for region: ME ---
+Found 29 mobile-related tournaments in ME.
+ID: epicgames_S37_BlitzMobileCup_ME | Title: Blitz Mobile Cup | Regions: ME
+ID: epicgames_S37_BlitzMobileCupWeekly_ME | Title: Blitz Mobile Cup | Regions: ME
+ID: epicgames_S37_AxeOfChampsBlitzMobileCup_ME | Title: Axe of Champions Blitz Cup (Mobile) | Regions: ME
+ID: epicgames_S37_SurfWitchBlitzMobileCup_ME | Title: Champion Surf Witch FNCS Blitz Cup (Mobile) | Regions: ME
+ID: epicgames_S38_TouchOnlyMobileCup_ME | Title: Touch-Only Test Cup | Regions: ME
+ID: epicgames_S38_BlitzMobileCup_ME | Title: Blitz Mobile Cup | Regions: ME
+ID: epicgames_S38_StrangerThingsMobileCup_ME | Title: Stranger Things Cup Blitz (Mobile) | Regions: ME
+ID: epicgames_S39_BlitzMobileCupDec_ME | Title: Mobile Series | Regions: ME
+ID: epicgames_S39_BlitzMobileCupDecQual_ME | Title: Mobile Series | Regions: ME
+ID: epicgames_S39_MobileSeriesJan_ME | Title: Mobile Series | Regions: ME
+ID: epicgames_S39_MobileSeriesCupJanQual_ME | Title: Mobile Series | Regions: ME
+ID: epicgames_S39_MobileSeriesFeb_ME | Title: Mobile Series | Regions: ME
+ID: epicgames_S39_MobileSeriesCupFebQual_ME | Title: Mobile Series | Regions: ME
+ID: epicgames_S39_SoloLevelingMobileCup_ME | Title: Solo Leveling: Arise Mobile Cup | Regions: ME
+ID: epicgames_S39_MobileSeriesMar_ME | Title: Mobile Series | Regions: ME
+ID: epicgames_S39_MobileSeriesCupMarQual_ME | Title: Mobile Series | Regions: ME
+ID: epicgames_S40_MobileSeriesMar_ME | Title: Mobile Series | Regions: ME
+ID: epicgames_S40_MobileSeriesCupQual_ME | Title: Mobile Series | Regions: ME
+ID: epicgames_S40_MobileSeriesApr_ME | Title: Mobile Series | Regions: ME
+ID: epicgames_S40_TripleThreatMobileCup_ME | Title: Triple Threat Mobile Cup | Regions: ME
+ID: epicgames_S40_MobileSeriesMay_ME | Title: Mobile Series | Regions: ME

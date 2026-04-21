@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '*/10 * * * *' # Every 10 minutes
+    - cron: '*/30 * * * *' # Every 30 minutes
   workflow_dispatch: # Manual trigger
 
 permissions:
@@ -30,9 +30,13 @@ jobs:
       - name: Run Aggregator
         run: npm run aggregate
         
-      - name: Commit and Push
+      - name: Commit and Push (only if data changed)
         run: |
           git config --global user.name "DogeminerCE"
           git config --global user.email "dogeminerdirectory@gmail.com"
           git add public/leaderboard.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update aggregated leaderboard data" && git push)
+          git diff --quiet && git diff --staged --quiet && echo "NO_CHANGE=true" >> $GITHUB_ENV || (git commit -m "chore: update aggregated leaderboard data" && git push)
+
+      - name: Trigger Vercel Redeploy (only if data changed)
+        if: env.NO_CHANGE != 'true'
+        run: curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_URL }}"

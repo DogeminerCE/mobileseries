@@ -1,0 +1,8 @@
+
+--- Deep Inspecting Leaderboard Metadata for Payout Tables ---
+Fetching: https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_EU&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier3_EU
+
+Leaderboard found: S39_MobileSeriesCup_JanQualifier3_EU
+Keys in leaderboard object: leaderboardEventId, leaderboardEventWindowId, page, totalPages, updatedAt, entries
+
+payoutTables NOT found in leaderboard object.

@@ -1,0 +1,3 @@
+
+--- Inspecting Tournament Detail for Payout Tables ---
+Fetching: https://fnapi.osirion.gg/v1/tournaments/details?eventId=epicgames_S39_MobileSeriesCupJanQual_EU

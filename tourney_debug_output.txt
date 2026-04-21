@@ -1,0 +1,116 @@
+Fetching tournaments...
+Found 30 mobile-related tournaments.
+ID: epicgames_S31_PlatformReloadDuosCashCupMobile_EU | Title: Reload Duos | Regions: EU
+  Window: S31_PlatformReloadDuosCashCupMobile_Event1Round1_EU
+  Window: S31_PlatformReloadDuosCashCupMobile_Event1Round2_EU
+  Window: S31_PlatformReloadDuosCashCupMobile_Event3Round1_EU
+  Window: S31_PlatformReloadDuosCashCupMobile_Event3Round2_EU
+  Window: S31_PlatformReloadDuosCashCupMobile_Event4Round1_EU
+  Window: S31_PlatformReloadDuosCashCupMobile_Event4Round2_EU
+ID: epicgames_S32_PlatformReloadDuosCashCupMobile_EU | Title: Reload Duos | Regions: EU
+ID: epicgames_S37_BlitzMobileCup_EU | Title: Blitz Mobile Cup | Regions: EU
+ID: epicgames_S37_BlitzMobileCupWeekly_EU | Title: Blitz Mobile Cup | Regions: EU
+ID: epicgames_S37_AxeOfChampsBlitzMobileCup_EU | Title: Axe of Champions Blitz Cup (Mobile) | Regions: EU
+ID: epicgames_S37_SurfWitchBlitzMobileCup_EU | Title: Champion Surf Witch FNCS Blitz Cup (Mobile) | Regions: EU
+ID: epicgames_S38_TouchOnlyMobileCup_EU | Title: Touch-Only Test Cup | Regions: EU
+  Window: S38_TouchOnlyMobileCup_Round1_EU
+  Window: S38_TouchOnlyMobileCup_Round2_EU
+ID: epicgames_S38_BlitzMobileCup_EU | Title: Blitz Mobile Cup | Regions: EU
+  Window: S38_BlitzMobileCup_Week1Qualifier1_EU
+  Window: S38_BlitzMobileCup_Week1Qualifier2_EU
+  Window: S38_BlitzMobileCup_Week1Qualifier3_EU
+  Window: S38_BlitzMobileCup_Week1Qualifier4_EU
+  Window: S38_BlitzMobileCup_Week1Qualifier5_EU
+  Window: S38_BlitzMobileCup_Week1Qualifier6_EU
+  Window: S38_BlitzMobileCup_Week2Qualifier1_EU
+  Window: S38_BlitzMobileCup_Week2Qualifier2_EU
+  Window: S38_BlitzMobileCup_Week2Qualifier3_EU
+  Window: S38_BlitzMobileCup_Week2Qualifier4_EU
+  Window: S38_BlitzMobileCup_Week2Qualifier5_EU
+  Window: S38_BlitzMobileCup_Week2Qualifier6_EU
+ID: epicgames_S38_StrangerThingsMobileCup_EU | Title: Stranger Things Cup Blitz (Mobile) | Regions: EU
+ID: epicgames_S39_ChaosChampionFNCSBlitzCup_EU | Title: Chaos Champion FNCS Blitz Cup (Mobile) | Regions: EU
+ID: epicgames_S39_BlitzMobileCupDec_EU | Title: Mobile Series | Regions: EU
+  Window: S39_BlitzMobileCup_DecRound1_EU
+  Window: S39_BlitzMobileCup_DecRound2_EU
+  Window: S39_BlitzMobileCup_DecRound3_EU
+  Window: S39_BlitzMobileCup_DecRound4_EU
+ID: epicgames_S39_BlitzMobileCupDecQual_EU | Title: Mobile Series | Regions: EU
+  Window: S39_BlitzMobileCup_DecQualifier1_EU
+  Window: S39_BlitzMobileCup_DecQualifier2_EU
+ID: epicgames_S39_MobileSeriesJan_EU | Title: Mobile Series | Regions: EU
+  Window: S39_MobileSeries_JanRound1_EU
+  Window: S39_MobileSeries_JanRound2_EU
+  Window: S39_MobileSeries_JanRound3_EU
+  Window: S39_MobileSeries_JanRound4_EU
+  Window: S39_MobileSeries_JanRound5_EU
+  Window: S39_MobileSeries_JanRound6_EU
+  Window: S39_MobileSeries_JanRound7_EU
+  Window: S39_MobileSeries_JanRound8_EU
+  Window: S39_MobileSeries_JanRound9_EU
+  Window: S39_MobileSeries_JanRound10_EU
+ID: epicgames_S39_MobileSeriesCupJanQual_EU | Title: Mobile Series | Regions: EU
+  Window: S39_MobileSeriesCup_JanQualifier3_EU
+  Window: S39_MobileSeriesCup_JanQualifier4_EU
+ID: epicgames_S39_KizunaAICupMobile_EU | Title: KizunaAI Mobile Cup | Regions: EU
+ID: epicgames_S39_MobileSeriesFeb_EU | Title: Mobile Series | Regions: EU
+  Window: S39_MobileSeries_FebRound1_EU
+  Window: S39_MobileSeries_FebRound2_EU
+  Window: S39_MobileSeries_FebRound3_EU
+  Window: S39_MobileSeries_FebRound4_EU
+  Window: S39_MobileSeries_FebRound5_EU
+  Window: S39_MobileSeries_FebRound6_EU
+  Window: S39_MobileSeries_FebRound7_EU
+  Window: S39_MobileSeries_FebRound8_EU
+  Window: S39_MobileSeries_FebRound9_EU
+  Window: S39_MobileSeries_FebRound10_EU
+ID: epicgames_S39_MobileTestCup_EU | Title: Touch-Only Test Cup | Regions: EU
+  Window: S39_MobileTestCup_Round1_EU
+  Window: S39_MobileTestCup_Round2_EU
+  Window: S39_MobileTestCup_Round3_EU
+  Window: S39_MobileTestCup_Round4_EU
+ID: epicgames_S39_MobileSeriesCupFebQual_EU | Title: Mobile Series | Regions: EU
+  Window: S39_MobileSeriesCup_FebQualifier5_EU
+  Window: S39_MobileSeriesCup_FebQualifier6_EU
+ID: epicgames_S39_SoloLevelingMobileCup_EU | Title: Solo Leveling: Arise Mobile Cup | Regions: EU
+ID: epicgames_S39_MobileSeriesMar_EU | Title: Mobile Series | Regions: EU
+  Window: S39_MobileSeries_MarRound1_EU
+  Window: S39_MobileSeries_MarRound2_EU
+  Window: S39_MobileSeries_MarRound3_EU
+  Window: S39_MobileSeries_MarRound4_EU
+  Window: S39_MobileSeries_MarRound5_EU
+ID: epicgames_S39_LanternFestCupMobile_EU | Title: Lantern Fest Mobile Cup | Regions: EU
+ID: epicgames_S39_MobileSeriesCupMarQual_EU | Title: Mobile Series | Regions: EU
+  Window: S39_MobileSeriesCup_MarQualifier7_EU
+ID: epicgames_S40_DuckythegamerCupMobile_EU | Title: DuckyTheGamer Mobile Cup | Regions: EU
+ID: epicgames_S40_MobileSeriesMar_EU | Title: Mobile Series | Regions: EU
+  Window: S40_MobileSeries_MarRound6_EU
+  Window: S40_MobileSeries_MarRound7_EU
+  Window: S40_MobileSeries_MarRound8_EU
+  Window: S40_MobileSeries_MarRound9_EU
+  Window: S40_MobileSeries_MarRound10_EU
+ID: epicgames_S40_MobileSeriesCupQual_EU | Title: Mobile Series | Regions: EU
+  Window: S40_MobileSeriesCup_MarQualifier8_EU
+  Window: S40_MobileSeriesCup_MarQualifier9_EU
+  Window: S40_MobileSeriesCup_MarQualifier10_EU
+  Window: S40_MobileSeriesCup_MarQualifier11_EU
+ID: epicgames_S40_SpidergamerCupMobile_EU | Title: SpiderGamer Mobile Cup | Regions: EU
+ID: epicgames_S40_MobileSeriesApr_EU | Title: Mobile Series | Regions: EU
+  Window: S40_MobileSeries_AprRound1_EU
+  Window: S40_MobileSeries_AprRound2_EU
+  Window: S40_MobileSeries_AprRound3_EU
+  Window: S40_MobileSeries_AprRound4_EU
+  Window: S40_MobileSeries_AprRound5_EU
+  Window: S40_MobileSeries_AprRound6_EU
+  Window: S40_MobileSeries_AprRound7_EU
+  Window: S40_MobileSeries_AprRound8_EU
+  Window: S40_MobileSeries_AprRound9_EU
+  Window: S40_MobileSeries_AprRound10_EU
+ID: epicgames_S40_ChampionKorFNCSCupMobile_EU | Title: Champion Kor FNCS Mobile Cup | Regions: EU
+ID: epicgames_S40_TripleThreatMobileCup_EU | Title: Triple Threat Mobile Cup | Regions: EU
+ID: epicgames_S40_MobileSeriesMay_EU | Title: Mobile Series | Regions: EU
+  Window: S40_MobileSeries_MayRound1_EU
+  Window: S40_MobileSeries_MayRound2_EU
+  Window: S40_MobileSeries_MayRound3_EU
+  Window: S40_MobileSeries_MayRound4_EU
+  Window: S40_MobileSeries_MayRound5_EU
