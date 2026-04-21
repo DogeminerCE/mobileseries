@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  :root {
+    --bg: #0A0A0B;
+    --ink: #FFFFFF;
+    --accent: #FCE14B;
+    --card-bg: #141416;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer components {
+  .podium-card {
+    @apply relative flex flex-col justify-end p-6 transition-all duration-300;
+  }
+
+  .podium-rank {
+    @apply absolute top-4 right-4 font-black italic opacity-20 pointer-events-none;
+  }
+
+  .leaderboard-row {
+    @apply grid grid-cols-12 px-4 py-3 bg-[#141416] items-center border-r-2 border-transparent hover:border-[#FCE14B] transition-colors cursor-default;
+  }
+
+  .stroke-text {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+  }
+}
