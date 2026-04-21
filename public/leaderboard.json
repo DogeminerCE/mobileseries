@@ -2,38 +2,29 @@
   "players": [
     {
       "name": "dogeeedagoon",
-      "earningsUSD": 22850,
+      "earningsUSD": 22000,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
       "rank": 1,
       "primaryRegion": "NA-WEST"
     },
     {
       "name": "FnX IAmNoob.",
-      "earningsUSD": 21750,
+      "earningsUSD": 18950,
       "countryCode": "ie",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.096Z",
+      "lastActiveDate": "2026-04-21T04:42:05.589Z",
       "rank": 2,
       "primaryRegion": "EUROPE"
     },
     {
-      "name": "GepardGOTY 7ǃ",
-      "earningsUSD": 15350,
-      "countryCode": "de",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.988Z",
-      "rank": 3,
-      "primaryRegion": "EUROPE"
-    },
-    {
       "name": "mtrx rises",
-      "earningsUSD": 13950,
+      "earningsUSD": 13700,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.988Z",
-      "rank": 4,
+      "lastActiveDate": "2026-04-21T04:41:54.274Z",
+      "rank": 3,
       "primaryRegion": "EUROPE"
     },
     {
@@ -41,62 +32,53 @@
       "earningsUSD": 11550,
       "countryCode": "so",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.988Z",
-      "rank": 5,
+      "lastActiveDate": "2026-04-21T04:42:04.926Z",
+      "rank": 4,
       "primaryRegion": "ASIA"
     },
     {
+      "name": "GepardGOTY 7ǃ",
+      "earningsUSD": 11300,
+      "countryCode": "de",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:42:05.589Z",
+      "rank": 5,
+      "primaryRegion": "EUROPE"
+    },
+    {
       "name": "mtb hardman",
-      "earningsUSD": 10850,
+      "earningsUSD": 10200,
       "countryCode": "au",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
       "rank": 6,
       "primaryRegion": "OCEANIA"
     },
     {
-      "name": "De_Tibbe",
-      "earningsUSD": 8550,
-      "countryCode": "nl",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:36.840Z",
-      "rank": 7,
-      "primaryRegion": "EUROPE"
-    },
-    {
       "name": "gents あくりあハンバーガー",
-      "earningsUSD": 7150,
+      "earningsUSD": 6350,
       "countryCode": "jp",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:37.664Z",
-      "rank": 8,
+      "lastActiveDate": "2026-04-21T04:42:04.150Z",
+      "rank": 7,
       "primaryRegion": "ASIA"
     },
     {
       "name": "BRN makaronfn9",
-      "earningsUSD": 7050,
+      "earningsUSD": 6250,
       "countryCode": "jp",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.988Z",
-      "rank": 9,
+      "lastActiveDate": "2026-04-21T04:42:04.926Z",
+      "rank": 8,
       "primaryRegion": "ASIA"
-    },
-    {
-      "name": "FA Parcafn ﾒ",
-      "earningsUSD": 6800,
-      "countryCode": "it",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.988Z",
-      "rank": 10,
-      "primaryRegion": "EUROPE"
     },
     {
       "name": "Foul Dark",
       "earningsUSD": 5500,
       "countryCode": "be",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:25.681Z",
-      "rank": 11,
+      "lastActiveDate": "2026-04-21T04:41:53.459Z",
+      "rank": 9,
       "primaryRegion": "NA-WEST"
     },
     {
@@ -104,8 +86,8 @@
       "earningsUSD": 5450,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:26.911Z",
-      "rank": 12,
+      "lastActiveDate": "2026-04-21T04:41:54.274Z",
+      "rank": 10,
       "primaryRegion": "NA-WEST"
     },
     {
@@ -113,62 +95,44 @@
       "earningsUSD": 5350,
       "countryCode": "es",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:24.216Z",
+      "lastActiveDate": "2026-04-21T04:41:51.914Z",
+      "rank": 11,
+      "primaryRegion": "EUROPE"
+    },
+    {
+      "name": "De_Tibbe",
+      "earningsUSD": 5150,
+      "countryCode": "nl",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:42:03.394Z",
+      "rank": 12,
+      "primaryRegion": "EUROPE"
+    },
+    {
+      "name": "FA Parcafn ﾒ",
+      "earningsUSD": 4550,
+      "countryCode": "it",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:42:05.589Z",
       "rank": 13,
       "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "Ololo Ali",
-      "earningsUSD": 5100,
-      "countryCode": "en",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
-      "rank": 14,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "Hawkeyedx",
-      "earningsUSD": 4800,
-      "countryCode": "us",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:23.544Z",
-      "rank": 15,
-      "primaryRegion": "NA-CENTRAL"
-    },
-    {
-      "name": "Unrealiana",
-      "earningsUSD": 4700,
-      "countryCode": "ni",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:08.945Z",
-      "rank": 16,
-      "primaryRegion": "NA-CENTRAL"
     },
     {
       "name": "vedianaaa",
       "earningsUSD": 4550,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
-      "rank": 17,
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
+      "rank": 14,
       "primaryRegion": "NA-CENTRAL"
     },
     {
-      "name": "Ololo Lostytard7",
-      "earningsUSD": 4250,
-      "countryCode": "fr",
+      "name": "Ololo Ali",
+      "earningsUSD": 4300,
+      "countryCode": "en",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.096Z",
-      "rank": 18,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "Evil Rowan Ψ",
-      "earningsUSD": 4050,
-      "countryCode": "be",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:20.498Z",
-      "rank": 19,
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
+      "rank": 15,
       "primaryRegion": "EUROPE"
     },
     {
@@ -176,8 +140,8 @@
       "earningsUSD": 4000,
       "countryCode": "ca",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:25.681Z",
-      "rank": 20,
+      "lastActiveDate": "2026-04-21T04:41:53.459Z",
+      "rank": 16,
       "primaryRegion": "EUROPE"
     },
     {
@@ -185,8 +149,8 @@
       "earningsUSD": 3950,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:25.016Z",
-      "rank": 21,
+      "lastActiveDate": "2026-04-21T04:41:52.624Z",
+      "rank": 17,
       "primaryRegion": "NA-CENTRAL"
     },
     {
@@ -194,53 +158,44 @@
       "earningsUSD": 3850,
       "countryCode": "pl",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
-      "rank": 22,
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
+      "rank": 18,
       "primaryRegion": "MIDDLE EAST"
-    },
-    {
-      "name": "senserdagoon",
-      "earningsUSD": 3800,
-      "countryCode": "un",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.096Z",
-      "rank": 23,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "Ololo ZiZooou",
-      "earningsUSD": 3650,
-      "countryCode": "fr",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:35.998Z",
-      "rank": 24,
-      "primaryRegion": "EUROPE"
     },
     {
       "name": "Samux 7",
       "earningsUSD": 3650,
       "countryCode": "it",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
-      "rank": 25,
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
+      "rank": 19,
       "primaryRegion": "MIDDLE EAST"
     },
     {
-      "name": "Tiktok_JonFNM",
+      "name": "Hawkeyedx",
       "earningsUSD": 3500,
-      "countryCode": "mx",
+      "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:38.373Z",
-      "rank": 26,
-      "primaryRegion": "NA-WEST"
+      "lastActiveDate": "2026-04-21T04:41:51.154Z",
+      "rank": 20,
+      "primaryRegion": "NA-CENTRAL"
+    },
+    {
+      "name": "senserdagoon",
+      "earningsUSD": 3400,
+      "countryCode": "un",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:42:05.589Z",
+      "rank": 21,
+      "primaryRegion": "EUROPE"
     },
     {
       "name": "mtb andreshter-",
       "earningsUSD": 3350,
       "countryCode": "so",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.096Z",
-      "rank": 27,
+      "lastActiveDate": "2026-04-21T04:42:05.589Z",
+      "rank": 22,
       "primaryRegion": "MIDDLE EAST"
     },
     {
@@ -248,170 +203,116 @@
       "earningsUSD": 3300,
       "countryCode": "ar",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
-      "rank": 28,
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
+      "rank": 23,
       "primaryRegion": "EUROPE"
     },
     {
-      "name": "2 Shiesty X",
-      "earningsUSD": 3100,
-      "countryCode": "ar",
+      "name": "Tiktok_JonFNM",
+      "earningsUSD": 3250,
+      "countryCode": "mx",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
-      "rank": 29,
-      "primaryRegion": "MIDDLE EAST"
+      "lastActiveDate": "2026-04-21T04:42:04.926Z",
+      "rank": 24,
+      "primaryRegion": "NA-WEST"
     },
     {
-      "name": "Tiktok Sudxylol",
-      "earningsUSD": 2950,
-      "countryCode": "us",
+      "name": "Evil Rowan Ψ",
+      "earningsUSD": 3050,
+      "countryCode": "be",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:11.041Z",
-      "rank": 30,
+      "lastActiveDate": "2026-04-21T04:41:38.686Z",
+      "rank": 25,
+      "primaryRegion": "EUROPE"
+    },
+    {
+      "name": "Unrealiana",
+      "earningsUSD": 2950,
+      "countryCode": "ni",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:41:37.728Z",
+      "rank": 26,
       "primaryRegion": "NA-CENTRAL"
     },
     {
-      "name": "Slursxz",
-      "earningsUSD": 2950,
-      "countryCode": "be",
+      "name": "2 Shiesty X",
+      "earningsUSD": 2900,
+      "countryCode": "ar",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:35.998Z",
-      "rank": 31,
-      "primaryRegion": "OCEANIA"
-    },
-    {
-      "name": "King Kong ROOKI",
-      "earningsUSD": 2850,
-      "countryCode": "be",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:37.664Z",
-      "rank": 32,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "MikaLva",
-      "earningsUSD": 2800,
-      "countryCode": "nl",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:34.685Z",
-      "rank": 33,
-      "primaryRegion": "EUROPE"
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
+      "rank": 27,
+      "primaryRegion": "MIDDLE EAST"
     },
     {
       "name": "most hated koda",
       "earningsUSD": 2750,
       "countryCode": "un",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.096Z",
-      "rank": 34,
+      "lastActiveDate": "2026-04-21T04:42:05.589Z",
+      "rank": 28,
       "primaryRegion": "NA-CENTRAL"
     },
     {
-      "name": "Fledermuesly",
+      "name": "Tiktok Sudxylol",
       "earningsUSD": 2550,
-      "countryCode": "de",
+      "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.988Z",
-      "rank": 35,
+      "lastActiveDate": "2026-04-21T04:41:40.133Z",
+      "rank": 29,
       "primaryRegion": "NA-CENTRAL"
-    },
-    {
-      "name": "BLZ KorvaxNC",
-      "earningsUSD": 2500,
-      "countryCode": "fr",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:35.998Z",
-      "rank": 36,
-      "primaryRegion": "BRAZIL"
-    },
-    {
-      "name": "cant qual",
-      "earningsUSD": 2400,
-      "countryCode": "gb",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:35.998Z",
-      "rank": 37,
-      "primaryRegion": "OCEANIA"
-    },
-    {
-      "name": "MoetyXBonnieblue",
-      "earningsUSD": 2350,
-      "countryCode": "jp",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:23.544Z",
-      "rank": 38,
-      "primaryRegion": "NA-WEST"
     },
     {
       "name": "Thynfn",
       "earningsUSD": 2300,
       "countryCode": "ch",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
-      "rank": 39,
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
+      "rank": 30,
       "primaryRegion": "BRAZIL"
     },
     {
-      "name": "通通薩胡爾",
-      "earningsUSD": 2150,
-      "countryCode": "it",
+      "name": "Ololo Lostytard7",
+      "earningsUSD": 2250,
+      "countryCode": "fr",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:36.840Z",
-      "rank": 40,
-      "primaryRegion": "NA-CENTRAL"
+      "lastActiveDate": "2026-04-21T04:42:05.589Z",
+      "rank": 31,
+      "primaryRegion": "EUROPE"
+    },
+    {
+      "name": "MoetyXBonnieblue",
+      "earningsUSD": 2150,
+      "countryCode": "jp",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:41:51.154Z",
+      "rank": 32,
+      "primaryRegion": "NA-WEST"
     },
     {
       "name": "revertaimassist",
       "earningsUSD": 2100,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.988Z",
-      "rank": 41,
+      "lastActiveDate": "2026-04-21T04:42:04.926Z",
+      "rank": 33,
       "primaryRegion": "BRAZIL"
-    },
-    {
-      "name": "EGY Vladeal",
-      "earningsUSD": 2050,
-      "countryCode": "en",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.988Z",
-      "rank": 42,
-      "primaryRegion": "MIDDLE EAST"
-    },
-    {
-      "name": "bont x richardsǃ",
-      "earningsUSD": 1900,
-      "countryCode": "is",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.988Z",
-      "rank": 43,
-      "primaryRegion": "ASIA"
     },
     {
       "name": "0 Ping Shipski",
       "earningsUSD": 1850,
       "countryCode": "pl",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:25.681Z",
-      "rank": 44,
+      "lastActiveDate": "2026-04-21T04:41:53.459Z",
+      "rank": 34,
       "primaryRegion": "BRAZIL"
-    },
-    {
-      "name": "autolockxdxdxdxd",
-      "earningsUSD": 1800,
-      "countryCode": "us",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:35.346Z",
-      "rank": 45,
-      "primaryRegion": "EUROPE"
     },
     {
       "name": "bxltzdagoon",
       "earningsUSD": 1800,
       "countryCode": "is",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:56.690Z",
-      "rank": 46,
+      "lastActiveDate": "2026-04-21T04:41:29.152Z",
+      "rank": 35,
       "primaryRegion": "NA-CENTRAL"
     },
     {
@@ -419,89 +320,80 @@
       "earningsUSD": 1800,
       "countryCode": "jp",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
-      "rank": 47,
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
+      "rank": 36,
       "primaryRegion": "OCEANIA"
-    },
-    {
-      "name": "hektixx ラ",
-      "earningsUSD": 1750,
-      "countryCode": "en",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
-      "rank": 48,
-      "primaryRegion": "NA-WEST"
     },
     {
       "name": "final boss quart",
       "earningsUSD": 1700,
       "countryCode": "un",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:55.064Z",
-      "rank": 49,
+      "lastActiveDate": "2026-04-21T04:41:27.530Z",
+      "rank": 37,
       "primaryRegion": "NA-WEST"
     },
     {
-      "name": "DC Griefer",
+      "name": "BLZ KorvaxNC",
       "earningsUSD": 1700,
-      "countryCode": "us",
+      "countryCode": "fr",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:38.373Z",
-      "rank": 50,
+      "lastActiveDate": "2026-04-21T04:42:02.258Z",
+      "rank": 38,
       "primaryRegion": "BRAZIL"
     },
     {
-      "name": "TikTok AlekFNM",
+      "name": "通通薩胡爾",
       "earningsUSD": 1650,
-      "countryCode": "br",
+      "countryCode": "it",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:57.411Z",
-      "rank": 51,
-      "primaryRegion": "BRAZIL"
+      "lastActiveDate": "2026-04-21T04:42:03.394Z",
+      "rank": 39,
+      "primaryRegion": "NA-CENTRAL"
     },
     {
       "name": "rxgerfnw",
       "earningsUSD": 1650,
       "countryCode": "mx",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.096Z",
-      "rank": 52,
+      "lastActiveDate": "2026-04-21T04:42:05.589Z",
+      "rank": 40,
       "primaryRegion": "NA-WEST"
     },
     {
-      "name": "JayOsamaǃ",
-      "earningsUSD": 1650,
-      "countryCode": "jp",
+      "name": "MikaLva",
+      "earningsUSD": 1600,
+      "countryCode": "nl",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:23.544Z",
-      "rank": 53,
-      "primaryRegion": "NA-WEST"
+      "lastActiveDate": "2026-04-21T04:41:02.285Z",
+      "rank": 41,
+      "primaryRegion": "EUROPE"
     },
     {
       "name": "kiwixdagoon",
       "earningsUSD": 1500,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:22.764Z",
-      "rank": 54,
+      "lastActiveDate": "2026-04-21T04:41:50.240Z",
+      "rank": 42,
       "primaryRegion": "EUROPE"
     },
     {
-      "name": "mamipollo TikTok",
+      "name": "Fledermuesly",
       "earningsUSD": 1500,
-      "countryCode": "mx",
+      "countryCode": "de",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:17.375Z",
-      "rank": 55,
-      "primaryRegion": "NA-CENTRAL"
+      "lastActiveDate": "2026-04-21T04:41:28.424Z",
+      "rank": 43,
+      "primaryRegion": "BRAZIL"
     },
     {
       "name": "MTB Keyxity ǃ",
       "earningsUSD": 1450,
       "countryCode": "co",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:26.911Z",
-      "rank": 56,
+      "lastActiveDate": "2026-04-21T04:41:54.274Z",
+      "rank": 44,
       "primaryRegion": "OCEANIA"
     },
     {
@@ -509,53 +401,53 @@
       "earningsUSD": 1450,
       "countryCode": "jp",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:10.364Z",
-      "rank": 57,
+      "lastActiveDate": "2026-04-21T04:41:39.424Z",
+      "rank": 45,
       "primaryRegion": "NA-WEST"
     },
     {
-      "name": "Gqrdo 20999",
+      "name": "TikTok AlekFNM",
       "earningsUSD": 1400,
-      "countryCode": "it",
+      "countryCode": "br",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
-      "rank": 58,
+      "lastActiveDate": "2026-04-21T04:41:29.895Z",
+      "rank": 46,
       "primaryRegion": "BRAZIL"
     },
     {
-      "name": "juicydagoon",
+      "name": "EGY Vladeal",
       "earningsUSD": 1400,
-      "countryCode": "la",
+      "countryCode": "en",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:34.685Z",
-      "rank": 59,
-      "primaryRegion": "NA-CENTRAL"
-    },
-    {
-      "name": "DX Lucka",
-      "earningsUSD": 1350,
-      "countryCode": "cz",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:37.664Z",
-      "rank": 60,
+      "lastActiveDate": "2026-04-21T04:42:04.926Z",
+      "rank": 47,
       "primaryRegion": "MIDDLE EAST"
     },
     {
-      "name": "MTB Hashim",
-      "earningsUSD": 1300,
-      "countryCode": "is",
+      "name": "JayOsamaǃ",
+      "earningsUSD": 1400,
+      "countryCode": "jp",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.096Z",
-      "rank": 61,
-      "primaryRegion": "EUROPE"
+      "lastActiveDate": "2026-04-21T04:41:51.154Z",
+      "rank": 48,
+      "primaryRegion": "NA-WEST"
     },
     {
       "name": "TT-LukeyOnMobile",
       "earningsUSD": 1300,
       "countryCode": "en",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.096Z",
-      "rank": 62,
+      "lastActiveDate": "2026-04-21T04:42:05.589Z",
+      "rank": 49,
+      "primaryRegion": "EUROPE"
+    },
+    {
+      "name": "autolockxdxdxdxd",
+      "earningsUSD": 1300,
+      "countryCode": "us",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:41:29.152Z",
+      "rank": 50,
       "primaryRegion": "EUROPE"
     },
     {
@@ -563,44 +455,107 @@
       "earningsUSD": 1250,
       "countryCode": "nl",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:38.373Z",
-      "rank": 63,
+      "lastActiveDate": "2026-04-21T04:42:04.926Z",
+      "rank": 51,
       "primaryRegion": "EUROPE"
     },
     {
-      "name": "Twtr VestalixFN",
+      "name": "bont x richardsǃ",
       "earningsUSD": 1250,
-      "countryCode": "nl",
+      "countryCode": "is",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:37.664Z",
-      "rank": 64,
-      "primaryRegion": "NA-WEST"
+      "lastActiveDate": "2026-04-21T04:42:03.394Z",
+      "rank": 52,
+      "primaryRegion": "ASIA"
     },
     {
       "name": "Swazy2Crazyネネネ",
       "earningsUSD": 1200,
       "countryCode": "nz",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:11.041Z",
-      "rank": 65,
+      "lastActiveDate": "2026-04-21T04:41:40.133Z",
+      "rank": 53,
       "primaryRegion": "ASIA"
+    },
+    {
+      "name": "Gqrdo 20999",
+      "earningsUSD": 1150,
+      "countryCode": "it",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
+      "rank": 54,
+      "primaryRegion": "EUROPE"
+    },
+    {
+      "name": "Ololo ZiZooou",
+      "earningsUSD": 1150,
+      "countryCode": "fr",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:42:02.258Z",
+      "rank": 55,
+      "primaryRegion": "EUROPE"
+    },
+    {
+      "name": "juicydagoon",
+      "earningsUSD": 1150,
+      "countryCode": "la",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:41:37.068Z",
+      "rank": 56,
+      "primaryRegion": "NA-CENTRAL"
+    },
+    {
+      "name": "Slursxz",
+      "earningsUSD": 1150,
+      "countryCode": "be",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:42:02.258Z",
+      "rank": 57,
+      "primaryRegion": "OCEANIA"
+    },
+    {
+      "name": "cant qual",
+      "earningsUSD": 1150,
+      "countryCode": "gb",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:42:02.258Z",
+      "rank": 58,
+      "primaryRegion": "OCEANIA"
+    },
+    {
+      "name": "King Kong ROOKI",
+      "earningsUSD": 1100,
+      "countryCode": "be",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:42:04.150Z",
+      "rank": 59,
+      "primaryRegion": "EUROPE"
     },
     {
       "name": "EliBoi123.",
       "earningsUSD": 1100,
       "countryCode": "un",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:24.216Z",
-      "rank": 66,
+      "lastActiveDate": "2026-04-21T04:41:51.914Z",
+      "rank": 60,
       "primaryRegion": "NA-WEST"
+    },
+    {
+      "name": "MTB Hashim",
+      "earningsUSD": 1050,
+      "countryCode": "is",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:42:05.589Z",
+      "rank": 61,
+      "primaryRegion": "EUROPE"
     },
     {
       "name": "tt kenamii.fnm",
       "earningsUSD": 1050,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:40.409Z",
-      "rank": 67,
+      "lastActiveDate": "2026-04-21T04:41:04.568Z",
+      "rank": 62,
       "primaryRegion": "NA-CENTRAL"
     },
     {
@@ -608,8 +563,8 @@
       "earningsUSD": 1050,
       "countryCode": "un",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:26.911Z",
-      "rank": 68,
+      "lastActiveDate": "2026-04-21T04:41:54.274Z",
+      "rank": 63,
       "primaryRegion": "NA-WEST"
     },
     {
@@ -617,8 +572,8 @@
       "earningsUSD": 1000,
       "countryCode": "de",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:53.002Z",
-      "rank": 69,
+      "lastActiveDate": "2026-04-21T04:41:25.354Z",
+      "rank": 64,
       "primaryRegion": "NA-CENTRAL"
     },
     {
@@ -626,17 +581,26 @@
       "earningsUSD": 1000,
       "countryCode": "so",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:24.543Z",
-      "rank": 70,
+      "lastActiveDate": "2026-04-21T04:40:54.247Z",
+      "rank": 65,
       "primaryRegion": "NA-CENTRAL"
+    },
+    {
+      "name": "Twtr VestalixFN",
+      "earningsUSD": 1000,
+      "countryCode": "nl",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:42:04.150Z",
+      "rank": 66,
+      "primaryRegion": "NA-WEST"
     },
     {
       "name": "kiched",
       "earningsUSD": 1000,
       "countryCode": "de",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:10.364Z",
-      "rank": 71,
+      "lastActiveDate": "2026-04-21T04:41:39.424Z",
+      "rank": 67,
       "primaryRegion": "ASIA"
     },
     {
@@ -644,26 +608,17 @@
       "earningsUSD": 1000,
       "countryCode": "un",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:56.690Z",
-      "rank": 72,
+      "lastActiveDate": "2026-04-21T04:41:29.152Z",
+      "rank": 68,
       "primaryRegion": "BRAZIL"
-    },
-    {
-      "name": "No AA Coque",
-      "earningsUSD": 950,
-      "countryCode": "mx",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:20.498Z",
-      "rank": 73,
-      "primaryRegion": "NA-WEST"
     },
     {
       "name": "Magizz.",
       "earningsUSD": 900,
       "countryCode": "fr",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:55.946Z",
-      "rank": 74,
+      "lastActiveDate": "2026-04-21T04:41:28.424Z",
+      "rank": 69,
       "primaryRegion": "EUROPE"
     },
     {
@@ -671,44 +626,26 @@
       "earningsUSD": 900,
       "countryCode": "fo",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.096Z",
-      "rank": 75,
+      "lastActiveDate": "2026-04-21T04:42:05.589Z",
+      "rank": 70,
       "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "bonjoür",
-      "earningsUSD": 900,
-      "countryCode": "so",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:36.840Z",
-      "rank": 76,
-      "primaryRegion": "NA-WEST"
     },
     {
       "name": "Fear MTB Adniq",
       "earningsUSD": 800,
       "countryCode": "no",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:05.405Z",
-      "rank": 77,
+      "lastActiveDate": "2026-04-21T04:40:39.946Z",
+      "rank": 71,
       "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "vexiity.",
-      "earningsUSD": 800,
-      "countryCode": "un",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:52.286Z",
-      "rank": 78,
-      "primaryRegion": "NA-WEST"
     },
     {
       "name": "Muhleeky",
       "earningsUSD": 800,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:38.124Z",
-      "rank": 79,
+      "lastActiveDate": "2026-04-21T04:41:02.967Z",
+      "rank": 72,
       "primaryRegion": "NA-WEST"
     },
     {
@@ -716,8 +653,8 @@
       "earningsUSD": 800,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:11.749Z",
-      "rank": 80,
+      "lastActiveDate": "2026-04-21T04:41:40.847Z",
+      "rank": 73,
       "primaryRegion": "BRAZIL"
     },
     {
@@ -725,80 +662,62 @@
       "earningsUSD": 750,
       "countryCode": "jp",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:26.911Z",
-      "rank": 81,
+      "lastActiveDate": "2026-04-21T04:41:54.274Z",
+      "rank": 74,
       "primaryRegion": "OCEANIA"
     },
     {
-      "name": "The Gugaa",
+      "name": "hektixx ラ",
       "earningsUSD": 750,
-      "countryCode": "pt",
+      "countryCode": "en",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:37.664Z",
-      "rank": 82,
-      "primaryRegion": "MIDDLE EAST"
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
+      "rank": 75,
+      "primaryRegion": "ASIA"
     },
     {
-      "name": "PercepTheGamer",
+      "name": "DX Lucka",
       "earningsUSD": 700,
-      "countryCode": "wa",
+      "countryCode": "cz",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:52.286Z",
-      "rank": 83,
-      "primaryRegion": "NA-WEST"
+      "lastActiveDate": "2026-04-21T04:42:04.150Z",
+      "rank": 76,
+      "primaryRegion": "ASIA"
     },
     {
       "name": "Plaplec",
       "earningsUSD": 650,
       "countryCode": "pl",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:11.041Z",
-      "rank": 84,
+      "lastActiveDate": "2026-04-21T04:41:40.133Z",
+      "rank": 77,
       "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "jqrdangregzeyrm",
-      "earningsUSD": 650,
-      "countryCode": "fo",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:20.498Z",
-      "rank": 85,
-      "primaryRegion": "NA-CENTRAL"
     },
     {
       "name": "drizzon7",
       "earningsUSD": 650,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:09.675Z",
-      "rank": 86,
+      "lastActiveDate": "2026-04-21T04:41:38.686Z",
+      "rank": 78,
       "primaryRegion": "NA-CENTRAL"
     },
     {
-      "name": "twttr chr1cc0fn6",
+      "name": "DC Griefer",
       "earningsUSD": 650,
-      "countryCode": "it",
+      "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:37.664Z",
-      "rank": 87,
-      "primaryRegion": "BRAZIL"
-    },
-    {
-      "name": "Maskierte Maske",
-      "earningsUSD": 500,
-      "countryCode": "de",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:17.375Z",
-      "rank": 88,
-      "primaryRegion": "EUROPE"
+      "lastActiveDate": "2026-04-21T04:42:04.926Z",
+      "rank": 79,
+      "primaryRegion": "MIDDLE EAST"
     },
     {
       "name": "2KGHantel",
       "earningsUSD": 500,
       "countryCode": "un",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:08.047Z",
-      "rank": 89,
+      "lastActiveDate": "2026-04-21T04:41:37.068Z",
+      "rank": 80,
       "primaryRegion": "EUROPE"
     },
     {
@@ -806,8 +725,8 @@
       "earningsUSD": 500,
       "countryCode": "be",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:37.664Z",
-      "rank": 90,
+      "lastActiveDate": "2026-04-21T04:42:04.150Z",
+      "rank": 81,
       "primaryRegion": "EUROPE"
     },
     {
@@ -815,44 +734,26 @@
       "earningsUSD": 500,
       "countryCode": "un",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
-      "rank": 91,
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
+      "rank": 82,
       "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "Gh0ztyу",
-      "earningsUSD": 500,
-      "countryCode": "us",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:23.895Z",
-      "rank": 92,
-      "primaryRegion": "NA-CENTRAL"
     },
     {
       "name": "We_hit_ghost",
       "earningsUSD": 500,
       "countryCode": "ca",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:25.681Z",
-      "rank": 93,
+      "lastActiveDate": "2026-04-21T04:41:53.459Z",
+      "rank": 83,
       "primaryRegion": "NA-CENTRAL"
-    },
-    {
-      "name": "Fuzion",
-      "earningsUSD": 500,
-      "countryCode": "au",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:22.764Z",
-      "rank": 94,
-      "primaryRegion": "NA-WEST"
     },
     {
       "name": "Revolushun-v-",
       "earningsUSD": 500,
       "countryCode": "jp",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:10.364Z",
-      "rank": 95,
+      "lastActiveDate": "2026-04-21T04:41:39.424Z",
+      "rank": 84,
       "primaryRegion": "NA-WEST"
     },
     {
@@ -860,8 +761,8 @@
       "earningsUSD": 500,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:12.453Z",
-      "rank": 96,
+      "lastActiveDate": "2026-04-21T04:41:41.752Z",
+      "rank": 85,
       "primaryRegion": "NA-WEST"
     },
     {
@@ -869,8 +770,8 @@
       "earningsUSD": 500,
       "countryCode": "es",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.988Z",
-      "rank": 97,
+      "lastActiveDate": "2026-04-21T04:42:04.926Z",
+      "rank": 86,
       "primaryRegion": "MIDDLE EAST"
     },
     {
@@ -878,8 +779,8 @@
       "earningsUSD": 500,
       "countryCode": "ar",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:25.016Z",
-      "rank": 98,
+      "lastActiveDate": "2026-04-21T04:41:52.624Z",
+      "rank": 87,
       "primaryRegion": "ASIA"
     },
     {
@@ -887,44 +788,53 @@
       "earningsUSD": 500,
       "countryCode": "au",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:35.998Z",
-      "rank": 99,
+      "lastActiveDate": "2026-04-21T04:42:02.258Z",
+      "rank": 88,
       "primaryRegion": "OCEANIA"
-    },
-    {
-      "name": "Brokenipad",
-      "earningsUSD": 450,
-      "countryCode": "ca",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:25.681Z",
-      "rank": 100,
-      "primaryRegion": "NA-WEST"
     },
     {
       "name": "SICKOLUCKY111",
       "earningsUSD": 450,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:39.473Z",
-      "rank": 101,
+      "lastActiveDate": "2026-04-21T04:41:03.631Z",
+      "rank": 89,
       "primaryRegion": "EUROPE"
+    },
+    {
+      "name": "jqrdangregzeyrm",
+      "earningsUSD": 450,
+      "countryCode": "fo",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:41:37.728Z",
+      "rank": 90,
+      "primaryRegion": "ASIA"
     },
     {
       "name": "EarlyJBird",
       "earningsUSD": 450,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:22.469Z",
-      "rank": 102,
+      "lastActiveDate": "2026-04-21T04:40:51.837Z",
+      "rank": 91,
       "primaryRegion": "NA-CENTRAL"
+    },
+    {
+      "name": "Brokenipad",
+      "earningsUSD": 450,
+      "countryCode": "ca",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:41:53.459Z",
+      "rank": 92,
+      "primaryRegion": "NA-WEST"
     },
     {
       "name": "DackelDavidネ",
       "earningsUSD": 450,
       "countryCode": "de",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:38.373Z",
-      "rank": 103,
+      "lastActiveDate": "2026-04-21T04:42:04.926Z",
+      "rank": 93,
       "primaryRegion": "MIDDLE EAST"
     },
     {
@@ -932,152 +842,44 @@
       "earningsUSD": 450,
       "countryCode": "br",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:37.414Z",
-      "rank": 104,
+      "lastActiveDate": "2026-04-21T04:41:02.285Z",
+      "rank": 94,
       "primaryRegion": "NA-CENTRAL"
     },
     {
-      "name": "CHXSELUVSYOS",
+      "name": "No AA Coque",
       "earningsUSD": 450,
-      "countryCode": "fo",
+      "countryCode": "mx",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:06.187Z",
-      "rank": 105,
-      "primaryRegion": "ASIA"
-    },
-    {
-      "name": "2 Dumfries",
-      "earningsUSD": 400,
-      "countryCode": "fo",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:00.659Z",
-      "rank": 106,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "Flame on Ipad",
-      "earningsUSD": 400,
-      "countryCode": "de",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:00.659Z",
-      "rank": 107,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "shimiez.",
-      "earningsUSD": 400,
-      "countryCode": "de",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:01.578Z",
-      "rank": 108,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "New Heqzy",
-      "earningsUSD": 400,
-      "countryCode": "es",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:54.438Z",
-      "rank": 109,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "SneakyStratus",
-      "earningsUSD": 400,
-      "countryCode": "un",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:01.578Z",
-      "rank": 110,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "TT-MØBILE Δrt",
-      "earningsUSD": 400,
-      "countryCode": "ch",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:01.578Z",
-      "rank": 111,
-      "primaryRegion": "EUROPE"
+      "lastActiveDate": "2026-04-21T04:41:04.568Z",
+      "rank": 95,
+      "primaryRegion": "NA-WEST"
     },
     {
       "name": "ibericoaim",
       "earningsUSD": 400,
       "countryCode": "es",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:02.341Z",
-      "rank": 112,
+      "lastActiveDate": "2026-04-21T04:40:37.137Z",
+      "rank": 96,
       "primaryRegion": "EUROPE"
     },
     {
-      "name": "AimxP4lmeǃ",
+      "name": "twttr chr1cc0fn6",
       "earningsUSD": 400,
-      "countryCode": "es",
+      "countryCode": "it",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:06.187Z",
-      "rank": 113,
-      "primaryRegion": "ASIA"
-    },
-    {
-      "name": "trix_TeaTea",
-      "earningsUSD": 250,
-      "countryCode": "ru",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:00.659Z",
-      "rank": 114,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "Lord Larsje",
-      "earningsUSD": 250,
-      "countryCode": "be",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:00.659Z",
-      "rank": 115,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "aidxnUK",
-      "earningsUSD": 250,
-      "countryCode": "un",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:34.685Z",
-      "rank": 116,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "Proklx",
-      "earningsUSD": 250,
-      "countryCode": "un",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:00.659Z",
-      "rank": 117,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "Jxrik",
-      "earningsUSD": 250,
-      "countryCode": "nl",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:00.659Z",
-      "rank": 118,
-      "primaryRegion": "EUROPE"
-    },
-    {
-      "name": "Owen 74 ㅤ",
-      "earningsUSD": 250,
-      "countryCode": "un",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:01.578Z",
-      "rank": 119,
-      "primaryRegion": "EUROPE"
+      "lastActiveDate": "2026-04-21T04:42:04.150Z",
+      "rank": 97,
+      "primaryRegion": "BRAZIL"
     },
     {
       "name": "Nonno gamer2019",
       "earningsUSD": 250,
       "countryCode": "it",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
-      "rank": 120,
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
+      "rank": 98,
       "primaryRegion": "EUROPE"
     },
     {
@@ -1085,8 +887,8 @@
       "earningsUSD": 250,
       "countryCode": "fr",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:02.341Z",
-      "rank": 121,
+      "lastActiveDate": "2026-04-21T04:40:37.137Z",
+      "rank": 99,
       "primaryRegion": "EUROPE"
     },
     {
@@ -1094,8 +896,8 @@
       "earningsUSD": 250,
       "countryCode": "es",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:03.950Z",
-      "rank": 122,
+      "lastActiveDate": "2026-04-21T04:40:38.500Z",
+      "rank": 100,
       "primaryRegion": "EUROPE"
     },
     {
@@ -1103,8 +905,8 @@
       "earningsUSD": 250,
       "countryCode": "fr",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:38.373Z",
-      "rank": 123,
+      "lastActiveDate": "2026-04-21T04:42:04.926Z",
+      "rank": 101,
       "primaryRegion": "EUROPE"
     },
     {
@@ -1112,8 +914,8 @@
       "earningsUSD": 250,
       "countryCode": "it",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:04.690Z",
-      "rank": 124,
+      "lastActiveDate": "2026-04-21T04:40:39.209Z",
+      "rank": 102,
       "primaryRegion": "EUROPE"
     },
     {
@@ -1121,8 +923,8 @@
       "earningsUSD": 250,
       "countryCode": "fr",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.096Z",
-      "rank": 125,
+      "lastActiveDate": "2026-04-21T04:42:05.589Z",
+      "rank": 103,
       "primaryRegion": "EUROPE"
     },
     {
@@ -1130,8 +932,8 @@
       "earningsUSD": 250,
       "countryCode": "it",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:06.101Z",
-      "rank": 126,
+      "lastActiveDate": "2026-04-21T04:40:40.636Z",
+      "rank": 104,
       "primaryRegion": "EUROPE"
     },
     {
@@ -1139,8 +941,8 @@
       "earningsUSD": 250,
       "countryCode": "es",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:07.007Z",
-      "rank": 127,
+      "lastActiveDate": "2026-04-21T04:40:41.281Z",
+      "rank": 105,
       "primaryRegion": "EUROPE"
     },
     {
@@ -1148,8 +950,8 @@
       "earningsUSD": 250,
       "countryCode": "ru",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:07.007Z",
-      "rank": 128,
+      "lastActiveDate": "2026-04-21T04:40:41.281Z",
+      "rank": 106,
       "primaryRegion": "EUROPE"
     },
     {
@@ -1157,8 +959,8 @@
       "earningsUSD": 250,
       "countryCode": "fr",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:21.077Z",
-      "rank": 129,
+      "lastActiveDate": "2026-04-21T04:40:50.209Z",
+      "rank": 107,
       "primaryRegion": "NA-CENTRAL"
     },
     {
@@ -1166,8 +968,8 @@
       "earningsUSD": 250,
       "countryCode": "jp",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:08.945Z",
-      "rank": 130,
+      "lastActiveDate": "2026-04-21T04:41:37.728Z",
+      "rank": 108,
       "primaryRegion": "NA-CENTRAL"
     },
     {
@@ -1175,80 +977,44 @@
       "earningsUSD": 250,
       "countryCode": "be",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:40.729Z",
-      "rank": 131,
+      "lastActiveDate": "2026-04-21T04:42:07.069Z",
+      "rank": 109,
       "primaryRegion": "NA-CENTRAL"
     },
     {
-      "name": "Thousand Tricks",
-      "earningsUSD": 250,
-      "countryCode": "un",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:24.216Z",
-      "rank": 132,
-      "primaryRegion": "NA-WEST"
-    },
-    {
-      "name": "phoeniixǃ",
+      "name": "Gh0ztyу",
       "earningsUSD": 250,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:34.410Z",
-      "rank": 133,
-      "primaryRegion": "NA-WEST"
+      "lastActiveDate": "2026-04-21T04:40:53.524Z",
+      "rank": 110,
+      "primaryRegion": "NA-CENTRAL"
     },
     {
       "name": "Purposë General",
       "earningsUSD": 250,
       "countryCode": "us",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:38.124Z",
-      "rank": 134,
+      "lastActiveDate": "2026-04-21T04:41:02.967Z",
+      "rank": 111,
       "primaryRegion": "NA-WEST"
     },
     {
-      "name": "NASDAQ Nico",
+      "name": "Fuzion",
       "earningsUSD": 250,
-      "countryCode": "un",
+      "countryCode": "au",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:51.578Z",
-      "rank": 135,
-      "primaryRegion": "BRAZIL"
-    },
-    {
-      "name": "snak3kk",
-      "earningsUSD": 250,
-      "countryCode": "ar",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:51.578Z",
-      "rank": 136,
-      "primaryRegion": "BRAZIL"
-    },
-    {
-      "name": "King Piесe Ψ",
-      "earningsUSD": 250,
-      "countryCode": "de",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:51.578Z",
-      "rank": 137,
-      "primaryRegion": "BRAZIL"
-    },
-    {
-      "name": "MTB Duy",
-      "earningsUSD": 250,
-      "countryCode": "gb",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:52.286Z",
-      "rank": 138,
-      "primaryRegion": "BRAZIL"
+      "lastActiveDate": "2026-04-21T04:41:50.240Z",
+      "rank": 112,
+      "primaryRegion": "OCEANIA"
     },
     {
       "name": "Wxaox",
       "earningsUSD": 250,
       "countryCode": "se",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:53.002Z",
-      "rank": 139,
+      "lastActiveDate": "2026-04-21T04:41:25.354Z",
+      "rank": 113,
       "primaryRegion": "BRAZIL"
     },
     {
@@ -1256,8 +1022,8 @@
       "earningsUSD": 250,
       "countryCode": "pt",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:53.002Z",
-      "rank": 140,
+      "lastActiveDate": "2026-04-21T04:41:25.354Z",
+      "rank": 114,
       "primaryRegion": "BRAZIL"
     },
     {
@@ -1265,8 +1031,8 @@
       "earningsUSD": 250,
       "countryCode": "it",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:53.002Z",
-      "rank": 141,
+      "lastActiveDate": "2026-04-21T04:41:25.354Z",
+      "rank": 115,
       "primaryRegion": "BRAZIL"
     },
     {
@@ -1274,8 +1040,8 @@
       "earningsUSD": 250,
       "countryCode": "br",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:54.438Z",
-      "rank": 142,
+      "lastActiveDate": "2026-04-21T04:41:26.784Z",
+      "rank": 116,
       "primaryRegion": "BRAZIL"
     },
     {
@@ -1283,8 +1049,8 @@
       "earningsUSD": 250,
       "countryCode": "es",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:55.946Z",
-      "rank": 143,
+      "lastActiveDate": "2026-04-21T04:41:28.424Z",
+      "rank": 117,
       "primaryRegion": "BRAZIL"
     },
     {
@@ -1292,26 +1058,17 @@
       "earningsUSD": 250,
       "countryCode": "pl",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:56.690Z",
-      "rank": 144,
+      "lastActiveDate": "2026-04-21T04:41:29.152Z",
+      "rank": 118,
       "primaryRegion": "BRAZIL"
-    },
-    {
-      "name": "NEXUS ルイスブルドーザー",
-      "earningsUSD": 250,
-      "countryCode": "jp",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:06.187Z",
-      "rank": 145,
-      "primaryRegion": "ASIA"
     },
     {
       "name": "Reeton120fps-",
       "earningsUSD": 250,
       "countryCode": "jp",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:08.945Z",
-      "rank": 146,
+      "lastActiveDate": "2026-04-21T04:41:37.728Z",
+      "rank": 119,
       "primaryRegion": "ASIA"
     },
     {
@@ -1319,8 +1076,8 @@
       "earningsUSD": 250,
       "countryCode": "un",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:09.675Z",
-      "rank": 147,
+      "lastActiveDate": "2026-04-21T04:41:38.686Z",
+      "rank": 120,
       "primaryRegion": "ASIA"
     },
     {
@@ -1328,71 +1085,44 @@
       "earningsUSD": 250,
       "countryCode": "un",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:35.998Z",
-      "rank": 148,
+      "lastActiveDate": "2026-04-21T04:42:02.258Z",
+      "rank": 121,
       "primaryRegion": "ASIA"
-    },
-    {
-      "name": "qualforkunzite",
-      "earningsUSD": 250,
-      "countryCode": "un",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:35.346Z",
-      "rank": 149,
-      "primaryRegion": "MIDDLE EAST"
-    },
-    {
-      "name": "Vynz αxҽʅʅ00",
-      "earningsUSD": 250,
-      "countryCode": "es",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:20.498Z",
-      "rank": 150,
-      "primaryRegion": "OCEANIA"
     },
     {
       "name": "klutzFNM",
       "earningsUSD": 250,
       "countryCode": "jp",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:22.109Z",
-      "rank": 151,
+      "lastActiveDate": "2026-04-21T04:41:49.538Z",
+      "rank": 122,
       "primaryRegion": "OCEANIA"
     },
     {
-      "name": "apx schmali",
+      "name": "The Gugaa",
       "earningsUSD": 250,
-      "countryCode": "de",
+      "countryCode": "pt",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:34.685Z",
-      "rank": 152,
+      "lastActiveDate": "2026-04-21T04:42:04.150Z",
+      "rank": 123,
       "primaryRegion": "MIDDLE EAST"
     },
     {
-      "name": "Yuan Khan",
+      "name": "bonjoür",
       "earningsUSD": 250,
-      "countryCode": "sa",
+      "countryCode": "so",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:35.346Z",
-      "rank": 153,
+      "lastActiveDate": "2026-04-21T04:42:03.394Z",
+      "rank": 124,
       "primaryRegion": "MIDDLE EAST"
-    },
-    {
-      "name": "Og. .",
-      "earningsUSD": 200,
-      "countryCode": "mx",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:21.820Z",
-      "rank": 154,
-      "primaryRegion": "NA-CENTRAL"
     },
     {
       "name": "Mydro5",
       "earningsUSD": 200,
       "countryCode": "nl",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:19.183Z",
-      "rank": 155,
+      "lastActiveDate": "2026-04-21T04:40:49.239Z",
+      "rank": 125,
       "primaryRegion": "NA-CENTRAL"
     },
     {
@@ -1400,8 +1130,8 @@
       "earningsUSD": 200,
       "countryCode": "un",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:22.469Z",
-      "rank": 156,
+      "lastActiveDate": "2026-04-21T04:40:51.837Z",
+      "rank": 126,
       "primaryRegion": "NA-CENTRAL"
     },
     {
@@ -1409,8 +1139,8 @@
       "earningsUSD": 200,
       "countryCode": "mx",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:23.225Z",
-      "rank": 157,
+      "lastActiveDate": "2026-04-21T04:40:52.777Z",
+      "rank": 127,
       "primaryRegion": "NA-CENTRAL"
     },
     {
@@ -1418,8 +1148,8 @@
       "earningsUSD": 200,
       "countryCode": "un",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:23.895Z",
-      "rank": 158,
+      "lastActiveDate": "2026-04-21T04:40:53.524Z",
+      "rank": 128,
       "primaryRegion": "NA-CENTRAL"
     },
     {
@@ -1427,8 +1157,8 @@
       "earningsUSD": 200,
       "countryCode": "ur",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:24:39.988Z",
-      "rank": 159,
+      "lastActiveDate": "2026-04-21T04:41:41.752Z",
+      "rank": 129,
       "primaryRegion": "NA-CENTRAL"
     },
     {
@@ -1436,35 +1166,17 @@
       "earningsUSD": 200,
       "countryCode": "au",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:24.543Z",
-      "rank": 160,
+      "lastActiveDate": "2026-04-21T04:40:54.247Z",
+      "rank": 130,
       "primaryRegion": "NA-CENTRAL"
-    },
-    {
-      "name": "Origin EaeGui",
-      "earningsUSD": 200,
-      "countryCode": "br",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:34.410Z",
-      "rank": 161,
-      "primaryRegion": "NA-WEST"
-    },
-    {
-      "name": "yalalay beghi7",
-      "earningsUSD": 200,
-      "countryCode": "it",
-      "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:34.410Z",
-      "rank": 162,
-      "primaryRegion": "NA-WEST"
     },
     {
       "name": "Percep Fanboy",
       "earningsUSD": 200,
       "countryCode": "fr",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:37.414Z",
-      "rank": 163,
+      "lastActiveDate": "2026-04-21T04:41:02.285Z",
+      "rank": 131,
       "primaryRegion": "NA-WEST"
     },
     {
@@ -1472,8 +1184,8 @@
       "earningsUSD": 200,
       "countryCode": "au",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:37.414Z",
-      "rank": 164,
+      "lastActiveDate": "2026-04-21T04:41:02.285Z",
+      "rank": 132,
       "primaryRegion": "NA-WEST"
     },
     {
@@ -1481,8 +1193,26 @@
       "earningsUSD": 200,
       "countryCode": "it",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:38.124Z",
-      "rank": 165,
+      "lastActiveDate": "2026-04-21T04:41:02.967Z",
+      "rank": 133,
+      "primaryRegion": "NA-WEST"
+    },
+    {
+      "name": "PercepTheGamer",
+      "earningsUSD": 200,
+      "countryCode": "wa",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:41:02.967Z",
+      "rank": 134,
+      "primaryRegion": "NA-WEST"
+    },
+    {
+      "name": "CHXSELUVSYOS",
+      "earningsUSD": 200,
+      "countryCode": "fo",
+      "lastActiveTournament": "Mobile Series",
+      "lastActiveDate": "2026-04-21T04:41:03.631Z",
+      "rank": 135,
       "primaryRegion": "NA-WEST"
     },
     {
@@ -1490,11 +1220,11 @@
       "earningsUSD": 200,
       "countryCode": "br",
       "lastActiveTournament": "Mobile Series",
-      "lastActiveDate": "2026-04-21T04:23:42.025Z",
-      "rank": 166,
+      "lastActiveDate": "2026-04-21T04:41:06.029Z",
+      "rank": 136,
       "primaryRegion": "NA-WEST"
     }
   ],
-  "lastUpdated": "2026-04-21T04:24:42.676Z",
+  "lastUpdated": "2026-04-21T04:42:09.093Z",
   "source": "github-actions"
 }
