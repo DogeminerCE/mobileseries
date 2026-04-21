@@ -130,8 +130,10 @@ async function aggregateMobileEarnings() {
       const title1 = t.displayData?.titleLine1?.toLowerCase() || '';
       const eventId = t.eventId?.toLowerCase() || '';
       
-      if (eventId.includes('blitz') || title1.includes('blitz')) return false;
-      
+      // Whitelist only official Mobile Series events.
+      // Note: Do NOT exclude by 'blitz' in eventId — Dec qualifiers carry
+      // eventId "S39_BlitzMobileCup_DecQualifier1_*" but are still titled
+      // "Mobile Series" and award full Mobile Series prize money.
       return (title1.includes('mobile series') || eventId.includes('mobileseries'));
     });
 
