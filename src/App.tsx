@@ -305,9 +305,8 @@ export default function App() {
                         <div className="col-span-1 font-mono text-[#FCE14B]">
                           {(idx + 4) < 10 ? `0${idx + 4}` : idx + 4}
                         </div>
-                        <div className="col-span-6 font-black uppercase italic tracking-tight flex flex-col">
+                        <div className="col-span-6 font-black uppercase italic tracking-tight flex flex-col justify-center">
                           <span>{player.name}</span>
-                          <span className="text-[8px] opacity-40 font-mono tracking-widest">{player.lastActiveTournament || 'Tournament Match'}</span>
                         </div>
                         <div className="col-span-2 flex items-center gap-2 opacity-60 text-[10px] uppercase font-mono">
                           <img 
@@ -373,8 +372,8 @@ export default function App() {
                   <div className="space-y-4">
                     <div className="text-[10px] uppercase opacity-40 mb-3 tracking-widest font-bold">Network Status</div>
                     <div className="flex items-center gap-3">
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#FCE14B] shadow-[0_0_12px_#FCE14B]"></div>
-                      <span className="text-[10px] uppercase tracking-widest font-bold text-[#FCE14B]">Osirion API Cloud Sync</span>
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#4ade80] shadow-[0_0_12px_#4ade80]"></div>
+                      <span className="text-[10px] uppercase tracking-widest font-bold text-[#4ade80]">Osirion API Cloud Sync</span>
                     </div>
                     <div className="text-[10px] uppercase opacity-40 italic font-mono">
                       Feed Update: {lastUpdated || 'SYNCING...'}
@@ -383,10 +382,6 @@ export default function App() {
                 </div>
 
                 <div className="mt-6 border-t border-white/5 pt-6 hidden md:block">
-                  <div className="flex items-center gap-2 mb-4 opacity-30">
-                    <Smartphone size={16} />
-                    <span className="text-[10px] uppercase tracking-widest font-black">Mobile Series 2026</span>
-                  </div>
                   <p className="text-[10px] opacity-20 uppercase font-mono leading-relaxed">
                     All player data is subject to verification by tournament officials. 
                     Earnings represent gross tournament payout before taxes and organization cuts.
