@@ -124,32 +124,35 @@ async function aggregateMobileEarnings() {
           if (!lbData.success || !lbData.leaderboard.entries) continue;
 
           lbData.leaderboard.entries.forEach((entry: any) => {
-            const username = entry.players[0]?.username;
-            if (!username) return;
-
-            if (!playerMap[username]) {
-              playerMap[username] = {
-                name: username,
-                earningsUSD: 0,
-                countryCode: resolveCountryCode(entry.players[0]?.flagToken),
-                lastActiveTournament: tourney.displayData?.titleLine1,
-                lastActiveDate: lbData.leaderboard.updatedAt || new Date().toISOString(),
-              };
-            }
-
             const prizeMoney = calculatePrize(entry.rank, region);
-            playerMap[username].earningsUSD += prizeMoney;
-
-            if (!playerRegionEarnings[username]) playerRegionEarnings[username] = {};
-            playerRegionEarnings[username][region] = (playerRegionEarnings[username][region] || 0) + prizeMoney;
             
-            const entryDate = new Date(lbData.leaderboard.updatedAt || 0).getTime();
-            const existingDate = new Date(playerMap[username].lastActiveDate).getTime();
-            if (entryDate > existingDate) {
-              playerMap[username].lastActiveTournament = tourney.displayData?.titleLine1;
-              playerMap[username].lastActiveDate = lbData.leaderboard.updatedAt;
-              playerMap[username].countryCode = resolveCountryCode(entry.players[0]?.flagToken);
-            }
+            (entry.players || []).forEach((player: any) => {
+              const username = player.username;
+              if (!username) return;
+
+              if (!playerMap[username]) {
+                playerMap[username] = {
+                  name: username,
+                  earningsUSD: 0,
+                  countryCode: resolveCountryCode(player.flagToken),
+                  lastActiveTournament: tourney.displayData?.titleLine1,
+                  lastActiveDate: lbData.leaderboard.updatedAt || new Date().toISOString(),
+                };
+              }
+
+              playerMap[username].earningsUSD += prizeMoney;
+
+              if (!playerRegionEarnings[username]) playerRegionEarnings[username] = {};
+              playerRegionEarnings[username][region] = (playerRegionEarnings[username][region] || 0) + prizeMoney;
+              
+              const entryDate = new Date(lbData.leaderboard.updatedAt || 0).getTime();
+              const existingDate = new Date(playerMap[username].lastActiveDate).getTime();
+              if (entryDate > existingDate) {
+                playerMap[username].lastActiveTournament = tourney.displayData?.titleLine1;
+                playerMap[username].lastActiveDate = lbData.leaderboard.updatedAt;
+                playerMap[username].countryCode = resolveCountryCode(player.flagToken);
+              }
+            });
           });
         }
       }
