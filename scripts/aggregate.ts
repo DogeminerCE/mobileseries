@@ -77,6 +77,9 @@ async function aggregateMobileEarnings() {
       if (processedTourneys.has(region + '_' + t.eventId)) return false;
       const title1 = t.displayData?.titleLine1?.toLowerCase() || '';
       const eventId = t.eventId?.toLowerCase() || '';
+      
+      if (eventId.includes('blitz') || title1.includes('blitz')) return false;
+      
       return (title1.includes('mobile series') || eventId.includes('mobileseries'));
     });
 
