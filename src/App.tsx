@@ -30,6 +30,7 @@ const CLAN_MAPPINGS: Record<string, string> = {
   'MTB Duy': 'MTB',
   'MTB Hardman': 'MTB',
   'Fear MTB Adniq': 'MTB',
+  'FNX IAMNOOB.': 'MTB',
   'DC Greifer': 'DC',
   'DC Ultra': 'DC',
   'DC kunzite': 'DC',
