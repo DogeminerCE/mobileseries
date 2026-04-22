@@ -37,6 +37,7 @@ const CLAN_MAPPINGS: Record<string, string> = {
   'dogeeedagoon': 'DC',
   'kals ngumoha': 'DC',
   'revertaimassist': 'DC',
+  'HWP Mohanad': 'DC',
   'Ololo Lostytard7': 'Ololo',
   'Ololo Ali': 'Ololo',
   'Ololo ZizNtmFdp': 'Ololo',
