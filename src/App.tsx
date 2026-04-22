@@ -56,6 +56,21 @@ function getClanIcon(playerName: string) {
   return null;
 }
 
+function ClanBadge({ clan, className }: { clan: string, className?: string }) {
+  return (
+    <div className="relative group flex items-center justify-center">
+      <img 
+        src={`/clans/${clan}.webp`} 
+        alt={`${clan} Clan`}
+        className={className}
+      />
+      <div className="absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 px-2 py-1 bg-[#141416] border border-[#FCE14B]/30 text-[#FCE14B] text-[10px] uppercase font-black tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none shadow-[0_0_15px_rgba(252,225,75,0.15)] z-50">
+        {clan} Clan
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -271,11 +286,7 @@ export default function App() {
                       <span className="podium-rank text-5xl">02</span>
                       <div className="flex items-center gap-2 mb-1">
                         {getClanIcon(displayedPlayers[1].name) && (
-                          <img 
-                            src={`/clans/${getClanIcon(displayedPlayers[1].name)}.webp`} 
-                            alt={`${getClanIcon(displayedPlayers[1].name)} Clan`}
-                            className="w-5 h-auto object-contain"
-                          />
+                          <ClanBadge clan={getClanIcon(displayedPlayers[1].name)!} className="w-5 h-auto object-contain" />
                         )}
                         <img 
                           src={`https://flagcdn.com/w40/${displayedPlayers[1].countryCode.toLowerCase()}.png`} 
@@ -299,11 +310,7 @@ export default function App() {
                       <span className="podium-rank text-7xl opacity-30">01</span>
                       <div className="flex items-center gap-2 mb-1">
                         {getClanIcon(displayedPlayers[0].name) && (
-                          <img 
-                            src={`/clans/${getClanIcon(displayedPlayers[0].name)}.webp`} 
-                            alt={`${getClanIcon(displayedPlayers[0].name)} Clan`}
-                            className="w-6 h-auto object-contain"
-                          />
+                          <ClanBadge clan={getClanIcon(displayedPlayers[0].name)!} className="w-6 h-auto object-contain" />
                         )}
                         <img 
                           src={`https://flagcdn.com/w40/${displayedPlayers[0].countryCode.toLowerCase()}.png`} 
@@ -327,11 +334,7 @@ export default function App() {
                       <span className="podium-rank text-5xl">03</span>
                       <div className="flex items-center gap-2 mb-1">
                         {getClanIcon(displayedPlayers[2].name) && (
-                          <img 
-                            src={`/clans/${getClanIcon(displayedPlayers[2].name)}.webp`} 
-                            alt={`${getClanIcon(displayedPlayers[2].name)} Clan`}
-                            className="w-5 h-auto object-contain"
-                          />
+                          <ClanBadge clan={getClanIcon(displayedPlayers[2].name)!} className="w-5 h-auto object-contain" />
                         )}
                         <img 
                           src={`https://flagcdn.com/w40/${displayedPlayers[2].countryCode.toLowerCase()}.png`} 
@@ -366,11 +369,7 @@ export default function App() {
                         <div className="col-span-6 font-black uppercase italic tracking-tight flex flex-col justify-center">
                           <div className="flex items-center gap-2">
                             {getClanIcon(player.name) && (
-                              <img 
-                                src={`/clans/${getClanIcon(player.name)}.webp`} 
-                                alt={`${getClanIcon(player.name)} Clan`}
-                                className="w-5 h-auto object-contain"
-                              />
+                              <ClanBadge clan={getClanIcon(player.name)!} className="w-5 h-auto object-contain" />
                             )}
                             <span>{player.name}</span>
                           </div>
