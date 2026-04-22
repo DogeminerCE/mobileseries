@@ -42,6 +42,7 @@ const CLAN_MAPPINGS: Record<string, string> = {
   'DC Griefer': 'DC',
   'defaultdagoon': 'DC',
   'Yuan Khan': 'DC',
+  'qual arc papier!': 'DC',
   'Ololo Lostytard7': 'Ololo',
   'Ololo Ali': 'Ololo',
   'Ololo ZizNtmFdp': 'Ololo',
