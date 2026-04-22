@@ -19,6 +19,43 @@ interface Player {
 
 const REGIONS = ["GLOBAL", "EUROPE", "NA-CENTRAL", "NA-WEST", "MIDDLE EAST", "OCEANIA", "ASIA", "BRAZIL"];
 
+const CLAN_MAPPINGS: Record<string, string> = {
+  'mtb andreshter-': 'MTB',
+  'MTB Assad': 'MTB',
+  'MTB Dizzy': 'MTB',
+  'MTB Frz': 'MTB',
+  'MTB H': 'MTB',
+  'MTB Keyxity !': 'MTB',
+  'MTB Hashim': 'MTB',
+  'MTB Duy': 'MTB',
+  'MTB Hardman': 'MTB',
+  'Fear MTB Adniq': 'MTB',
+  'DC Greifer': 'DC',
+  'DC Ultra': 'DC',
+  'DC kunzite': 'DC',
+  'DC rayderr': 'DC',
+  'dogeeedagoon': 'DC',
+  'kals ngumoha': 'DC',
+  'revertaimassist': 'DC',
+  'Ololo Lostytard7': 'Ololo',
+  'Ololo Ali': 'Ololo',
+  'Ololo ZizNtmFdp': 'Ololo',
+  'Ololo Chatpomme': 'Ololo',
+  'Ololo Angel E': 'Ololo',
+  'XSET Losty': 'Ololo',
+  'Evil Rowan Ψ': 'Ololo',
+  'み Nikito Android': 'Origin',
+  'Origin EaeGui': 'Origin'
+};
+
+function getClanIcon(playerName: string) {
+  const lowerName = playerName.toLowerCase();
+  for (const [name, clan] of Object.entries(CLAN_MAPPINGS)) {
+    if (name.toLowerCase() === lowerName) return clan;
+  }
+  return null;
+}
+
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -233,6 +270,13 @@ export default function App() {
                     <div className="podium-card bg-[#141416] border-l-4 border-[#FCE14B] h-48 group hover:bg-[#1c1c1f]">
                       <span className="podium-rank text-5xl">02</span>
                       <div className="flex items-center gap-2 mb-1">
+                        {getClanIcon(displayedPlayers[1].name) && (
+                          <img 
+                            src={`/clans/${getClanIcon(displayedPlayers[1].name)}.webp`} 
+                            alt={`${getClanIcon(displayedPlayers[1].name)} Clan`}
+                            className="w-5 h-auto object-contain"
+                          />
+                        )}
                         <img 
                           src={`https://flagcdn.com/w40/${displayedPlayers[1].countryCode.toLowerCase()}.png`} 
                           alt={displayedPlayers[1].countryCode}
@@ -254,6 +298,13 @@ export default function App() {
                     <div className="podium-card bg-gradient-to-b from-[#FFF47C] to-[#EBA311] text-black h-56 md:-mt-8 shadow-[0_20px_50px_rgba(252,225,75,0.2)]">
                       <span className="podium-rank text-7xl opacity-30">01</span>
                       <div className="flex items-center gap-2 mb-1">
+                        {getClanIcon(displayedPlayers[0].name) && (
+                          <img 
+                            src={`/clans/${getClanIcon(displayedPlayers[0].name)}.webp`} 
+                            alt={`${getClanIcon(displayedPlayers[0].name)} Clan`}
+                            className="w-6 h-auto object-contain"
+                          />
+                        )}
                         <img 
                           src={`https://flagcdn.com/w40/${displayedPlayers[0].countryCode.toLowerCase()}.png`} 
                           alt={displayedPlayers[0].countryCode}
@@ -275,6 +326,13 @@ export default function App() {
                     <div className="podium-card bg-[#141416] border-l-4 border-[#FCE14B] h-48">
                       <span className="podium-rank text-5xl">03</span>
                       <div className="flex items-center gap-2 mb-1">
+                        {getClanIcon(displayedPlayers[2].name) && (
+                          <img 
+                            src={`/clans/${getClanIcon(displayedPlayers[2].name)}.webp`} 
+                            alt={`${getClanIcon(displayedPlayers[2].name)} Clan`}
+                            className="w-5 h-auto object-contain"
+                          />
+                        )}
                         <img 
                           src={`https://flagcdn.com/w40/${displayedPlayers[2].countryCode.toLowerCase()}.png`} 
                           alt={displayedPlayers[2].countryCode}
@@ -306,7 +364,16 @@ export default function App() {
                           {(idx + 4) < 10 ? `0${idx + 4}` : idx + 4}
                         </div>
                         <div className="col-span-6 font-black uppercase italic tracking-tight flex flex-col justify-center">
-                          <span>{player.name}</span>
+                          <div className="flex items-center gap-2">
+                            {getClanIcon(player.name) && (
+                              <img 
+                                src={`/clans/${getClanIcon(player.name)}.webp`} 
+                                alt={`${getClanIcon(player.name)} Clan`}
+                                className="w-5 h-auto object-contain"
+                              />
+                            )}
+                            <span>{player.name}</span>
+                          </div>
                         </div>
                         <div className="col-span-2 flex items-center gap-2 opacity-60 text-[10px] uppercase font-mono">
                           <img 
