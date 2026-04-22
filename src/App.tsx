@@ -69,7 +69,7 @@ function ClanBadge({ clan, className }: { clan: string, className?: string }) {
         src={`/clans/${clan}.webp`} 
         alt={`${clan} Clan`}
         className={className}
-        style={{ filter: "drop-shadow(2px 0 0 black) drop-shadow(0 2px 0 black) drop-shadow(-2px 0 0 black) drop-shadow(0 -2px 0 black)" }}
+        style={{ filter: "drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black)" }}
       />
       <div className="absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 px-2 py-1 bg-[#141416] border border-[#FCE14B]/30 text-[#FCE14B] text-[10px] uppercase font-black tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none shadow-[0_0_15px_rgba(252,225,75,0.15)] z-50">
         {clan} Clan
