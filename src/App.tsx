@@ -146,7 +146,9 @@ export default function App() {
 
   const filteredAndSortedPlayers = players
     .filter(p => {
-      const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const clanName = getClanIcon(p.name);
+      const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                           (clanName && clanName.toLowerCase().includes(searchTerm.toLowerCase()));
       const matchesRegion = selectedRegion === 'GLOBAL' || p.primaryRegion === selectedRegion;
       return matchesSearch && matchesRegion;
     })
