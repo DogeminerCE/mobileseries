@@ -47,7 +47,6 @@ const CLAN_MAPPINGS: Record<string, string> = {
   'Ololo Ali': 'Ololo',
   'Ololo ZizNtmFdp': 'Ololo',
   'Ololo Chatpomme': 'Ololo',
-  'Ololo Angel E': 'Ololo',
   'XSET Losty': 'Ololo',
   'Evil Rowan Ψ': 'Ololo',
   'み Nikito Android': 'Origin',
