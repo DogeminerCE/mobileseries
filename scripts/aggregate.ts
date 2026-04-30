@@ -268,14 +268,20 @@ async function aggregateMobileEarnings() {
   }
 
   const aggregatedPlayers = Object.values(playerMap)
-    .filter((p: any) => p.earningsUSD > 0 || (playerEvents[p.name?.toLowerCase()] || []).length > 0)
+    .filter((p: any) => {
+      // Include if they have series earnings
+      if (p.earningsUSD > 0) return true;
+      // Include if they earned money in any non-series event
+      const events = playerEvents[p.name?.toLowerCase()] || [];
+      return events.some(e => e.earnings > 0);
+    })
     .sort((a: any, b: any) => b.earningsUSD - a.earningsUSD)
     .map((p: any, idx: number) => {
       const key = p.name.toLowerCase();
       const regionMap = playerRegionEarnings[key] || {};
       const topRegionKey = Object.entries(regionMap).sort((a: any, b: any) => b[1] - a[1])[0]?.[0] || 'EU';
-      // Sort events by date descending (most recent first)
-      const events = (playerEvents[key] || []).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      // Sort events by date descending (most recent first), exclude $0 events
+      const events = (playerEvents[key] || []).filter(e => e.earnings > 0).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       return { ...p, rank: idx + 1, primaryRegion: REGION_LABEL_MAP[topRegionKey] || 'GLOBAL', events };
     });
 
