@@ -198,9 +198,10 @@ async function aggregateMobileEarnings() {
             (entry.players || []).forEach((player: any) => {
               const username = player.username;
               if (!username) return;
+              const key = username.toLowerCase();
 
-              if (!playerMap[username]) {
-                playerMap[username] = {
+              if (!playerMap[key]) {
+                playerMap[key] = {
                   name: username,
                   earningsUSD: 0,
                   countryCode: resolveCountryCode(player.flagToken),
@@ -209,14 +210,14 @@ async function aggregateMobileEarnings() {
                 };
               }
 
-              playerMap[username].earningsUSD += prizeMoney;
+              playerMap[key].earningsUSD += prizeMoney;
 
-              if (!playerRegionEarnings[username]) playerRegionEarnings[username] = {};
-              playerRegionEarnings[username][region] = (playerRegionEarnings[username][region] || 0) + prizeMoney;
+              if (!playerRegionEarnings[key]) playerRegionEarnings[key] = {};
+              playerRegionEarnings[key][region] = (playerRegionEarnings[key][region] || 0) + prizeMoney;
 
               // Track individual event results
-              if (!playerEvents[username]) playerEvents[username] = [];
-              playerEvents[username].push({
+              if (!playerEvents[key]) playerEvents[key] = [];
+              playerEvents[key].push({
                 event: fullEventName,
                 region: REGION_LABEL_MAP[region] || region,
                 placement: entry.rank,
@@ -225,11 +226,12 @@ async function aggregateMobileEarnings() {
               });
               
               const entryDate = new Date(eventDate).getTime();
-              const existingDate = new Date(playerMap[username].lastActiveDate).getTime();
+              const existingDate = new Date(playerMap[key].lastActiveDate).getTime();
               if (entryDate > existingDate) {
-                playerMap[username].lastActiveTournament = tourney.displayData?.titleLine1;
-                playerMap[username].lastActiveDate = eventDate;
-                playerMap[username].countryCode = resolveCountryCode(player.flagToken);
+                playerMap[key].name = username; // keep most recent display name
+                playerMap[key].lastActiveTournament = tourney.displayData?.titleLine1;
+                playerMap[key].lastActiveDate = eventDate;
+                playerMap[key].countryCode = resolveCountryCode(player.flagToken);
               }
             });
           });
@@ -242,10 +244,11 @@ async function aggregateMobileEarnings() {
     .filter((p: any) => p.earningsUSD > 0)
     .sort((a: any, b: any) => b.earningsUSD - a.earningsUSD)
     .map((p: any, idx: number) => {
-      const regionMap = playerRegionEarnings[p.name] || {};
+      const key = p.name.toLowerCase();
+      const regionMap = playerRegionEarnings[key] || {};
       const topRegionKey = Object.entries(regionMap).sort((a: any, b: any) => b[1] - a[1])[0]?.[0] || 'EU';
       // Sort events by date descending (most recent first)
-      const events = (playerEvents[p.name] || []).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      const events = (playerEvents[key] || []).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       return { ...p, rank: idx + 1, primaryRegion: REGION_LABEL_MAP[topRegionKey] || 'GLOBAL', events };
     });
 
