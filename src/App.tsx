@@ -154,13 +154,37 @@ export default function App() {
     setPage(1);
   }, [searchTerm, selectedRegion, sortBy]);
 
+  // Compute region-specific earnings when a region filter is active
+  const getRegionEarnings = (player: Player, region: string): number => {
+    if (region === 'GLOBAL' || !player.events) return player.earningsUSD;
+    return player.events
+      .filter(e => e.region === region)
+      .reduce((sum, e) => sum + e.earnings, 0);
+  };
+
+  const getRegionEvents = (player: Player, region: string): PlayerEvent[] | undefined => {
+    if (region === 'GLOBAL' || !player.events) return player.events;
+    return player.events.filter(e => e.region === region);
+  };
+
   const filteredAndSortedPlayers = players
     .filter(p => {
       const clanName = getClanIcon(p.name);
       const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                            (clanName && clanName.toLowerCase().includes(searchTerm.toLowerCase()));
-      const matchesRegion = selectedRegion === 'GLOBAL' || p.primaryRegion === selectedRegion;
-      return matchesSearch && matchesRegion;
+      if (selectedRegion === 'GLOBAL') return matchesSearch;
+      // Show any player with earnings in the selected region
+      const regionEarnings = getRegionEarnings(p, selectedRegion);
+      return matchesSearch && regionEarnings > 0;
+    })
+    .map(p => {
+      if (selectedRegion === 'GLOBAL') return p;
+      // Override earnings and events with region-specific data
+      return {
+        ...p,
+        earningsUSD: getRegionEarnings(p, selectedRegion),
+        events: getRegionEvents(p, selectedRegion),
+      };
     })
     .sort((a, b) => {
       if (sortBy === 'earnings') return b.earningsUSD - a.earningsUSD;
