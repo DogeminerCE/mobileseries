@@ -34,7 +34,7 @@ const CLAN_MAPPINGS: Record<string, string> = {
   'MTB Dizzy': 'MTB',
   'MTB Frz': 'MTB',
   'MTB H': 'MTB',
-  'MTB Keyxity !': 'MTB',
+  'MTB Keyxity ǃ': 'MTB',
   'MTB Hashim': 'MTB',
   'MTB Duy': 'MTB',
   'MTB Hardman': 'MTB',
