@@ -105,11 +105,17 @@ function calculatePrize(rank: number, region: string): number {
   return match ? match.prize : 0;
 }
 
+const REGION_LABEL_MAP: Record<string, string> = {
+  'EU': 'EUROPE', 'NAC': 'NA-CENTRAL', 'NAW': 'NA-WEST',
+  'BR': 'BRAZIL', 'ASIA': 'ASIA', 'OCE': 'OCEANIA', 'ME': 'MIDDLE EAST'
+};
+
 async function aggregateMobileEarnings() {
   console.log("Starting verified global series aggregation (Sept 2023 - Present)...");
   const regions = ['EU', 'NAC', 'NAW', 'BR', 'ASIA', 'OCE', 'ME'];
   const playerMap: Record<string, any> = {};
   const playerRegionEarnings: Record<string, Record<string, number>> = {};
+  const playerEvents: Record<string, Array<{ event: string, region: string, placement: number, earnings: number, date: string }>> = {};
   const processedTourneys = new Set<string>();
 
   for (const region of regions) {
@@ -177,6 +183,15 @@ async function aggregateMobileEarnings() {
           
           if (!lbData.success || !lbData.leaderboard.entries) continue;
 
+          const eventTitle = tourney.displayData?.titleLine1 || 'Unknown Event';
+          const eventDate = lbData.leaderboard.updatedAt || new Date().toISOString();
+          // Build a human-readable event name from the window ID
+          const winIdParts = lbEventWindowId.match(/(?:Qualifier|Round|Final|Week)\d*/i);
+          const windowLabel = winIdParts ? winIdParts[0] : '';
+          const fullEventName = windowLabel 
+            ? `${eventTitle} — ${windowLabel} (${REGION_LABEL_MAP[region] || region})`
+            : `${eventTitle} (${REGION_LABEL_MAP[region] || region})`;
+
           lbData.leaderboard.entries.forEach((entry: any) => {
             const prizeMoney = calculatePrize(entry.rank, region);
             
@@ -190,7 +205,7 @@ async function aggregateMobileEarnings() {
                   earningsUSD: 0,
                   countryCode: resolveCountryCode(player.flagToken),
                   lastActiveTournament: tourney.displayData?.titleLine1,
-                  lastActiveDate: lbData.leaderboard.updatedAt || new Date().toISOString(),
+                  lastActiveDate: eventDate,
                 };
               }
 
@@ -198,12 +213,22 @@ async function aggregateMobileEarnings() {
 
               if (!playerRegionEarnings[username]) playerRegionEarnings[username] = {};
               playerRegionEarnings[username][region] = (playerRegionEarnings[username][region] || 0) + prizeMoney;
+
+              // Track individual event results
+              if (!playerEvents[username]) playerEvents[username] = [];
+              playerEvents[username].push({
+                event: fullEventName,
+                region: REGION_LABEL_MAP[region] || region,
+                placement: entry.rank,
+                earnings: prizeMoney,
+                date: eventDate
+              });
               
-              const entryDate = new Date(lbData.leaderboard.updatedAt || 0).getTime();
+              const entryDate = new Date(eventDate).getTime();
               const existingDate = new Date(playerMap[username].lastActiveDate).getTime();
               if (entryDate > existingDate) {
                 playerMap[username].lastActiveTournament = tourney.displayData?.titleLine1;
-                playerMap[username].lastActiveDate = lbData.leaderboard.updatedAt;
+                playerMap[username].lastActiveDate = eventDate;
                 playerMap[username].countryCode = resolveCountryCode(player.flagToken);
               }
             });
@@ -213,18 +238,15 @@ async function aggregateMobileEarnings() {
     }
   }
 
-  const REGION_LABEL_MAP: Record<string, string> = {
-    'EU': 'EUROPE', 'NAC': 'NA-CENTRAL', 'NAW': 'NA-WEST',
-    'BR': 'BRAZIL', 'ASIA': 'ASIA', 'OCE': 'OCEANIA', 'ME': 'MIDDLE EAST'
-  };
-
   const aggregatedPlayers = Object.values(playerMap)
     .filter((p: any) => p.earningsUSD > 0)
     .sort((a: any, b: any) => b.earningsUSD - a.earningsUSD)
     .map((p: any, idx: number) => {
       const regionMap = playerRegionEarnings[p.name] || {};
       const topRegionKey = Object.entries(regionMap).sort((a: any, b: any) => b[1] - a[1])[0]?.[0] || 'EU';
-      return { ...p, rank: idx + 1, primaryRegion: REGION_LABEL_MAP[topRegionKey] || 'GLOBAL' };
+      // Sort events by date descending (most recent first)
+      const events = (playerEvents[p.name] || []).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      return { ...p, rank: idx + 1, primaryRegion: REGION_LABEL_MAP[topRegionKey] || 'GLOBAL', events };
     });
 
   const payload = {

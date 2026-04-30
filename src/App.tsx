@@ -5,7 +5,15 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "motion/react";
-import { Trophy, Globe, DollarSign, Activity, Smartphone, Loader2, AlertCircle, RefreshCcw, Youtube, Twitter, MessageSquare } from "lucide-react";
+import { Trophy, Globe, DollarSign, Activity, Smartphone, Loader2, AlertCircle, RefreshCcw, Youtube, Twitter, MessageSquare, ChevronDown } from "lucide-react";
+
+interface PlayerEvent {
+  event: string;
+  region: string;
+  placement: number;
+  earnings: number;
+  date: string;
+}
 
 interface Player {
   rank: number;
@@ -15,6 +23,7 @@ interface Player {
   primaryRegion: string;
   lastActiveTournament: string;
   lastActiveDate: string;
+  events?: PlayerEvent[];
 }
 
 const REGIONS = ["GLOBAL", "EUROPE", "NA-CENTRAL", "NA-WEST", "MIDDLE EAST", "OCEANIA", "ASIA", "BRAZIL"];
@@ -90,6 +99,7 @@ export default function App() {
   const PAGE_SIZE = 25;
 
   const [dataSource, setDataSource] = useState<string>('syncing');
+  const [expandedPlayer, setExpandedPlayer] = useState<string | null>(null);
 
   const fetchLeaderboard = async (isRetry = false) => {
     if (!isRetry) setLoading(true);
@@ -289,7 +299,7 @@ export default function App() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 h-fit">
                   {/* Rank 2 */}
                   {displayedPlayers[1] && (
-                    <div className="podium-card bg-[#141416] border-l-4 border-[#FCE14B] h-48 group hover:bg-[#1c1c1f]">
+                    <div className="podium-card bg-[#141416] border-l-4 border-[#FCE14B] h-48 group hover:bg-[#1c1c1f] cursor-pointer" onClick={() => setExpandedPlayer(expandedPlayer === displayedPlayers[1].name ? null : displayedPlayers[1].name)}>
                       <span className="podium-rank text-5xl">02</span>
                       <div className="flex items-center gap-2 mb-1">
                         {getClanIcon(displayedPlayers[1].name) && (
@@ -313,7 +323,7 @@ export default function App() {
 
                   {/* Rank 1 */}
                   {displayedPlayers[0] && (
-                    <div className="podium-card bg-gradient-to-b from-[#FFF47C] to-[#EBA311] text-black h-56 md:-mt-8 shadow-[0_20px_50px_rgba(252,225,75,0.2)]">
+                    <div className="podium-card bg-gradient-to-b from-[#FFF47C] to-[#EBA311] text-black h-56 md:-mt-8 shadow-[0_20px_50px_rgba(252,225,75,0.2)] cursor-pointer" onClick={() => setExpandedPlayer(expandedPlayer === displayedPlayers[0].name ? null : displayedPlayers[0].name)}>
                       <span className="podium-rank text-7xl opacity-30">01</span>
                       <div className="flex items-center gap-2 mb-1">
                         {getClanIcon(displayedPlayers[0].name) && (
@@ -337,7 +347,7 @@ export default function App() {
 
                   {/* Rank 3 */}
                   {displayedPlayers[2] && (
-                    <div className="podium-card bg-[#141416] border-l-4 border-[#FCE14B] h-48">
+                    <div className="podium-card bg-[#141416] border-l-4 border-[#FCE14B] h-48 cursor-pointer" onClick={() => setExpandedPlayer(expandedPlayer === displayedPlayers[2].name ? null : displayedPlayers[2].name)}>
                       <span className="podium-rank text-5xl">03</span>
                       <div className="flex items-center gap-2 mb-1">
                         {getClanIcon(displayedPlayers[2].name) && (
@@ -360,6 +370,56 @@ export default function App() {
                   )}
                 </div>
 
+                {/* Expanded Event Breakdown for Podium Players */}
+                <AnimatePresence>
+                  {expandedPlayer && displayedPlayers.slice(0, 3).find(p => p.name === expandedPlayer) && (() => {
+                    const player = displayedPlayers.find(p => p.name === expandedPlayer)!;
+                    return (
+                      <motion.div
+                        key={`breakdown-${expandedPlayer}`}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="bg-[#0f0f11] border border-white/10 p-4 space-y-2">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="text-[10px] uppercase tracking-widest font-bold text-[#FCE14B]">
+                              Event Breakdown — {player.name}
+                            </div>
+                            <button onClick={() => setExpandedPlayer(null)} className="text-white/30 hover:text-white transition-colors">
+                              <ChevronDown size={14} className="rotate-180" />
+                            </button>
+                          </div>
+                          <div className="grid grid-cols-12 px-2 py-1 text-[9px] uppercase tracking-widest font-bold opacity-30 border-b border-white/10">
+                            <div className="col-span-1">#</div>
+                            <div className="col-span-7">Event</div>
+                            <div className="col-span-2 text-center">Place</div>
+                            <div className="col-span-2 text-right">Earned</div>
+                          </div>
+                          {(player.events && player.events.length > 0) ? player.events.map((evt, i) => (
+                            <div key={i} className="grid grid-cols-12 px-2 py-1.5 text-xs font-mono hover:bg-white/5 transition-colors border-b border-white/5 last:border-b-0">
+                              <div className="col-span-1 text-white/30">{i + 1}</div>
+                              <div className="col-span-7 text-white/70 truncate pr-2" title={evt.event}>{evt.event}</div>
+                              <div className="col-span-2 text-center">
+                                <span className={`px-1.5 py-0.5 text-[10px] font-bold ${evt.placement <= 3 ? 'text-[#FCE14B]' : 'text-white/60'}`}>
+                                  {evt.placement}{evt.placement === 1 ? 'st' : evt.placement === 2 ? 'nd' : evt.placement === 3 ? 'rd' : 'th'}
+                                </span>
+                              </div>
+                              <div className={`col-span-2 text-right font-bold ${evt.earnings > 0 ? 'text-[#4ade80]' : 'text-white/30'}`}>
+                                {evt.earnings > 0 ? `$${evt.earnings.toLocaleString()}` : '—'}
+                              </div>
+                            </div>
+                          )) : (
+                            <div className="py-4 text-center text-white/20 text-xs font-mono italic">Event data not yet available — awaiting next sync</div>
+                          )}
+                        </div>
+                      </motion.div>
+                    );
+                  })()}
+                </AnimatePresence>
+
                 {/* Leaderboard Table */}
                 <div className="space-y-2 mt-4">
                   <div className="grid grid-cols-12 px-4 py-2 opacity-40 text-[10px] uppercase tracking-widest font-bold border-b border-white/10">
@@ -369,31 +429,70 @@ export default function App() {
                   
                   <div className="space-y-1">
                     {displayedPlayers.slice(3).map((player, idx) => (
-                      <div key={player.name} className="leaderboard-row">
-                        <div className="col-span-1 font-mono text-[#FCE14B]">
-                          {(idx + 4) < 10 ? `0${idx + 4}` : idx + 4}
-                        </div>
-                        <div className="col-span-6 font-black uppercase italic tracking-tight flex flex-col justify-center">
-                          <div className="flex items-center gap-2">
-                            {getClanIcon(player.name) && (
-                              <ClanBadge clan={getClanIcon(player.name)!} className="w-5 h-auto object-contain" />
-                            )}
-                            <span>{player.name}</span>
+                      <div key={player.name}>
+                        <div className="leaderboard-row cursor-pointer" onClick={() => setExpandedPlayer(expandedPlayer === player.name ? null : player.name)}>
+                          <div className="col-span-1 font-mono text-[#FCE14B]">
+                            {(idx + 4) < 10 ? `0${idx + 4}` : idx + 4}
+                          </div>
+                          <div className="col-span-6 font-black uppercase italic tracking-tight flex flex-col justify-center">
+                            <div className="flex items-center gap-2">
+                              {getClanIcon(player.name) && (
+                                <ClanBadge clan={getClanIcon(player.name)!} className="w-5 h-auto object-contain" />
+                              )}
+                              <span>{player.name}</span>
+                              <ChevronDown size={12} className={`opacity-30 transition-transform duration-200 ${expandedPlayer === player.name ? 'rotate-180' : ''}`} />
+                            </div>
+                          </div>
+                          <div className="col-span-2 flex items-center gap-2 opacity-60 text-[10px] uppercase font-mono">
+                            <img 
+                              src={`https://flagcdn.com/w20/${player.countryCode.toLowerCase()}.png`} 
+                              alt={player.countryCode}
+                              className="w-4 h-auto"
+                              referrerPolicy="no-referrer"
+                              onError={(e) => (e.currentTarget.style.display = 'none')}
+                            />
+                            {player.countryCode}
+                          </div>
+                          <div className="col-span-3 text-right font-mono font-bold text-sm md:text-base">
+                            ${player.earningsUSD.toLocaleString()}
                           </div>
                         </div>
-                        <div className="col-span-2 flex items-center gap-2 opacity-60 text-[10px] uppercase font-mono">
-                          <img 
-                            src={`https://flagcdn.com/w20/${player.countryCode.toLowerCase()}.png`} 
-                            alt={player.countryCode}
-                            className="w-4 h-auto"
-                            referrerPolicy="no-referrer"
-                            onError={(e) => (e.currentTarget.style.display = 'none')}
-                          />
-                          {player.countryCode}
-                        </div>
-                        <div className="col-span-3 text-right font-mono font-bold text-sm md:text-base">
-                          ${player.earningsUSD.toLocaleString()}
-                        </div>
+                        <AnimatePresence>
+                          {expandedPlayer === player.name && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                              className="overflow-hidden"
+                            >
+                              <div className="bg-[#0f0f11] border border-white/10 border-t-0 px-4 py-3 ml-4 mr-1 mb-1 space-y-1">
+                                <div className="grid grid-cols-12 px-1 py-1 text-[9px] uppercase tracking-widest font-bold opacity-30 border-b border-white/10">
+                                  <div className="col-span-1">#</div>
+                                  <div className="col-span-7">Event</div>
+                                  <div className="col-span-2 text-center">Place</div>
+                                  <div className="col-span-2 text-right">Earned</div>
+                                </div>
+                                {(player.events && player.events.length > 0) ? player.events.map((evt, i) => (
+                                  <div key={i} className="grid grid-cols-12 px-1 py-1.5 text-xs font-mono hover:bg-white/5 transition-colors border-b border-white/5 last:border-b-0">
+                                    <div className="col-span-1 text-white/30">{i + 1}</div>
+                                    <div className="col-span-7 text-white/70 truncate pr-2" title={evt.event}>{evt.event}</div>
+                                    <div className="col-span-2 text-center">
+                                      <span className={`text-[10px] font-bold ${evt.placement <= 3 ? 'text-[#FCE14B]' : 'text-white/60'}`}>
+                                        {evt.placement}{evt.placement === 1 ? 'st' : evt.placement === 2 ? 'nd' : evt.placement === 3 ? 'rd' : 'th'}
+                                      </span>
+                                    </div>
+                                    <div className={`col-span-2 text-right font-bold ${evt.earnings > 0 ? 'text-[#4ade80]' : 'text-white/30'}`}>
+                                      {evt.earnings > 0 ? `$${evt.earnings.toLocaleString()}` : '—'}
+                                    </div>
+                                  </div>
+                                )) : (
+                                  <div className="py-4 text-center text-white/20 text-xs font-mono italic">Event data not yet available — awaiting next sync</div>
+                                )}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
                     ))}
                     
