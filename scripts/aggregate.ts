@@ -156,7 +156,7 @@ async function aggregateMobileEarnings() {
           if (processedValidLeaderboard) break;
           
           const lbEventWindowId = loc.leaderboardEventWindowId;
-          const normalizedId = lbEventWindowId.replace(/_mg$|_2$|_alt$|_alt\d+$/i, '');
+          const normalizedId = lbEventWindowId.replace(/_2$|_alt$|_alt\d+$/i, '');
           
           if (
             processedLeaderboards.has(lbEventWindowId) ||
