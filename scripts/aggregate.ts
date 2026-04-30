@@ -110,12 +110,14 @@ const REGION_LABEL_MAP: Record<string, string> = {
   'BR': 'BRAZIL', 'ASIA': 'ASIA', 'OCE': 'OCEANIA', 'ME': 'MIDDLE EAST'
 };
 
+type EventCategory = 'series' | 'blitz' | 'testcup' | 'reload';
+
 async function aggregateMobileEarnings() {
   console.log("Starting verified global series aggregation (Sept 2023 - Present)...");
   const regions = ['EU', 'NAC', 'NAW', 'BR', 'ASIA', 'OCE', 'ME'];
   const playerMap: Record<string, any> = {};
   const playerRegionEarnings: Record<string, Record<string, number>> = {};
-  const playerEvents: Record<string, Array<{ event: string, region: string, placement: number, earnings: number, date: string }>> = {};
+  const playerEvents: Record<string, Array<{ event: string, region: string, placement: number, earnings: number, date: string, category: string }>> = {};
   const processedTourneys = new Set<string>();
 
   for (const region of regions) {
@@ -131,30 +133,49 @@ async function aggregateMobileEarnings() {
       continue;
     }
 
-    const mobileTourneys = tourneyData.tournaments.filter((t: any) => {
-      if (processedTourneys.has(region + '_' + t.eventId)) return false;
-      const title1 = t.displayData?.titleLine1?.toLowerCase() || '';
-      const eventId = t.eventId?.toLowerCase() || '';
+    // Classify each tournament into a category
+    function classifyTourney(t: any): EventCategory | null {
+      if (processedTourneys.has(region + '_' + t.eventId)) return null;
+      const title = t.displayData?.titleLine1?.toLowerCase() || '';
+      const eid = t.eventId?.toLowerCase() || '';
       
-      // Whitelist only official Mobile Series events.
-      // Note: Do NOT exclude by 'blitz' in eventId — Dec qualifiers carry
-      // eventId "S39_BlitzMobileCup_DecQualifier1_*" but are still titled
-      // "Mobile Series" and award full Mobile Series prize money.
-      return (title1.includes('mobile series') || eventId.includes('mobileseries'));
-    });
+      // Mobile Series (including Dec blitz qualifiers titled "Mobile Series")
+      if (title.includes('mobile series') || eid.includes('mobileseries')) return 'series';
+      // Blitz Mobile Cup (but NOT the ones already matched as series above)
+      if (eid.includes('blitzmobilecup') || (title.includes('blitz') && title.includes('mobile'))) return 'blitz';
+      // Touch-Only Test Cup / Mobile Test Cup
+      if (eid.includes('touchonlymobilecup') || eid.includes('mobiletestcup')) return 'testcup';
+      // Platform Reload Duos Cash Cup (Mobile)
+      if (eid.includes('platformreloadduoscashcupmobile')) return 'reload';
+      
+      return null;
+    }
 
-    console.log(`[DATA] Found ${mobileTourneys.length} unique Mobile tournaments in ${region}.`);
+    const categorizedTourneys = tourneyData.tournaments
+      .map((t: any) => ({ tourney: t, category: classifyTourney(t) }))
+      .filter((x: any) => x.category !== null);
+
+    const counts = { series: 0, blitz: 0, testcup: 0, reload: 0 };
+    categorizedTourneys.forEach((x: any) => counts[x.category as EventCategory]++);
+    console.log(`[DATA] Found ${categorizedTourneys.length} mobile events in ${region} (series: ${counts.series}, blitz: ${counts.blitz}, testcup: ${counts.testcup}, reload: ${counts.reload})`);
+    
     const processedLeaderboards = new Set<string>();
 
-    for (const tourney of mobileTourneys) {
+    for (const { tourney, category } of categorizedTourneys) {
       processedTourneys.add(region + '_' + tourney.eventId);
       const windows = tourney.eventWindows || [];
       
       for (const window of windows) {
         const winId = window.eventWindowId?.toLowerCase() || '';
         
-        if (!winId.includes('qualifier') || winId.endsWith('_series')) {
-          continue;
+        // For Mobile Series: only process qualifier windows (existing logic)
+        if (category === 'series') {
+          if (!winId.includes('qualifier') || winId.endsWith('_series')) {
+            continue;
+          }
+        } else {
+          // For other categories: skip series aggregate windows only
+          if (winId.endsWith('_series')) continue;
         }
 
         let processedValidLeaderboard = false;
@@ -177,7 +198,7 @@ async function aggregateMobileEarnings() {
           processedValidLeaderboard = true;
 
           const lbUrl = `${OSIRION_API}/tournaments/leaderboard?leaderboardEventId=${loc.leaderboardEventId}&leaderboardEventWindowId=${lbEventWindowId}`;
-          console.log(`[CRAWL] ${lbUrl}`);
+          console.log(`[CRAWL][${category}] ${lbUrl}`);
           const lbResp = await fetch(lbUrl);
           const lbData = await lbResp.json();
           
@@ -186,7 +207,7 @@ async function aggregateMobileEarnings() {
           const eventTitle = tourney.displayData?.titleLine1 || 'Unknown Event';
           const eventDate = lbData.leaderboard.updatedAt || new Date().toISOString();
           // Build a human-readable event name from the window ID
-          const winIdParts = lbEventWindowId.match(/(?:Qualifier|Round|Final|Week)\d*/i);
+          const winIdParts = lbEventWindowId.match(/(?:Qualifier|Round|Final|Week|Event)\d*/i);
           const windowLabel = winIdParts ? winIdParts[0] : '';
           const fullEventName = windowLabel 
             ? `${eventTitle} — ${windowLabel} (${REGION_LABEL_MAP[region] || region})`
@@ -210,25 +231,31 @@ async function aggregateMobileEarnings() {
                 };
               }
 
-              playerMap[key].earningsUSD += prizeMoney;
+              // Only count Mobile Series earnings towards the base total
+              if (category === 'series') {
+                playerMap[key].earningsUSD += prizeMoney;
+              }
 
               if (!playerRegionEarnings[key]) playerRegionEarnings[key] = {};
-              playerRegionEarnings[key][region] = (playerRegionEarnings[key][region] || 0) + prizeMoney;
+              if (category === 'series') {
+                playerRegionEarnings[key][region] = (playerRegionEarnings[key][region] || 0) + prizeMoney;
+              }
 
-              // Track individual event results
+              // Track individual event results with category
               if (!playerEvents[key]) playerEvents[key] = [];
               playerEvents[key].push({
                 event: fullEventName,
                 region: REGION_LABEL_MAP[region] || region,
                 placement: entry.rank,
                 earnings: prizeMoney,
-                date: eventDate
+                date: eventDate,
+                category: category as string,
               });
               
               const entryDate = new Date(eventDate).getTime();
               const existingDate = new Date(playerMap[key].lastActiveDate).getTime();
               if (entryDate > existingDate) {
-                playerMap[key].name = username; // keep most recent display name
+                playerMap[key].name = username;
                 playerMap[key].lastActiveTournament = tourney.displayData?.titleLine1;
                 playerMap[key].lastActiveDate = eventDate;
                 playerMap[key].countryCode = resolveCountryCode(player.flagToken);
@@ -241,7 +268,7 @@ async function aggregateMobileEarnings() {
   }
 
   const aggregatedPlayers = Object.values(playerMap)
-    .filter((p: any) => p.earningsUSD > 0)
+    .filter((p: any) => p.earningsUSD > 0 || (playerEvents[p.name?.toLowerCase()] || []).length > 0)
     .sort((a: any, b: any) => b.earningsUSD - a.earningsUSD)
     .map((p: any, idx: number) => {
       const key = p.name.toLowerCase();
