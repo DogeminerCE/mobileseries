@@ -1,0 +1,379 @@
+Starting verified global series aggregation (Sept 2023 - Present)...
+[REGION] Processing: EU
+[DATA] Found 20 mobile events in EU (series: 12, blitz: 4, testcup: 2, reload: 2)
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_EU&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event1Round2_EU
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_EU&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event3Round2_EU
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_EU&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event4Round2_EU
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_EU&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event5_EU
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_EU&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event7_EU
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_EU&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event6_EU
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_EU&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event8_EU
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_EU&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event6_EU_makegood
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S32_PlatformReloadDuosCashCupMobile_EU&leaderboardEventWindowId=S32_PlatformReloadDuosCashCupMobile_Event1_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCup_EU&leaderboardEventWindowId=S37_BlitzMobileCup_Event1_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_EU&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event1_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_EU&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event2_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_EU&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event3_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_EU&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event4_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_EU&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event5_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_EU&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event6_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_EU&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event7_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_EU&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event8_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_EU&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event9_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_EU&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event10_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_EU&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event11_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_EU&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event12_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_EU&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event13_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_EU&leaderboardEventWindowId=S38_BlitzMobileCup_Week1Final_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_EU&leaderboardEventWindowId=S38_BlitzMobileCup_Week2Final_EU
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_StrangerThingsMobileCup_EU&leaderboardEventWindowId=S38_StrangerThingsMobileCup_EU
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_TouchOnlyMobileCup_EU&leaderboardEventWindowId=S38_TouchOnlyMobileCup_Final_EU
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_EU&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier1_EU
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_EU&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier2_EU
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_EU&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier5_EU
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_EU&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier6_EU
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_EU&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier3_EU
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_EU&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier4_EU
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupMarQual_EU&leaderboardEventWindowId=S39_MobileSeriesCup_MarQualifier7_EU
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileTestCup_EU&leaderboardEventWindowId=S39_MobileTestCup_Final_EU
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileTestCup_EU&leaderboardEventWindowId=S39_MobileTestCup_Final2_EU
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileTestCup_EU&leaderboardEventWindowId=S39_MobileTestCup_Final3_EU
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileTestCup_EU&leaderboardEventWindowId=S39_MobileTestCup_Final4_EU
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_EU&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier8_EU
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_EU&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier9_EU
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_EU&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier10_EU
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_EU&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier11_EU
+FAILED TO FETCH S40_MobileSeriesCup_MarQualifier11_EU
+[REGION] Processing: NAC
+[DATA] Found 20 mobile events in NAC (series: 12, blitz: 4, testcup: 2, reload: 2)
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event1Round2_NAC
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event3Round2_NAC
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event4Round2_NAC
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event5_NAC
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event7_NAC
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event6_NAC_makegood
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event8_NAC
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S32_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S32_PlatformReloadDuosCashCupMobile_Event1_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCup_NAC&leaderboardEventWindowId=S37_BlitzMobileCup_Event1_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAC&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event1_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAC&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event2_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAC&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event3_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAC&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event4_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAC&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event5_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAC&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event6_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAC&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event7_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAC&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event8_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAC&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event9_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAC&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event10_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAC&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event11_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAC&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event12_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAC&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event13_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_NAC&leaderboardEventWindowId=S38_BlitzMobileCup_Week1Final_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_NAC&leaderboardEventWindowId=S38_BlitzMobileCup_Week2Final_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_StrangerThingsMobileCup_NAC&leaderboardEventWindowId=S38_StrangerThingsMobileCup_NAC
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_TouchOnlyMobileCup_NAC&leaderboardEventWindowId=S38_TouchOnlyMobileCup_Final_NAC
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_NAC&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier1_NAC
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_NAC&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier2_NAC
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_NAC&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier2_NAC_mg
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_NAC&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier5_NAC
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_NAC&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier6_NAC
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_NAC&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier3_NAC
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_NAC&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier4_NAC
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupMarQual_NAC&leaderboardEventWindowId=S39_MobileSeriesCup_MarQualifier7_NAC
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileTestCup_NAC&leaderboardEventWindowId=S39_MobileTestCup_Final_NAC
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileTestCup_NAC&leaderboardEventWindowId=S39_MobileTestCup_Final2_NAC
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileTestCup_NAC&leaderboardEventWindowId=S39_MobileTestCup_Final3_NAC
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileTestCup_NAC&leaderboardEventWindowId=S39_MobileTestCup_Final4_NAC
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_NAC&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier8_NAC
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_NAC&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier9_NAC
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_NAC&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier10_NAC
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_NAC&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier11_NAC
+[REGION] Processing: NAW
+[DATA] Found 19 mobile events in NAW (series: 12, blitz: 4, testcup: 1, reload: 2)
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event1Round2_NAC
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event3Round2_NAC
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event4Round2_NAC
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event5_NAC
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event7_NAC
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event6_NAC_makegood
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event8_NAC
+FAILED TO FETCH S31_PlatformReloadDuosCashCupMobile_Event8_NAC
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S32_PlatformReloadDuosCashCupMobile_NAC&leaderboardEventWindowId=S32_PlatformReloadDuosCashCupMobile_Event1_NAC
+FAILED TO FETCH S32_PlatformReloadDuosCashCupMobile_Event1_NAC
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCup_NAW&leaderboardEventWindowId=S37_BlitzMobileCup_Event1_NAW
+FAILED TO FETCH S37_BlitzMobileCup_Event1_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAW&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event1_NAW
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event1_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAW&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event2_NAW
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event2_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAW&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event3_NAW
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event3_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAW&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event4_NAW
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event4_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAW&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event5_NAW
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event5_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAW&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event6_NAW
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event6_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAW&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event7_NAW
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event7_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAW&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event8_NAW
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event8_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAW&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event9_NAW
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event9_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAW&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event10_NAW
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event10_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAW&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event11_NAW
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event11_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAW&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event12_NAW
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event12_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_NAW&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event13_NAW
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event13_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_NAW&leaderboardEventWindowId=S38_BlitzMobileCup_Week1Final_NAW
+FAILED TO FETCH S38_BlitzMobileCup_Week1Final_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_NAW&leaderboardEventWindowId=S38_BlitzMobileCup_Week2Final_NAW
+FAILED TO FETCH S38_BlitzMobileCup_Week2Final_NAW
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_StrangerThingsMobileCup_NAC&leaderboardEventWindowId=S38_StrangerThingsMobileCup_NAC
+FAILED TO FETCH S38_StrangerThingsMobileCup_NAC
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_TouchOnlyMobileCup_NAW&leaderboardEventWindowId=S38_TouchOnlyMobileCup_Final_NAW
+FAILED TO FETCH S38_TouchOnlyMobileCup_Final_NAW
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_NAW&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier1_NAW
+FAILED TO FETCH S39_BlitzMobileCup_DecQualifier1_NAW
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_NAW&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier2_NAW
+FAILED TO FETCH S39_BlitzMobileCup_DecQualifier2_NAW
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_NAW&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier2_NAW_mg
+FAILED TO FETCH S39_BlitzMobileCup_DecQualifier2_NAW_mg
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_NAW&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier5_NAW
+FAILED TO FETCH S39_MobileSeriesCup_FebQualifier5_NAW
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_NAW&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier6_NAW
+FAILED TO FETCH S39_MobileSeriesCup_FebQualifier6_NAW
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_NAW&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier3_NAW
+FAILED TO FETCH S39_MobileSeriesCup_JanQualifier3_NAW
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_NAW&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier4_NAW
+FAILED TO FETCH S39_MobileSeriesCup_JanQualifier4_NAW
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupMarQual_NAW&leaderboardEventWindowId=S39_MobileSeriesCup_MarQualifier7_NAW
+FAILED TO FETCH S39_MobileSeriesCup_MarQualifier7_NAW
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_NAW&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier8_NAW
+FAILED TO FETCH S40_MobileSeriesCup_MarQualifier8_NAW
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_NAW&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier9_NAW
+FAILED TO FETCH S40_MobileSeriesCup_MarQualifier9_NAW
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_NAW&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier10_NAW
+FAILED TO FETCH S40_MobileSeriesCup_MarQualifier10_NAW
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_NAW&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier11_NAW
+FAILED TO FETCH S40_MobileSeriesCup_MarQualifier11_NAW
+[REGION] Processing: BR
+[DATA] Found 19 mobile events in BR (series: 12, blitz: 4, testcup: 1, reload: 2)
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_BR&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event1Round2_BR
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_BR&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event3Round2_BR
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_BR&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event4Round2_BR
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_BR&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event5_BR
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_BR&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event7_BR
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_BR&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event6_BR
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_BR&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event6_BR_makegood
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_BR&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event8_BR
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S32_PlatformReloadDuosCashCupMobile_BR&leaderboardEventWindowId=S32_PlatformReloadDuosCashCupMobile_Event1_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCup_BR&leaderboardEventWindowId=S37_BlitzMobileCup_Event1_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_BR&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event1_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_BR&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event2_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_BR&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event3_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_BR&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event4_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_BR&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event5_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_BR&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event6_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_BR&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event7_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_BR&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event8_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_BR&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event9_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_BR&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event10_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_BR&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event11_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_BR&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event12_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_BR&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event13_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_BR&leaderboardEventWindowId=S38_BlitzMobileCup_Week1Final_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_BR&leaderboardEventWindowId=S38_BlitzMobileCup_Week2Final_BR
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_StrangerThingsMobileCup_BR&leaderboardEventWindowId=S38_StrangerThingsMobileCup_BR
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_TouchOnlyMobileCup_BR&leaderboardEventWindowId=S38_TouchOnlyMobileCup_Final_BR
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_BR&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier1_BR
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_BR&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier2_BR
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_BR&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier5_BR
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_BR&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier6_BR
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_BR&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier3_BR
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_BR&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier4_BR
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupMarQual_BR&leaderboardEventWindowId=S39_MobileSeriesCup_MarQualifier7_BR
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_BR&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier8_BR
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_BR&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier9_BR
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_BR&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier10_BR
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_BR&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier11_BR
+[REGION] Processing: ASIA
+[DATA] Found 18 mobile events in ASIA (series: 12, blitz: 3, testcup: 1, reload: 2)
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ASIA&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event1Round2_ASIA
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ASIA&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event2Round1_ASIA
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ASIA&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event3Round2_ASIA
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ASIA&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event4Round2_ASIA
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ASIA&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event5_ASIA
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ASIA&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event6_ASIA
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ASIA&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event7_ASIA
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ASIA&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event8_ASIA
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S32_PlatformReloadDuosCashCupMobile_ASIA&leaderboardEventWindowId=S32_PlatformReloadDuosCashCupMobile_Event1_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCup_ASIA&leaderboardEventWindowId=S37_BlitzMobileCup_Event1_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ASIA&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event1_ASIA
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event1_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ASIA&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event2_ASIA
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event2_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ASIA&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event3_ASIA
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event3_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ASIA&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event4_ASIA
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event4_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ASIA&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event5_ASIA
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event5_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ASIA&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event6_ASIA
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event6_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ASIA&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event7_ASIA
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event7_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ASIA&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event8_ASIA
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event8_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ASIA&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event9_ASIA
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event9_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ASIA&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event10_ASIA
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event10_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ASIA&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event11_ASIA
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event11_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ASIA&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event12_ASIA
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event12_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ASIA&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event13_ASIA
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event13_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_ASIA&leaderboardEventWindowId=S38_BlitzMobileCup_Week1Final_ASIA
+FAILED TO FETCH S38_BlitzMobileCup_Week1Final_ASIA
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_ASIA&leaderboardEventWindowId=S38_BlitzMobileCup_Week2Final_ASIA
+FAILED TO FETCH S38_BlitzMobileCup_Week2Final_ASIA
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_TouchOnlyMobileCup_ASIA&leaderboardEventWindowId=S38_TouchOnlyMobileCup_Final_ASIA
+FAILED TO FETCH S38_TouchOnlyMobileCup_Final_ASIA
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_ASIA&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier1_ASIA
+FAILED TO FETCH S39_BlitzMobileCup_DecQualifier1_ASIA
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_ASIA&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier2_ASIA
+FAILED TO FETCH S39_BlitzMobileCup_DecQualifier2_ASIA
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_ASIA&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier2_ASIA_mg
+FAILED TO FETCH S39_BlitzMobileCup_DecQualifier2_ASIA_mg
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_ASIA&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier5_ASIA
+FAILED TO FETCH S39_MobileSeriesCup_FebQualifier5_ASIA
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_ASIA&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier6_ASIA
+FAILED TO FETCH S39_MobileSeriesCup_FebQualifier6_ASIA
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_ASIA&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier3_ASIA
+FAILED TO FETCH S39_MobileSeriesCup_JanQualifier3_ASIA
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_ASIA&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier4_ASIA
+FAILED TO FETCH S39_MobileSeriesCup_JanQualifier4_ASIA
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupMarQual_ASIA&leaderboardEventWindowId=S39_MobileSeriesCup_MarQualifier7_ASIA
+FAILED TO FETCH S39_MobileSeriesCup_MarQualifier7_ASIA
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_ASIA&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier8_ASIA
+FAILED TO FETCH S40_MobileSeriesCup_MarQualifier8_ASIA
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_ASIA&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier9_ASIA
+FAILED TO FETCH S40_MobileSeriesCup_MarQualifier9_ASIA
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_ASIA&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier10_ASIA
+FAILED TO FETCH S40_MobileSeriesCup_MarQualifier10_ASIA
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_ASIA&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier11_ASIA
+FAILED TO FETCH S40_MobileSeriesCup_MarQualifier11_ASIA
+[REGION] Processing: OCE
+[DATA] Found 18 mobile events in OCE (series: 12, blitz: 3, testcup: 1, reload: 2)
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_OCE&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event1Round2_OCE
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_OCE&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event2Round2_OCE
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_OCE&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event3Round2_OCE
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_OCE&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event4Round2_OCE
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_OCE&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event5_OCE
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_OCE&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event6_OCE
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_OCE&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event7_OCE
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_OCE&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event8_OCE
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S32_PlatformReloadDuosCashCupMobile_OCE&leaderboardEventWindowId=S32_PlatformReloadDuosCashCupMobile_Event1_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCup_OCE&leaderboardEventWindowId=S37_BlitzMobileCup_Event1_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_OCE&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event1_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_OCE&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event2_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_OCE&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event3_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_OCE&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event4_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_OCE&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event5_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_OCE&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event6_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_OCE&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event7_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_OCE&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event8_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_OCE&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event9_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_OCE&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event10_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_OCE&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event11_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_OCE&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event12_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_OCE&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event13_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_OCE&leaderboardEventWindowId=S38_BlitzMobileCup_Week1Final_OCE
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_OCE&leaderboardEventWindowId=S38_BlitzMobileCup_Week2Final_OCE
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_TouchOnlyMobileCup_OCE&leaderboardEventWindowId=S38_TouchOnlyMobileCup_Final_OCE
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_OCE&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier1_OCE
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_OCE&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier2_OCE
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_OCE&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier2_OCE_mg
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_OCE&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier5_OCE
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_OCE&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier6_OCE
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_OCE&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier3_OCE
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_OCE&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier4_OCE
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupMarQual_OCE&leaderboardEventWindowId=S39_MobileSeriesCup_MarQualifier7_OCE
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_OCE&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier8_OCE
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_OCE&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier9_OCE
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_OCE&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier10_OCE
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_OCE&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier11_OCE
+[REGION] Processing: ME
+[DATA] Found 19 mobile events in ME (series: 12, blitz: 4, testcup: 1, reload: 2)
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ME&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event1Round2_ME
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ME&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event3Round2_ME
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ME&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event4Round2_ME
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ME&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event5_ME
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ME&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event7_ME
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ME&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event6_ME
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ME&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event8_ME
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S31_PlatformReloadDuosCashCupMobile_ME&leaderboardEventWindowId=S31_PlatformReloadDuosCashCupMobile_Event6_ME_makegood
+[CRAWL][reload] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S32_PlatformReloadDuosCashCupMobile_ME&leaderboardEventWindowId=S32_PlatformReloadDuosCashCupMobile_Event1_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCup_ME&leaderboardEventWindowId=S37_BlitzMobileCup_Event1_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ME&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event1_ME
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event1_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ME&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event2_ME
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event2_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ME&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event3_ME
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event3_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ME&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event4_ME
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event4_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ME&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event5_ME
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event5_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ME&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event6_ME
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event6_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ME&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event7_ME
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event7_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ME&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event8_ME
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event8_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ME&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event9_ME
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event9_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ME&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event10_ME
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event10_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ME&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event11_ME
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event11_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ME&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event12_ME
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event12_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S37_BlitzMobileCupWeekly_ME&leaderboardEventWindowId=S37_BlitzMobileCupWeekly_Event13_ME
+FAILED TO FETCH S37_BlitzMobileCupWeekly_Event13_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_ME&leaderboardEventWindowId=S38_BlitzMobileCup_Week1Final_ME
+FAILED TO FETCH S38_BlitzMobileCup_Week1Final_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_BlitzMobileCup_ME&leaderboardEventWindowId=S38_BlitzMobileCup_Week2Final_ME
+FAILED TO FETCH S38_BlitzMobileCup_Week2Final_ME
+[CRAWL][blitz] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_StrangerThingsMobileCup_ME&leaderboardEventWindowId=S38_StrangerThingsMobileCup_ME
+FAILED TO FETCH S38_StrangerThingsMobileCup_ME
+[CRAWL][testcup] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S38_TouchOnlyMobileCup_ME&leaderboardEventWindowId=S38_TouchOnlyMobileCup_Final_ME
+FAILED TO FETCH S38_TouchOnlyMobileCup_Final_ME
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_ME&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier1_ME
+FAILED TO FETCH S39_BlitzMobileCup_DecQualifier1_ME
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_BlitzMobileCupDecQual_ME&leaderboardEventWindowId=S39_BlitzMobileCup_DecQualifier2_ME
+FAILED TO FETCH S39_BlitzMobileCup_DecQualifier2_ME
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_ME&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier5_ME
+FAILED TO FETCH S39_MobileSeriesCup_FebQualifier5_ME
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupFebQual_ME&leaderboardEventWindowId=S39_MobileSeriesCup_FebQualifier6_ME
+FAILED TO FETCH S39_MobileSeriesCup_FebQualifier6_ME
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_ME&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier3_ME
+FAILED TO FETCH S39_MobileSeriesCup_JanQualifier3_ME
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupJanQual_ME&leaderboardEventWindowId=S39_MobileSeriesCup_JanQualifier4_ME
+FAILED TO FETCH S39_MobileSeriesCup_JanQualifier4_ME
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S39_MobileSeriesCupMarQual_ME&leaderboardEventWindowId=S39_MobileSeriesCup_MarQualifier7_ME
+FAILED TO FETCH S39_MobileSeriesCup_MarQualifier7_ME
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_ME&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier8_ME
+FAILED TO FETCH S40_MobileSeriesCup_MarQualifier8_ME
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_ME&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier9_ME
+FAILED TO FETCH S40_MobileSeriesCup_MarQualifier9_ME
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_ME&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier10_ME
+FAILED TO FETCH S40_MobileSeriesCup_MarQualifier10_ME
+[CRAWL][series] https://fnapi.osirion.gg/v1/tournaments/leaderboard?leaderboardEventId=epicgames_S40_MobileSeriesCupQual_ME&leaderboardEventWindowId=S40_MobileSeriesCup_MarQualifier11_ME
+FAILED TO FETCH S40_MobileSeriesCup_MarQualifier11_ME
+!!! Aggregation complete and cache written to public/leaderboard.json !!!
