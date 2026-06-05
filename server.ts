@@ -40,24 +40,36 @@ function resolveCountryCode(token: string): string {
   return clean.toLowerCase().substring(0, 2);
 }
 
-async function fetchOsirionLeaderboard(eventId: string, windowId: string) {
-  try {
-    const url = `${OSIRION_API}/tournaments/leaderboard?leaderboardEventId=${eventId}&leaderboardEventWindowId=${windowId}`;
-    const resp = await fetch(url);
-    const data = await resp.json();
-    if (!data.success) return null;
-    return data.leaderboard;
-  } catch (err) {
-    console.error("Osirion Fetch Error:", err);
-    return null;
+async function fetchWithRetry(url: string, retries = 5): Promise<any> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.success !== false || data.errorCode !== 'RATELIMITED') return data;
+      const backoff = Math.min(5000 * Math.pow(2, i), 30000);
+      console.log(`[WARN] Rate limited on ${url}, retrying in ${backoff / 1000}s... (attempt ${i + 1}/${retries})`);
+      await new Promise(r => setTimeout(r, backoff));
+    } catch (err) {
+      const backoff = Math.min(5000 * Math.pow(2, i), 30000);
+      console.error(`[WARN] Fetch error on ${url}, retrying in ${backoff / 1000}s...`, err);
+      await new Promise(r => setTimeout(r, backoff));
+    }
   }
+  return { success: false };
+}
+
+async function fetchOsirionLeaderboard(eventId: string, windowId: string) {
+  const url = `${OSIRION_API}/tournaments/leaderboard?leaderboardEventId=${eventId}&leaderboardEventWindowId=${windowId}`;
+  const data = await fetchWithRetry(url);
+  if (!data.success) return null;
+  return data.leaderboard;
 }
 
 /** 
  * MOBILE SERIES QUALIFIER PRIZING (PER REGION) - UPDATED 2024
  * Data verified from official tournament payout summaries.
  */
-const PRIZE_TABLES: Record<string, Array<{ rank: number, prize: number }>> = {
+const SERIES_PRIZE_TABLES: Record<string, Array<{ rank: number, prize: number }>> = {
   'EU': [
     { rank: 1, prize: 1000 },
     { rank: 2, prize: 900 },
@@ -123,16 +135,98 @@ const PRIZE_TABLES: Record<string, Array<{ rank: number, prize: number }>> = {
   ]
 };
 
+// Blitz Mobile Cup Finals prizing
+const BLITZ_PRIZE_TABLES: Record<string, Array<{ rank: number, prize: number }>> = {
+  'EU': [
+    { rank: 1, prize: 1500 }, { rank: 2, prize: 1000 }, { rank: 3, prize: 800 },
+    { rank: 4, prize: 600 }, { rank: 5, prize: 500 }, { rank: 6, prize: 450 },
+    { rank: 7, prize: 400 }, { rank: 8, prize: 350 }, { rank: 9, prize: 325 },
+    { rank: 10, prize: 300 }, { rank: 11, prize: 275 }, { rank: 12, prize: 250 },
+    { rank: 13, prize: 225 }, { rank: 14, prize: 200 }, { rank: 15, prize: 175 },
+    { rank: 16, prize: 150 },
+  ],
+  'NAC': [
+    { rank: 1, prize: 1500 }, { rank: 2, prize: 1000 }, { rank: 3, prize: 800 },
+    { rank: 4, prize: 600 }, { rank: 5, prize: 500 }, { rank: 6, prize: 450 },
+    { rank: 7, prize: 400 }, { rank: 8, prize: 350 }, { rank: 9, prize: 325 },
+    { rank: 10, prize: 300 }, { rank: 11, prize: 275 }, { rank: 12, prize: 250 },
+    { rank: 13, prize: 225 }, { rank: 14, prize: 200 }, { rank: 15, prize: 175 },
+    { rank: 16, prize: 150 },
+  ],
+  'NAW': [
+    { rank: 1, prize: 375 }, { rank: 2, prize: 250 }, { rank: 3, prize: 200 },
+    { rank: 4, prize: 150 }, { rank: 5, prize: 125 }, { rank: 16, prize: 100 },
+  ],
+  'BR': [
+    { rank: 1, prize: 375 }, { rank: 2, prize: 250 }, { rank: 3, prize: 200 },
+    { rank: 4, prize: 150 }, { rank: 5, prize: 125 }, { rank: 16, prize: 100 },
+  ],
+  'ASIA': [
+    { rank: 1, prize: 375 }, { rank: 2, prize: 250 }, { rank: 3, prize: 200 },
+    { rank: 4, prize: 150 }, { rank: 5, prize: 125 }, { rank: 16, prize: 100 },
+  ],
+  'ME': [
+    { rank: 1, prize: 375 }, { rank: 2, prize: 250 }, { rank: 3, prize: 200 },
+    { rank: 4, prize: 150 }, { rank: 5, prize: 125 }, { rank: 16, prize: 100 },
+  ],
+  'OCE': [
+    { rank: 1, prize: 375 }, { rank: 2, prize: 250 }, { rank: 3, prize: 200 },
+    { rank: 4, prize: 150 }, { rank: 5, prize: 125 }, { rank: 16, prize: 100 },
+  ],
+};
+
+// Touch-Only Test Cup / Blitz Test Cup prizing (same for all regions)
+const TESTCUP_PRIZE_TABLES: Record<string, Array<{ rank: number, prize: number }>> = {
+  'EU': [
+    { rank: 1, prize: 375 }, { rank: 2, prize: 250 }, { rank: 3, prize: 200 },
+    { rank: 4, prize: 150 }, { rank: 5, prize: 125 }, { rank: 16, prize: 100 },
+  ],
+  'NAC': [
+    { rank: 1, prize: 375 }, { rank: 2, prize: 250 }, { rank: 3, prize: 200 },
+    { rank: 4, prize: 150 }, { rank: 5, prize: 125 }, { rank: 16, prize: 100 },
+  ],
+  'NAW': [
+    { rank: 1, prize: 375 }, { rank: 2, prize: 250 }, { rank: 3, prize: 200 },
+    { rank: 4, prize: 150 }, { rank: 5, prize: 125 }, { rank: 16, prize: 100 },
+  ],
+  'BR': [
+    { rank: 1, prize: 375 }, { rank: 2, prize: 250 }, { rank: 3, prize: 200 },
+    { rank: 4, prize: 150 }, { rank: 5, prize: 125 }, { rank: 16, prize: 100 },
+  ],
+  'ASIA': [
+    { rank: 1, prize: 375 }, { rank: 2, prize: 250 }, { rank: 3, prize: 200 },
+    { rank: 4, prize: 150 }, { rank: 5, prize: 125 }, { rank: 16, prize: 100 },
+  ],
+  'ME': [
+    { rank: 1, prize: 375 }, { rank: 2, prize: 250 }, { rank: 3, prize: 200 },
+    { rank: 4, prize: 150 }, { rank: 5, prize: 125 }, { rank: 16, prize: 100 },
+  ],
+  'OCE': [
+    { rank: 1, prize: 375 }, { rank: 2, prize: 250 }, { rank: 3, prize: 200 },
+    { rank: 4, prize: 150 }, { rank: 5, prize: 125 }, { rank: 16, prize: 100 },
+  ],
+};
+
+// Reload Duos Cash Cup Mobile prizing (using test cup structure)
+const RELOAD_PRIZE_TABLES = TESTCUP_PRIZE_TABLES;
+
 // Fallback for smaller/unmapped regions
 const DEFAULT_PRIZE_TABLE = [
   { rank: 1, prize: 100 },
   { rank: 16, prize: 100 },
 ];
 
-function calculatePrize(rank: number, region: string): number {
-  const table = PRIZE_TABLES[region] || DEFAULT_PRIZE_TABLE;
-  // Sort by rank ascending to find the bracket
-  const match = [...table].sort((a,b) => a.rank - b.rank).find(t => rank <= t.rank);
+type EventCategory = 'series' | 'blitz' | 'testcup' | 'reload';
+
+function calculatePrize(rank: number, region: string, category: EventCategory = 'series'): number {
+  const categoryTables: Record<EventCategory, Record<string, Array<{ rank: number, prize: number }>>> = {
+    series: SERIES_PRIZE_TABLES,
+    blitz: BLITZ_PRIZE_TABLES,
+    testcup: TESTCUP_PRIZE_TABLES,
+    reload: RELOAD_PRIZE_TABLES,
+  };
+  const table = (categoryTables[category] || categoryTables.series)[region] || DEFAULT_PRIZE_TABLE;
+  const match = [...table].sort((a, b) => a.rank - b.rank).find(t => rank <= t.rank);
   return match ? match.prize : 0;
 }
 
@@ -158,18 +252,18 @@ async function aggregateMobileEarnings() {
       console.log(`[REGION] Processing: ${region}`);
       
       // Delay to prevent hitting Osirion rate limits
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 5000));
       
       const tourneyUrl = `${OSIRION_API}/tournaments?includeHistoricData=true&region=${region}`;
-      const tourneyResp = await fetch(tourneyUrl);
-      const tourneyData = await tourneyResp.json();
+      const tourneyData = await fetchWithRetry(tourneyUrl);
       
-      if (!tourneyData.success) {
-        console.error(`[ERROR] API rejected tournament list for region ${region}`);
+      if (!tourneyData || (!tourneyData.success && !Array.isArray(tourneyData))) {
+        console.error(`[ERROR] API rejected tournament list for region ${region} after retries`);
         continue;
       }
 
-      const mobileTourneys = tourneyData.tournaments.filter((t: any) => {
+      const tournaments = Array.isArray(tourneyData) ? tourneyData : (tourneyData.tournaments || []);
+      const mobileTourneys = tournaments.filter((t: any) => {
         // FIX: prefix with region to prevent cross-region event skipping
         if (processedTourneys.has(region + '_' + t.eventId)) return false;
         
@@ -235,10 +329,9 @@ async function aggregateMobileEarnings() {
             console.log(`[CRAWL] ${region}: ${tourney.displayData?.titleLine1} -> ${lbEventWindowId}`);
             
             const lbUrl = `${OSIRION_API}/tournaments/leaderboard?leaderboardEventId=${loc.leaderboardEventId}&leaderboardEventWindowId=${lbEventWindowId}`;
-            const lbResp = await fetch(lbUrl);
-            const lbData = await lbResp.json();
+            const lbData = await fetchWithRetry(lbUrl);
             
-            if (!lbData.success || !lbData.leaderboard.entries) continue;
+            if (!lbData.success || !lbData.leaderboard?.entries) continue;
 
             lbData.leaderboard.entries.forEach((entry: any) => {
               const username = entry.players[0]?.username;

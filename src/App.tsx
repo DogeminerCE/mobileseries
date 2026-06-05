@@ -27,6 +27,22 @@ interface Player {
   events?: PlayerEvent[];
 }
 
+interface Qualification {
+  player: string;
+  countryCode: string;
+  qualifier: string;
+  qualifierDate: string;
+  originalWinner: boolean;
+  rolledDownFrom: string | null;
+}
+
+interface LeaderboardData {
+  players: Player[];
+  qualifications?: Record<string, Qualification[]>;
+  lastUpdated?: string;
+  source?: string;
+}
+
 const REGIONS = ["GLOBAL", "EUROPE", "NA-CENTRAL", "NA-WEST", "MIDDLE EAST", "OCEANIA", "ASIA", "BRAZIL"];
 
 const CLAN_MAPPINGS: Record<string, string> = {
@@ -59,6 +75,10 @@ const CLAN_MAPPINGS: Record<string, string> = {
   'Ololo Chatpomme': 'Ololo',
   'XSET Losty': 'Ololo',
   'Evil Rowan Ψ': 'Ololo',
+  'Rowans Revenge': 'Ololo',
+  'Ololo KillerX': 'Ololo',
+  'Ololo Cousfishyy': 'Ololo',
+  'Ololo キャットアップル': 'Ololo',
   'み Nikito Android': 'Origin',
   'Origin EaeGui': 'Origin'
 };
@@ -107,6 +127,9 @@ export default function App() {
   const [includeTestCup, setIncludeTestCup] = useState(false);
   const [includeReload, setIncludeReload] = useState(false);
 
+  const [qualifications, setQualifications] = useState<Record<string, Qualification[]>>({});
+  const [activeTab, setActiveTab] = useState<'leaderboard' | 'qualifications'>('leaderboard');
+
   const fetchLeaderboard = async (isRetry = false) => {
     if (!isRetry) setLoading(true);
     setError(null);
@@ -114,9 +137,10 @@ export default function App() {
       // Check frontend cache first (30 min TTL — matches GitHub Actions cron frequency)
       const cached = localStorage.getItem('leaderboard_cache_v2');
       if (cached && !isRetry) {
-        const { players: cachedPlayers, timestamp } = JSON.parse(cached);
+        const { players: cachedPlayers, qualifications: cachedQuals, timestamp } = JSON.parse(cached);
         if (Date.now() - timestamp < 30 * 60 * 1000) {
           setPlayers(cachedPlayers);
+          if (cachedQuals) setQualifications(cachedQuals);
           setLastUpdated(new Date(timestamp).toLocaleTimeString());
           setDataSource('local-cache');
           setLoading(false);
@@ -131,6 +155,7 @@ export default function App() {
 
       if (data.players && data.players.length > 0) {
         setPlayers(data.players);
+        if (data.qualifications) setQualifications(data.qualifications);
         setLastUpdated(new Date(data.lastUpdated || Date.now()).toLocaleTimeString());
         setDataSource(data.source || 'osirion-aggregated');
         setLoading(false);
@@ -138,6 +163,7 @@ export default function App() {
         // Cache locally
         localStorage.setItem('leaderboard_cache_v2', JSON.stringify({
           players: data.players,
+          qualifications: data.qualifications || {},
           timestamp: Date.now()
         }));
       } else {
@@ -220,13 +246,10 @@ export default function App() {
       <div className="max-w-7xl mx-auto p-6 md:p-10 flex flex-col min-h-screen">
         {/* Header Section */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-8">
-          <div className="relative">
-            <h1 className="text-6xl md:text-8xl font-black italic uppercase leading-none tracking-tighter text-transparent stroke-text opacity-40">
-              FORTNITE
+          <div>
+            <h1 className="text-4xl md:text-6xl font-black italic uppercase leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#FFF47C] to-[#EBA311] pr-2 pb-2">
+              MOBILE SERIES.xyz
             </h1>
-            <h2 className="text-4xl md:text-6xl font-black italic uppercase leading-none tracking-tighter absolute top-4 left-2 text-transparent bg-clip-text bg-gradient-to-b from-[#FFF47C] to-[#EBA311] pr-2 pb-2">
-              MOBILE SERIES
-            </h2>
           </div>
           
           <div className="flex flex-col md:items-end gap-3 w-full md:w-auto">
@@ -365,9 +388,21 @@ export default function App() {
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               className="grid grid-cols-1 md:grid-cols-12 gap-8 flex-grow"
             >
-              {/* Podium & Leaderboard Section */}
+              {/* Main Content Area */}
               <div className="md:col-span-8 flex flex-col gap-6">
                 
+                {/* Navigation Tabs */}
+                <div className="flex gap-6 border-b border-white/10 pb-2">
+                  <button onClick={() => setActiveTab('leaderboard')} className={`pb-2 font-black italic uppercase tracking-widest text-sm transition-all border-b-2 ${activeTab === 'leaderboard' ? 'text-[#FCE14B] border-[#FCE14B]' : 'text-white/40 border-transparent hover:text-white'}`}>
+                    Earnings Leaderboard
+                  </button>
+                  <button onClick={() => setActiveTab('qualifications')} className={`pb-2 font-black italic uppercase tracking-widest text-sm transition-all border-b-2 ${activeTab === 'qualifications' ? 'text-[#FCE14B] border-[#FCE14B]' : 'text-white/40 border-transparent hover:text-white'}`}>
+                    Group Stage Quals
+                  </button>
+                </div>
+
+                {activeTab === 'leaderboard' ? (
+                  <>
                 {/* Podium Top 3 */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 h-fit">
                   {/* Rank 2 */}
@@ -585,6 +620,61 @@ export default function App() {
                     )}
                   </div>
                 </div>
+                </>
+                ) : (
+
+                <div className="border border-white/10 bg-[#141416]/50">
+                  {/* Group Stage Qualifications */}
+                  <div className="p-5 border-b border-white/5">
+                    <div className="flex items-center gap-3 mb-1">
+                      <Trophy size={18} className="text-[#FCE14B]" />
+                      <h3 className="text-lg font-black italic uppercase tracking-tighter text-[#FCE14B]">Group Stage Qualifications</h3>
+                    </div>
+                    <p className="text-[10px] uppercase tracking-widest font-mono opacity-30 mt-1">
+                      Winners of each Qualifier Round earn a Group Stage slot. If already qualified, slot rolls down.
+                    </p>
+                  </div>
+                    <div className="px-5 pb-5">
+                      <div className="grid grid-cols-12 px-3 py-2 text-[9px] uppercase tracking-widest font-bold opacity-30 border-b border-white/10">
+                        <div className="col-span-1">#</div>
+                        <div className="col-span-5">Player</div>
+                        <div className="col-span-4">Qualifier</div>
+                        <div className="col-span-2 text-right">Status</div>
+                      </div>
+                      <div className="space-y-0.5">
+                        {(qualifications[selectedRegion === 'GLOBAL' ? 'EUROPE' : selectedRegion] || []).map((q, i) => (
+                          <div key={`${q.player}-${q.qualifier}`} className="grid grid-cols-12 px-3 py-2.5 items-center bg-[#0f0f11] hover:bg-white/5 transition-colors border-b border-white/5 last:border-b-0">
+                            <div className="col-span-1 font-mono text-[#FCE14B] text-sm">{i + 1}</div>
+                            <div className="col-span-5 flex items-center gap-2">
+                              {getClanIcon(q.player) && (
+                                <ClanBadge clan={getClanIcon(q.player)!} className="w-4 h-auto object-contain" />
+                              )}
+                              <img
+                                src={`https://flagcdn.com/w20/${q.countryCode.toLowerCase()}.png`}
+                                alt={q.countryCode}
+                                className="w-4 h-auto opacity-80"
+                                referrerPolicy="no-referrer"
+                                onError={(e) => (e.currentTarget.style.display = 'none')}
+                              />
+                              <span className="font-bold uppercase italic text-sm truncate">{q.player}</span>
+                            </div>
+                            <div className="col-span-4 font-mono text-xs text-white/50">{q.qualifier}</div>
+                            <div className="col-span-2 text-right">
+                              {q.originalWinner ? (
+                                <span className="px-2 py-0.5 text-[9px] font-black uppercase bg-[#FCE14B]/10 text-[#FCE14B] border border-[#FCE14B]/20">Winner</span>
+                              ) : (
+                                <span className="px-2 py-0.5 text-[9px] font-black uppercase bg-white/5 text-white/40 border border-white/10" title={`Rolled down from ${q.rolledDownFrom}`}>Roll-down</span>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                        {(!qualifications[selectedRegion === 'GLOBAL' ? 'EUROPE' : selectedRegion] || qualifications[selectedRegion === 'GLOBAL' ? 'EUROPE' : selectedRegion]?.length === 0) && (
+                          <div className="py-8 text-center font-mono text-xs text-white/20 italic uppercase">No qualifications recorded for this region</div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Sidebar Section */}
@@ -597,6 +687,22 @@ export default function App() {
                     Follow for updates & join the community
                   </p>
                   
+                  {/* Latest Video Mini Player */}
+                  <div className="mb-4">
+                    <div className="text-[9px] uppercase tracking-widest font-bold opacity-50 mb-2">
+                      Latest Video
+                    </div>
+                    <div className="relative w-full overflow-hidden border-2 border-black" style={{ paddingBottom: '56.25%' }}>
+                      <iframe
+                        className="absolute inset-0 w-full h-full"
+                        src="https://www.youtube.com/embed/8KxzgDZoo64"
+                        title="Latest Video — Mobile Graphics are better than you think"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    </div>
+                  </div>
+
                   <div className="flex flex-col gap-2 mt-auto">
                     <a href="https://youtube.com/@babylion122" target="_blank" rel="noreferrer" className="flex items-center gap-3 border-2 border-black bg-transparent p-2.5 hover:bg-black hover:text-[#FCE14B] transition-all font-black uppercase italic text-sm tracking-tighter group">
                       <Youtube size={18} className="group-hover:scale-110 transition-transform" />
@@ -613,6 +719,33 @@ export default function App() {
                   </div>
                 </div>
                 
+                <div className="border border-white/10 p-5 bg-[#141416]/50">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Smartphone size={16} className="text-[#FCE14B]" />
+                    <h3 className="text-xs font-black italic uppercase tracking-tighter text-[#FCE14B]">Mobile Creators</h3>
+                  </div>
+                  <p className="text-[9px] uppercase tracking-widest font-mono opacity-30 mb-4">
+                    Download creator assets
+                  </p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[1, 2, 3, 4, 5, 6].map(i => (
+                      <a
+                        key={i}
+                        href={`/creator-assets/Icon${i}.png`}
+                        download={`Icon${i}.png`}
+                        className="aspect-square bg-[#0f0f11] border border-white/10 flex items-center justify-center hover:border-[#FCE14B]/30 transition-colors cursor-pointer group overflow-hidden"
+                        title={`Download Icon ${i}`}
+                      >
+                        <img 
+                          src={`/creator-assets/Icon${i}.png`} 
+                          alt={`Creator Asset ${i}`}
+                          className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
+                        />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="border border-white/10 p-6 space-y-6 bg-[#141416]/50">
                   <div className="space-y-4">
                     <div className="text-[10px] uppercase opacity-40 mb-3 tracking-widest font-bold">Network Status</div>
