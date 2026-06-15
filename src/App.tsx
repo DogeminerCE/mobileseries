@@ -37,24 +37,35 @@ interface Qualification {
   rolledDownFrom: string | null;
 }
 
-interface HeatSeed {
-  player: string;
-  countryCode: string;
-  rank: number;
-  points: number;
-}
-
-interface QualifierEligible {
-  player: string;
-  countryCode: string;
-  fromHeat: string;
+interface HeatsSeeding {
+  [heatNum: string]: Array<{
+    rank: number;
+    player: string;
+    countryCode: string;
+    points: number;
+  }>;
 }
 
 interface LeaderboardData {
   players: Player[];
   qualifications?: Record<string, Qualification[]>;
-  heatsSeeding?: Record<string, Record<number, HeatSeed[]>>;
-  qualifierEligible?: Record<string, QualifierEligible[]>;
+  heatsSeeding?: Record<string, HeatsSeeding>;
+  lastUpdated?: string;
+  source?: string;
+}
+
+interface Qualification {
+  player: string;
+  countryCode: string;
+  qualifier: string;
+  qualifierDate: string;
+  originalWinner: boolean;
+  rolledDownFrom: string | null;
+}
+
+interface LeaderboardData {
+  players: Player[];
+  qualifications?: Record<string, Qualification[]>;
   lastUpdated?: string;
   source?: string;
 }
@@ -144,9 +155,8 @@ export default function App() {
   const [includeReload, setIncludeReload] = useState(false);
 
   const [qualifications, setQualifications] = useState<Record<string, Qualification[]>>({});
-  const [heatsSeeding, setHeatsSeeding] = useState<Record<string, Record<number, HeatSeed[]>>>({});
-  const [qualifierEligible, setQualifierEligible] = useState<Record<string, QualifierEligible[]>>({});
-  const [activeTab, setActiveTab] = useState<'leaderboard' | 'qualifications' | 'heats'>('leaderboard');
+  const [heatsSeeding, setHeatsSeeding] = useState<Record<string, HeatsSeeding>>({});
+  const [activeTab, setActiveTab] = useState<'leaderboard' | 'heats' | 'qualifications'>('leaderboard');
 
   const fetchLeaderboard = async (isRetry = false) => {
     if (!isRetry) setLoading(true);
@@ -155,12 +165,11 @@ export default function App() {
       // Check frontend cache first (30 min TTL — matches GitHub Actions cron frequency)
       const cached = localStorage.getItem('leaderboard_cache_v2');
       if (cached && !isRetry) {
-        const { players: cachedPlayers, qualifications: cachedQuals, heatsSeeding: cachedHeats, qualifierEligible: cachedEligible, timestamp } = JSON.parse(cached);
+        const { players: cachedPlayers, qualifications: cachedQuals, heatsSeeding: cachedHeats, timestamp } = JSON.parse(cached);
         if (Date.now() - timestamp < 30 * 60 * 1000) {
           setPlayers(cachedPlayers);
           if (cachedQuals) setQualifications(cachedQuals);
           if (cachedHeats) setHeatsSeeding(cachedHeats);
-          if (cachedEligible) setQualifierEligible(cachedEligible);
           setLastUpdated(new Date(timestamp).toLocaleTimeString());
           setDataSource('local-cache');
           setLoading(false);
@@ -177,8 +186,6 @@ export default function App() {
         setPlayers(data.players);
         if (data.qualifications) setQualifications(data.qualifications);
         if (data.heatsSeeding) setHeatsSeeding(data.heatsSeeding);
-        if (data.qualifierEligible) setQualifierEligible(data.qualifierEligible);
-        
         setLastUpdated(new Date(data.lastUpdated || Date.now()).toLocaleTimeString());
         setDataSource(data.source || 'osirion-aggregated');
         setLoading(false);
@@ -188,7 +195,6 @@ export default function App() {
           players: data.players,
           qualifications: data.qualifications || {},
           heatsSeeding: data.heatsSeeding || {},
-          qualifierEligible: data.qualifierEligible || {},
           timestamp: Date.now()
         }));
       } else {
@@ -267,104 +273,74 @@ export default function App() {
   const displayedPlayers = filteredAndSortedPlayers.slice(0, page * PAGE_SIZE);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-white flex flex-col font-sans selection:bg-[#FCE14B] selection:text-black overflow-x-hidden">
-      {/* Dynamic Background */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#FCE14B] rounded-full mix-blend-screen filter blur-[150px] opacity-[0.03] animate-blob"></div>
-        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-white rounded-full mix-blend-screen filter blur-[150px] opacity-[0.02] animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-[-20%] left-[20%] w-[60%] h-[60%] bg-[#FCE14B] rounded-full mix-blend-screen filter blur-[150px] opacity-[0.03] animate-blob animation-delay-4000"></div>
-        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.015] mix-blend-overlay"></div>
-      </div>
-
-      {/* Main Content wrapper */}
-      <div className="relative z-10 flex flex-col min-h-screen max-w-[1800px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
-        <header className="mb-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-white/10 pb-8 relative">
-            {/* Header Content */}
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2 opacity-60">
-                <Trophy size={16} className="text-[#FCE14B]" />
-                <span className="text-[10px] uppercase tracking-[0.3em] font-black font-mono">Mobile Series Leaderboard</span>
-              </div>
-              <h1 className="text-5xl md:text-7xl font-black italic uppercase leading-[0.85] tracking-tighter title-glow">
-                Mobile<br/>
-                <span className="text-transparent stroke-text relative">
-                  Earnings
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#FCE14B] to-transparent opacity-20 blur-xl mix-blend-overlay"></div>
-                </span>
-              </h1>
-              <p className="mt-4 text-xs font-mono uppercase tracking-widest opacity-40 max-w-xl leading-relaxed">
-                Aggregated lifetime tournament earnings for Fortnite Mobile Series. Tracking top players across all regions. 
-                Group Stage qualifications are actively updated.
-              </p>
-              
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link 
-                  to="/dropmap"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#FCE14B] text-black font-black italic uppercase text-xs tracking-widest hover:scale-105 transition-all shadow-[0_0_20px_rgba(252,225,75,0.3)] hover:shadow-[0_0_30px_rgba(252,225,75,0.5)]"
-                >
-                  <MapPin size={16} />
-                  Interactive Drop Map
-                </Link>
-                <button 
-                  onClick={() => fetchLeaderboard(true)}
-                  disabled={loading}
-                  className="inline-flex items-center gap-2 px-6 py-3 border border-white/10 bg-white/5 hover:bg-white/10 transition-colors font-black italic uppercase text-xs tracking-widest disabled:opacity-50"
-                >
-                  <RefreshCcw size={14} className={loading ? 'animate-spin text-[#FCE14B]' : 'text-white/40'} />
-                  Sync Latest Data
-                </button>
-              </div>
-            </div>
-
-            {/* Filter Controls block */}
-            <div className="w-full md:w-auto bg-[#141416]/50 p-5 border border-white/10 backdrop-blur-xl shrink-0">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4">
-                <div className="space-y-2">
-                  <label className="text-[9px] font-bold uppercase tracking-widest text-[#FCE14B]">Search Player/Clan</label>
-                  <input
-                    type="text"
-                    placeholder="ENTER NAME..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-[#0A0A0B] border border-white/10 px-4 py-3 text-xs font-mono placeholder:text-white/20 focus:outline-none focus:border-[#FCE14B]/50 transition-colors uppercase tracking-wider"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[9px] font-bold uppercase tracking-widest text-[#FCE14B]">Region Select</label>
-                  <div className="relative">
-                    <Globe size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
-                    <select
-                      value={selectedRegion}
-                      onChange={(e) => setSelectedRegion(e.target.value)}
-                      className="w-full bg-[#0A0A0B] border border-white/10 pl-9 pr-4 py-3 text-xs font-mono uppercase tracking-wider appearance-none focus:outline-none focus:border-[#FCE14B]/50 transition-colors cursor-pointer"
-                    >
-                      {REGIONS.map(r => (
-                        <option key={r} value={r}>{r}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div className="min-h-screen bg-[#0A0A0B] text-white selection:bg-[#FCE14B] selection:text-black">
+      <div className="max-w-7xl mx-auto p-6 md:p-10 flex flex-col min-h-screen">
+        {/* Header Section */}
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-8">
+          <div>
+            <h1 className="text-4xl md:text-6xl font-black italic uppercase leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#FFF47C] to-[#EBA311] pr-2 pb-2">
+              MOBILE SERIES.xyz
+            </h1>
+            <Link 
+              to="/drop-map"
+              className="mt-2 flex items-center gap-2 px-4 py-2 bg-[#FCE14B]/10 border border-[#FCE14B]/30 text-[#FCE14B] hover:bg-[#FCE14B] hover:text-black transition-all font-black italic uppercase text-[10px] tracking-tighter w-fit group"
+            >
+              <MapPin size={14} className="group-hover:animate-bounce" />
+              Drop Map
+              <span className="text-[7px] font-mono tracking-widest opacity-50 ml-1">NEW</span>
+            </Link>
           </div>
           
-          <div className="flex flex-wrap gap-4 items-center justify-between mb-2">
-            <div className="flex gap-2 text-[10px] font-mono tracking-widest uppercase opacity-40">
-              <span>Sort by:</span>
-              <button onClick={() => setSortBy('earnings')} className={`hover:text-[#FCE14B] transition-colors ${sortBy === 'earnings' ? 'text-[#FCE14B]' : ''}`}>[Earnings]</button>
-              <button onClick={() => setSortBy('date')} className={`hover:text-[#FCE14B] transition-colors ${sortBy === 'date' ? 'text-[#FCE14B]' : ''}`}>[Recent]</button>
-              <button onClick={() => setSortBy('name')} className={`hover:text-[#FCE14B] transition-colors ${sortBy === 'name' ? 'text-[#FCE14B]' : ''}`}>[A-Z]</button>
-            </div>
-
-            <div className="flex flex-wrap gap-2 items-center">
-               <span className="text-[10px] font-mono tracking-widest uppercase opacity-40 mr-1">Include:</span>
+          <div className="flex flex-col md:items-end gap-3 w-full md:w-auto">
+             <div className="flex items-center gap-4 w-full">
+               <div className="relative flex-grow md:w-64">
+                 <input 
+                  type="text" 
+                  placeholder="SEARCH PRO PLAYER..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full bg-[#141416] border border-white/10 px-4 py-2 font-mono text-xs focus:outline-none focus:border-[#FCE14B] transition-colors uppercase"
+                 />
+               </div>
+               <select 
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="bg-[#141416] border border-white/10 px-4 py-2 font-mono text-xs focus:outline-none focus:border-[#FCE14B] text-[#FCE14B] cursor-pointer"
+               >
+                 <option value="earnings">SORT: EARNINGS</option>
+                 <option value="name">SORT: NAME (A-Z)</option>
+                 <option value="date">SORT: RECENT</option>
+               </select>
+               <button 
+                onClick={() => fetchLeaderboard()}
+                disabled={loading}
+                className="p-2.5 border-2 border-[#FCE14B]/30 text-[#FCE14B] hover:bg-[#FCE14B] hover:text-black transition-all duration-300"
+              >
+                <RefreshCcw size={18} className={loading ? 'animate-spin' : ''} />
+              </button>
+             </div>
+             <div className="flex flex-wrap md:justify-end gap-1.5">
+               {REGIONS.map(region => (
+                 <button
+                  key={region}
+                  onClick={() => setSelectedRegion(region)}
+                  className={`px-3 py-1 text-[9px] font-black tracking-tighter transition-all italic uppercase border ${
+                    selectedRegion === region 
+                    ? 'bg-[#FCE14B] text-black border-[#FCE14B]' 
+                    : 'bg-transparent text-white/40 border-white/10 hover:border-white/30'
+                  }`}
+                 >
+                   {region}
+                 </button>
+               ))}
+             </div>
+             <div className="flex flex-wrap md:justify-end gap-2 mt-1">
                <label className={`flex items-center gap-1.5 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider cursor-pointer border transition-all ${
                  includeBlitz ? 'bg-[#FCE14B]/10 border-[#FCE14B]/40 text-[#FCE14B]' : 'bg-transparent border-white/10 text-white/30 hover:border-white/20'
                }`}>
                  <input type="checkbox" checked={includeBlitz} onChange={e => setIncludeBlitz(e.target.checked)} className="sr-only" />
                  <div className={`w-2.5 h-2.5 border flex items-center justify-center transition-all ${
-                   includeBlitz ? 'border-[#FCE14B] bg-[#FCE14B]' : 'bg-transparent border-white/30'
+                   includeBlitz ? 'border-[#FCE14B] bg-[#FCE14B]' : 'border-white/30'
                  }`}>{includeBlitz && <span className="text-black text-[7px] font-black">✓</span>}</div>
                  + Blitz Cups
                </label>
@@ -373,9 +349,9 @@ export default function App() {
                }`}>
                  <input type="checkbox" checked={includeTestCup} onChange={e => setIncludeTestCup(e.target.checked)} className="sr-only" />
                  <div className={`w-2.5 h-2.5 border flex items-center justify-center transition-all ${
-                   includeTestCup ? 'border-[#FCE14B] bg-[#FCE14B]' : 'bg-transparent border-white/30'
+                   includeTestCup ? 'border-[#FCE14B] bg-[#FCE14B]' : 'border-white/30'
                  }`}>{includeTestCup && <span className="text-black text-[7px] font-black">✓</span>}</div>
-                 + Touch-Only Test Cups
+                 + Test Cups
                </label>
                <label className={`flex items-center gap-1.5 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider cursor-pointer border transition-all ${
                  includeReload ? 'bg-[#FCE14B]/10 border-[#FCE14B]/40 text-[#FCE14B]' : 'bg-transparent border-white/10 text-white/30 hover:border-white/20'
@@ -397,21 +373,39 @@ export default function App() {
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
               exit={{ opacity: 0 }}
-              className="flex-grow flex flex-col items-center justify-center p-6 text-center"
+              className="fixed inset-0 z-[100] bg-[#0A0A0B] flex flex-col items-center justify-center p-6 text-center"
             >
               <div className="relative mb-12">
-                <div className="w-24 h-24 border-t-4 border-l-4 border-[#FCE14B] animate-spin rounded-full"></div>
+                <h1 className="text-7xl md:text-9xl font-black italic uppercase leading-none tracking-tighter text-transparent stroke-text opacity-10">
+                  CONNECTING
+                </h1>
+                <div className="absolute inset-0 flex items-center justify-center">
+                   <div className="w-24 h-24 border-t-4 border-l-4 border-[#FCE14B] animate-spin rounded-full"></div>
+                </div>
               </div>
-              <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-[#FCE14B] animate-pulse">
-                INITIALIZING...
-              </h2>
+              
+              <div className="flex flex-col items-center gap-6">
+                <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-[#FCE14B] animate-pulse">
+                  INITIALIZING...
+                </h2>
+                <p className="max-w-md font-mono text-xs text-white/40 leading-relaxed uppercase">
+                  Crawling historical qualifiers from Sept-Apr. Aggregating regional earnings. Please wait for the master leaderboard to be built.
+                </p>
+                <div className="w-64 h-1 bg-white/5 overflow-hidden mt-4">
+                   <div className="h-full bg-[#FCE14B] animate-pulse w-full"></div>
+                </div>
+              </div>
+
+              <div className="mt-20 font-mono text-[10px] text-white/20 uppercase tracking-[0.2em]">
+                Source: Osirion Tournament Data API v1
+              </div>
             </motion.div>
           ) : error ? (
             <motion.div 
               key="error"
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }}
-              className="flex-grow flex flex-col items-center justify-center py-20 text-center space-y-6"
+              className="flex-grow flex flex-col items-center justify-center py-40 text-center space-y-6"
             >
               <AlertCircle size={48} className="text-red-500" />
               <div className="max-w-md">
@@ -677,7 +671,7 @@ export default function App() {
                         <h3 className="text-lg font-black italic uppercase tracking-tighter text-[#FCE14B]">Heats Seeding</h3>
                       </div>
                       <p className="text-[10px] uppercase tracking-widest font-mono opacity-30 mt-1">
-                        Snake-draft seeding for the top 64 players into 4 Heats based on cumilative points.
+                        Snake-draft seeding for the top 64 players into 4 Heats based on cumulative points.
                       </p>
                     </div>
                     <div className="p-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
