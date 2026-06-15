@@ -1,22 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import * as admin from 'firebase-admin';
-
-let isFirebaseInitialized = false;
-
-// Initialize Firebase Admin SDK
-if (!admin.apps.length) {
-  try {
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount)
-    });
-    isFirebaseInitialized = true;
-  } catch (error) {
-    console.error("Firebase Admin Initialization Error:", error);
-  }
-} else {
-  isFirebaseInitialized = true;
-}
+import jwt from 'jsonwebtoken';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
@@ -51,9 +34,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: 'Server configuration error: missing Epic credentials' });
   }
 
-  if (!isFirebaseInitialized) {
-    console.error("Firebase Admin is not initialized.");
-    return res.status(500).json({ error: 'Server configuration error: Firebase Admin failed to initialize. Check the FIREBASE_SERVICE_ACCOUNT environment variable formatting.' });
+  let serviceAccount: any = null;
+  try {
+    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
+    if (!serviceAccount.private_key || !serviceAccount.client_email) {
+      throw new Error("Missing keys in FIREBASE_SERVICE_ACCOUNT");
+    }
+  } catch (error) {
+    console.error("Firebase Admin Initialization Error:", error);
+    return res.status(500).json({ error: 'Server configuration error: FIREBASE_SERVICE_ACCOUNT is malformed.' });
   }
 
   try {
@@ -105,27 +94,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const accountData = await accountRes.json();
     const displayName = accountData[0]?.displayName || 'Unknown Player';
 
-    // 3. Create or update the user in Firebase Auth
-    try {
-      await admin.auth().updateUser(accountId, {
-        displayName: displayName
-      });
-    } catch (firebaseErr: any) {
-      if (firebaseErr.code === 'auth/user-not-found') {
-        // User doesn't exist yet, create them
-        await admin.auth().createUser({
-          uid: accountId,
-          displayName: displayName
-        });
-      } else {
-        throw firebaseErr;
+    // 3. Mint a Firebase Custom Token manually
+    // This entirely bypasses the firebase-admin library which crashes on Vercel Node 20
+    const nowSeconds = Math.floor(Date.now() / 1000);
+    const customToken = jwt.sign(
+      {
+        iss: serviceAccount.client_email,
+        sub: serviceAccount.client_email,
+        aud: 'https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit',
+        iat: nowSeconds,
+        exp: nowSeconds + (60 * 60), // 1 hour expiration
+        uid: accountId,
+        // Firebase Auth automatically sets this claim on the created user
+        claims: {
+          epic_display_name: displayName
+        }
+      },
+      serviceAccount.private_key,
+      {
+        algorithm: 'RS256'
       }
-    }
+    );
 
-    // 4. Mint a Firebase Custom Token
-    const customToken = await admin.auth().createCustomToken(accountId);
-
-    // 5. Return the token and profile to the client
+    // 4. Return the token and profile to the client
+    // Note: the frontend will call signInWithCustomToken and then updateProfile to apply the displayName!
     return res.status(200).json({ 
       token: customToken,
       accountId,
