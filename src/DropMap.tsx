@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useNavigate } from 'react-router-dom';
 import { 
   Trophy, Globe, MapPin, Users, ChevronLeft, LogIn, LogOut, 
-  ZoomIn, ZoomOut, RotateCcw, Crosshair, Trash2, Eye, EyeOff, Info
+  ZoomIn, ZoomOut, RotateCcw, Crosshair, Trash2, Eye, EyeOff, Info, PenTool
 } from "lucide-react";
 import { auth, db } from './firebase';
 import { 
