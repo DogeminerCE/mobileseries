@@ -1,15 +1,14 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { getApps, initializeApp, cert } from 'firebase-admin/app';
-import { getAuth } from 'firebase-admin/auth';
+import * as admin from 'firebase-admin';
 
 let isFirebaseInitialized = false;
 
 // Initialize Firebase Admin SDK
-if (!getApps().length) {
+if (!admin.apps.length) {
   try {
     const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
-    initializeApp({
-      credential: cert(serviceAccount)
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount)
     });
     isFirebaseInitialized = true;
   } catch (error) {
@@ -108,13 +107,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // 3. Create or update the user in Firebase Auth
     try {
-      await getAuth().updateUser(accountId, {
+      await admin.auth().updateUser(accountId, {
         displayName: displayName
       });
     } catch (firebaseErr: any) {
       if (firebaseErr.code === 'auth/user-not-found') {
         // User doesn't exist yet, create them
-        await getAuth().createUser({
+        await admin.auth().createUser({
           uid: accountId,
           displayName: displayName
         });
@@ -124,7 +123,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // 4. Mint a Firebase Custom Token
-    const customToken = await getAuth().createCustomToken(accountId);
+    const customToken = await admin.auth().createCustomToken(accountId);
 
     // 5. Return the token and profile to the client
     return res.status(200).json({ 
