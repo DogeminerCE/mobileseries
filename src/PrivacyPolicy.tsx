@@ -15,7 +15,7 @@ export default function PrivacyPolicy() {
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-white/90">1. Information We Collect</h2>
           <p className="text-white/70 leading-relaxed">
-            When you log in using Epic Games on our site (Mobile Series Leaderboard), we only request access to your basic profile information, which includes your Epic Account ID and Display Name. We do not have access to your email, password, payment information, or any other private account details.
+            When you log in using Epic Games on our site (mobileseries.xyz), we only request access to your basic profile information, which includes your Epic Account ID and Display Name. We do not have access to your email, password, payment information, or any other private account details.
           </p>
         </section>
 

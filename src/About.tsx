@@ -15,13 +15,13 @@ export default function About() {
         </button>
 
         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-[#FCE14B]">
-          About Mobile Series
+          About mobileseries.xyz
         </h1>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-white/90">What is Mobile Series?</h2>
+          <h2 className="text-xl font-bold text-white/90">What is mobileseries.xyz?</h2>
           <p className="text-white/70 leading-relaxed">
-            Mobile Series is a community-built competitive Fortnite tournament tracker and leaderboard platform. It aggregates and displays real-time standings, prize pool breakdowns, and player statistics for official Fortnite Mobile competitive events — including the Venture Series, Blitz Series, and Test Cup tournaments.
+            mobileseries.xyz is a community-built competitive Fortnite tournament tracker and leaderboard platform. It aggregates and displays real-time standings, prize pool breakdowns, and player statistics for official Fortnite Mobile competitive events — including the Venture Series, Blitz Series, and Test Cup tournaments.
           </p>
           <p className="text-white/70 leading-relaxed">
             The platform also includes an interactive Drop Map feature that allows qualified players to log in with their Epic Games account and mark their planned landing spots for upcoming heats and finals.
@@ -31,7 +31,7 @@ export default function About() {
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-white/90">Publisher</h2>
           <p className="text-white/70 leading-relaxed">
-            Mobile Series is developed and maintained by <strong className="text-white/90">BabyLion</strong>, an independent developer and Fortnite community organizer. This is a fan-made community project and is not affiliated with, endorsed by, or sponsored by Epic Games, Inc.
+            mobileseries.xyz is developed and maintained by <strong className="text-white/90">Babylion122</strong>, an independent developer and Fortnite community organizer. This is a fan-made community project and is not affiliated with, endorsed by, or sponsored by Epic Games, Inc.
           </p>
         </section>
 
