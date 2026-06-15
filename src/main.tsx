@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App.tsx';
 import DropMap from './DropMap.tsx';
 import PrivacyPolicy from './PrivacyPolicy.tsx';
+import About from './About.tsx';
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(
@@ -13,6 +14,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<App />} />
         <Route path="/drop-map" element={<DropMap />} />
         <Route path="/pp" element={<PrivacyPolicy />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

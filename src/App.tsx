@@ -858,10 +858,19 @@ export default function App() {
       </div>
 
       {/* Persistent Footer */}
-      <footer className="w-full py-4 text-center border-t border-white/5 bg-[#0A0A0B]">
-        <span className="text-[10px] font-mono opacity-20 uppercase tracking-[0.4em]">
-          Real-time Data: Osirion API • Updated every 30 min
-        </span>
+      <footer className="w-full py-6 border-t border-white/5 bg-[#0A0A0B]">
+        <div className="flex flex-col items-center gap-2">
+          <div className="flex items-center gap-4 text-[11px] font-medium uppercase tracking-widest">
+            <a href="/about" className="text-white/40 hover:text-white/80 transition-colors">About</a>
+            <span className="text-white/10">|</span>
+            <a href="/pp" className="text-white/40 hover:text-white/80 transition-colors">Privacy Policy</a>
+            <span className="text-white/10">|</span>
+            <a href="mailto:babylionbiz@gmail.com" className="text-white/40 hover:text-white/80 transition-colors">Contact</a>
+          </div>
+          <span className="text-[10px] font-mono opacity-20 uppercase tracking-[0.4em]">
+            Real-time Data: Osirion API • Updated every 30 min
+          </span>
+        </div>
       </footer>
     </div>
   );
