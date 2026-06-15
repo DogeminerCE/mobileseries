@@ -319,6 +319,12 @@ async function aggregateMobileEarnings() {
   }>> = {};
   const qualifiedPlayers: Record<string, Set<string>> = {}; // region -> set of qualified player keys
 
+  // Heat Seeding: Snake draft from cumulative Round Stages
+  const heatsSeeding: Record<string, Record<number, Array<{ player: string, countryCode: string, rank: number, points: number }>>> = {};
+
+  // Qualifier Eligible: Top 4 from Heats
+  const qualifierEligible: Record<string, Array<{ player: string, countryCode: string, fromHeat: string }>> = {};
+
   for (const region of regions) {
     console.log(`[REGION] Processing: ${region}`);
     await new Promise(resolve => setTimeout(resolve, 5000));
@@ -407,9 +413,9 @@ async function aggregateMobileEarnings() {
       for (const window of windows) {
         const winId = window.eventWindowId?.toLowerCase() || '';
         
-        // For Mobile Series: only process qualifier windows (existing logic)
+        // For Mobile Series: process qualifiers AND the cumulative _series leaderboard (for heats seeding)
         if (category === 'series') {
-          if (!winId.includes('qualifier') || winId.endsWith('_series')) {
+          if (!winId.includes('qualifier') && !winId.endsWith('_series')) {
             continue;
           }
         } else {
@@ -458,7 +464,7 @@ async function aggregateMobileEarnings() {
           if (
             processedLeaderboards.has(lbEventWindowId) ||
             processedLeaderboards.has(normalizedId) ||
-            lbEventWindowId.toLowerCase().includes('_series')
+            (lbEventWindowId.toLowerCase().includes('_series') && category !== 'series')
           ) {
              continue;
           }
@@ -473,6 +479,68 @@ async function aggregateMobileEarnings() {
           const lbData = await fetchWithRetry(lbUrl);
           
           if (!lbData.success || !lbData.leaderboard?.entries) continue;
+
+          const regionLabel = REGION_LABEL_MAP[region] || region;
+
+          // Process Heat Seeding from the cumulative series leaderboard
+          if (category === 'series' && lbEventWindowId.toLowerCase().endsWith('_series')) {
+            if (!heatsSeeding[regionLabel]) heatsSeeding[regionLabel] = { 1: [], 2: [], 3: [], 4: [] };
+            
+            // Only parse if empty (to avoid overwriting if multiple series boards exist)
+            if (heatsSeeding[regionLabel][1].length === 0) {
+              const sortedEntries = [...lbData.leaderboard.entries].sort((a: any, b: any) => a.rank - b.rank);
+              for (const entry of sortedEntries) {
+                if (entry.rank > 64) break; // Top 64 only
+                
+                const username = (entry.players || [])[0]?.username;
+                if (!username) continue;
+                
+                const cc = resolveCountryCode((entry.players || [])[0]?.flagToken);
+                const offset = (entry.rank - 1) % 8;
+                let heat = 0;
+                if (offset === 0 || offset === 7) heat = 1;
+                else if (offset === 1 || offset === 6) heat = 2;
+                else if (offset === 2 || offset === 5) heat = 3;
+                else if (offset === 3 || offset === 4) heat = 4;
+                
+                heatsSeeding[regionLabel][heat].push({
+                  player: username,
+                  countryCode: cc,
+                  rank: entry.rank,
+                  points: entry.points
+                });
+              }
+            }
+            continue; // Skip earnings logic for cumulative boards
+          }
+
+          // Process Qualifier Eligibility from Top 4 of each Heat
+          if (category === 'heats') {
+            if (!qualifierEligible[regionLabel]) qualifierEligible[regionLabel] = [];
+            
+            const sortedEntries = [...lbData.leaderboard.entries].sort((a: any, b: any) => a.rank - b.rank);
+            const eventTitle = tourney.displayData?.titleLine1 || 'Unknown Event';
+            const heatMatch = eventTitle.match(/Heat\s*(\d)/i) || lbEventWindowId.match(/Heat_?(\d)/i);
+            const heatName = heatMatch ? `Heat ${heatMatch[1]}` : 'Heat';
+
+            for (const entry of sortedEntries) {
+              if (entry.rank > 4) break; // Only top 4 advance to qualifier
+              
+              const username = (entry.players || [])[0]?.username;
+              if (!username) continue;
+              
+              // Only add if not already present
+              if (!qualifierEligible[regionLabel].some(q => q.player === username)) {
+                const cc = resolveCountryCode((entry.players || [])[0]?.flagToken);
+                qualifierEligible[regionLabel].push({
+                  player: username,
+                  countryCode: cc,
+                  fromHeat: heatName
+                });
+              }
+            }
+            // Do NOT continue here; heats DO give earnings!
+          }
 
           const eventTitle = tourney.displayData?.titleLine1 || 'Unknown Event';
           const eventDate = lbData.leaderboard.updatedAt || new Date().toISOString();
@@ -612,6 +680,8 @@ async function aggregateMobileEarnings() {
   const payload = {
     players: aggregatedPlayers,
     qualifications,
+    heatsSeeding,
+    qualifierEligible,
     lastUpdated: new Date().toISOString(),
     source: 'github-actions'
   };

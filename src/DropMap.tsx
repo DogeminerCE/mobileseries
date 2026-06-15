@@ -25,22 +25,16 @@ interface DropSpot {
   playerName: string;
   epicAccountId: string;
   region: string;
+  mapSession: string;
   color: string;
   heatNumber?: number;
   createdAt?: any;
 }
 
-interface HeatPlayer {
-  name: string;
-  countryCode: string;
-  heatNumber: number;
-  rank: number; // rank in Round Series leaderboard
-  points: number;
-}
-
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
 const DROP_MAP_REGIONS = ["EUROPE", "NA-CENTRAL", "NA-WEST", "MIDDLE EAST", "OCEANIA", "ASIA", "BRAZIL"];
+const MAP_SESSIONS = ["Group Stage", "Qualifier 12", "Heat 1", "Heat 2", "Heat 3", "Heat 4"];
 
 const HEAT_COLORS: Record<number, string> = {
   1: '#FF4444', // Red
@@ -69,6 +63,7 @@ export default function DropMap() {
   
   // Map state
   const [selectedRegion, setSelectedRegion] = useState('EUROPE');
+  const [selectedSession, setSelectedSession] = useState('Group Stage');
   const [dropSpots, setDropSpots] = useState<DropSpot[]>([]);
   const [myColor, setMyColor] = useState(PLAYER_COLORS[0]);
   const [isPlacing, setIsPlacing] = useState(false);
@@ -83,8 +78,8 @@ export default function DropMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapImageRef = useRef<HTMLImageElement>(null);
 
-  // Heat players (qualified)
-  const [heatPlayers, setHeatPlayers] = useState<Record<string, HeatPlayer[]>>({});
+  // Leaderboard data for Auth
+  const [leaderboardData, setLeaderboardData] = useState<any>(null);
 
   // ─── Auth Listener ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -94,7 +89,6 @@ export default function DropMap() {
         // Use displayName from Firebase Auth as Epic name
         const name = firebaseUser.displayName || '';
         setEpicName(name);
-        checkQualification(name);
       } else {
         setEpicName('');
         setIsQualified(false);
@@ -104,42 +98,45 @@ export default function DropMap() {
     return () => unsub();
   }, []);
 
-  // ─── Check Qualification Against leaderboard.json ───────────────────────────
-  const checkQualification = async (name: string) => {
-    try {
-      const res = await fetch('/leaderboard.json');
-      const data = await res.json();
-      const qualData = data.qualifications || {};
-      
-      // Check if this player appears in any qualifications list
-      const lowerName = name.toLowerCase();
-      let qualified = false;
-      for (const region of Object.keys(qualData)) {
-        const regionQuals = qualData[region] || [];
-        if (regionQuals.some((q: any) => q.player.toLowerCase() === lowerName)) {
-          qualified = true;
-          break;
-        }
-      }
+  // ─── Fetch Leaderboard Data ─────────────────────────────────────────────────
+  useEffect(() => {
+    fetch('/leaderboard.json')
+      .then(res => res.json())
+      .then(data => setLeaderboardData(data))
+      .catch(err => console.error('Failed to load leaderboard data', err));
+  }, []);
 
-      // Also check if player is in players list (top earners may be heat-eligible)
-      if (!qualified && data.players) {
-        qualified = data.players.some((p: any) => p.name.toLowerCase() === lowerName);
-      }
-
-      setIsQualified(qualified);
-    } catch (err) {
-      console.error('Failed to check qualification:', err);
-      // Default to allowing placement if data can't be checked
-      setIsQualified(true);
+  // ─── Check Session Authorization ────────────────────────────────────────────
+  useEffect(() => {
+    if (!epicName || !leaderboardData) {
+      setIsQualified(false);
+      return;
     }
-  };
+
+    const lowerName = epicName.toLowerCase();
+    let qualified = false;
+
+    if (selectedSession.startsWith('Heat')) {
+      const heatNum = parseInt(selectedSession.replace('Heat ', ''));
+      const seeding = leaderboardData.heatsSeeding?.[selectedRegion]?.[heatNum] || [];
+      qualified = seeding.some((p: any) => p.player.toLowerCase() === lowerName);
+    } else if (selectedSession === 'Qualifier 12') {
+      const eligible = leaderboardData.qualifierEligible?.[selectedRegion] || [];
+      qualified = eligible.some((p: any) => p.player.toLowerCase() === lowerName);
+    } else if (selectedSession === 'Group Stage') {
+      const quals = leaderboardData.qualifications?.[selectedRegion] || [];
+      qualified = quals.some((q: any) => q.player.toLowerCase() === lowerName);
+    }
+
+    setIsQualified(qualified);
+  }, [epicName, selectedRegion, selectedSession, leaderboardData]);
 
   // ─── Firestore Real-time Listener ───────────────────────────────────────────
   useEffect(() => {
     const q = query(
       collection(db, 'dropSpots'),
-      where('region', '==', selectedRegion)
+      where('region', '==', selectedRegion),
+      where('mapSession', '==', selectedSession)
     );
     const unsub = onSnapshot(q, (snapshot) => {
       const spots: DropSpot[] = [];
@@ -149,7 +146,7 @@ export default function DropMap() {
       setDropSpots(spots);
     });
     return () => unsub();
-  }, [selectedRegion]);
+  }, [selectedRegion, selectedSession]);
 
   // ─── Login with Epic Games (via custom token approach) ──────────────────────
   // Note: Until Epic OAuth is configured, we use a simple name-based auth for dev
@@ -169,7 +166,6 @@ export default function DropMap() {
       await updateProfile(cred.user, { displayName: name });
       
       setEpicName(name);
-      checkQualification(name);
       
       // Assign a random color
       setMyColor(PLAYER_COLORS[Math.floor(Math.random() * PLAYER_COLORS.length)]);
@@ -200,11 +196,12 @@ export default function DropMap() {
     if (x < 0 || x > 100 || y < 0 || y > 100) return;
 
     try {
-      // Remove existing spot for this user in this region
+      // Remove existing spot for this user in this region/session
       const existingQuery = query(
         collection(db, 'dropSpots'),
         where('epicAccountId', '==', user.uid),
-        where('region', '==', selectedRegion)
+        where('region', '==', selectedRegion),
+        where('mapSession', '==', selectedSession)
       );
       const existing = await getDocs(existingQuery);
       for (const docSnap of existing.docs) {
@@ -218,6 +215,7 @@ export default function DropMap() {
         playerName: epicName,
         epicAccountId: user.uid,
         region: selectedRegion,
+        mapSession: selectedSession,
         color: myColor,
         createdAt: serverTimestamp(),
       });
@@ -226,7 +224,7 @@ export default function DropMap() {
     } catch (err) {
       console.error('Failed to place drop spot:', err);
     }
-  }, [isPlacing, user, isQualified, epicName, selectedRegion, myColor]);
+  }, [isPlacing, user, isQualified, epicName, selectedRegion, selectedSession, myColor]);
 
   // ─── Remove My Drop Spot ───────────────────────────────────────────────────
   const handleRemoveMySpot = async () => {
@@ -235,7 +233,8 @@ export default function DropMap() {
       const q = query(
         collection(db, 'dropSpots'),
         where('epicAccountId', '==', user.uid),
-        where('region', '==', selectedRegion)
+        where('region', '==', selectedRegion),
+        where('mapSession', '==', selectedSession)
       );
       const snap = await getDocs(q);
       for (const docSnap of snap.docs) {
@@ -351,6 +350,33 @@ export default function DropMap() {
                 {region}
               </button>
             ))}
+          </div>
+          
+          {/* Session Tabs */}
+          <div className="flex flex-wrap gap-1.5 mt-2 pt-2 border-t border-white/10">
+            {MAP_SESSIONS.map(session => {
+              const isQual = session === 'Qualifier 12';
+              const qualEligible = leaderboardData?.qualifierEligible?.[selectedRegion] || [];
+              const isDisabled = isQual && qualEligible.length === 0;
+
+              return (
+                <button
+                  key={session}
+                  onClick={() => !isDisabled && setSelectedSession(session)}
+                  disabled={isDisabled}
+                  className={`px-3 py-1 text-[9px] font-black tracking-tighter transition-all italic uppercase border ${
+                    selectedSession === session 
+                    ? 'bg-white text-black border-white' 
+                    : isDisabled
+                      ? 'bg-transparent text-white/10 border-white/5 cursor-not-allowed'
+                      : 'bg-transparent text-white/40 border-white/10 hover:border-white/30'
+                  }`}
+                  title={isDisabled ? "Qualifier eligibility not yet determined (Heats not finished)" : ""}
+                >
+                  {session}
+                </button>
+              );
+            })}
           </div>
         </div>
       </header>
@@ -591,7 +617,7 @@ export default function DropMap() {
               <div className="flex items-center gap-2">
                 <Users size={14} className="text-[#FCE14B]" />
                 <h3 className="text-[10px] font-black italic uppercase tracking-tighter text-[#FCE14B]">
-                  Drop Spots — {selectedRegion}
+                  Drop Spots — {selectedRegion} — {selectedSession}
                 </h3>
               </div>
               <span className="text-[9px] font-mono text-white/20">
