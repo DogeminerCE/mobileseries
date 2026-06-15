@@ -10,6 +10,7 @@ import {
   Trophy, Globe, MapPin, Users, ChevronLeft, LogIn, LogOut, 
   ZoomIn, ZoomOut, RotateCcw, Crosshair, Trash2, Eye, EyeOff, Info, PenTool
 } from "lucide-react";
+import pc from 'polygon-clipping';
 import { auth, db } from './firebase';
 import { 
   collection, addDoc, deleteDoc, doc, onSnapshot, query, where, getDocs, serverTimestamp 
@@ -45,9 +46,9 @@ const HEAT_COLORS: Record<number, string> = {
 };
 
 const PLAYER_COLORS = [
-  '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD',
+  '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD',
   '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9', '#82E0AA', '#F8C471',
-  '#F1948A', '#85929E', '#AED6F1', '#A3E4D7', '#FAD7A0', '#D2B4DE',
+  '#85929E', '#AED6F1', '#A3E4D7', '#FAD7A0', '#D2B4DE',
 ];
 
 // ─── Main Component ─────────────────────────────────────────────────────────────
@@ -350,6 +351,33 @@ export default function DropMap() {
 
   const mySpot = dropSpots.find(s => s.epicAccountId === user?.uid);
 
+  // ─── Calculate Overlapping Polygons ─────────────────────────────────────────
+  const overlappingPolygons = useMemo(() => {
+    let overlaps: pc.Polygon[] = [];
+    
+    // Extract valid polygons
+    const validSpots = dropSpots.filter(s => s.path && s.path.length >= 3);
+    
+    // Check every pair for intersections
+    for (let i = 0; i < validSpots.length; i++) {
+      for (let j = i + 1; j < validSpots.length; j++) {
+        try {
+          const p1: pc.Polygon = [[validSpots[i].path!.map(p => [p.x, p.y] as pc.Pair)]];
+          const p2: pc.Polygon = [[validSpots[j].path!.map(p => [p.x, p.y] as pc.Pair)]];
+          
+          const intersection = pc.intersection(p1, p2);
+          if (intersection.length > 0) {
+            overlaps = pc.union(overlaps, intersection);
+          }
+        } catch (e) {
+          // Polygon-clipping might throw if self-intersecting, ignore it
+          console.warn('Polygon intersection failed', e);
+        }
+      }
+    }
+    return overlaps;
+  }, [dropSpots]);
+
   return (
     <div className="min-h-screen bg-[#0A0A0B] text-white flex flex-col">
       <header className="border-b border-white/10 bg-[#0A0A0B]/95 backdrop-blur-xl sticky top-0 z-50">
@@ -556,9 +584,24 @@ export default function DropMap() {
                       className="transition-all"
                     />
                   ))}
+                  
+                  {/* Overlap Highlights (RED) */}
+                  {overlappingPolygons.map((multiPoly, i) => 
+                    multiPoly.map((poly, j) => (
+                      <polygon
+                        key={`overlap-${i}-${j}`}
+                        points={poly[0].map(p => `${p[0]},${p[1]}`).join(' ')}
+                        fill="rgba(255, 0, 0, 0.6)"
+                        stroke="#FF0000"
+                        strokeWidth="1.5"
+                        vectorEffect="non-scaling-stroke"
+                        className="animate-pulse pointer-events-none"
+                      />
+                    ))
+                  )}
                 </svg>
 
-                {/* Drop Spot Markers */}
+                {/* Drop Spot Markers & Labels */}
                 {dropSpots.map((spot) => (
                   <div
                     key={spot.id}
@@ -603,22 +646,22 @@ export default function DropMap() {
                       </div>
                     )}
 
+                    {/* Centered Name Label */}
                     {(showLabels || hoveredSpot === spot.id) && (
                       <div 
-                        className={`absolute left-1/2 -translate-x-1/2 bottom-full mb-2 whitespace-nowrap px-2 py-0.5 text-[9px] font-black uppercase tracking-wider border transition-all ${
+                        className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap px-2.5 py-1 text-[11px] font-black uppercase tracking-widest transition-all ${
                           hoveredSpot === spot.id 
-                            ? 'opacity-100 scale-100' 
-                            : 'opacity-70 scale-95'
+                            ? 'opacity-100 scale-110 z-50' 
+                            : 'opacity-90 scale-100'
                         }`}
                         style={{
-                          backgroundColor: spot.color + '22',
-                          borderColor: spot.color + '66',
-                          color: spot.color,
+                          color: '#FFFFFF',
+                          textShadow: `0 0 4px #000000, 0 0 10px ${spot.color}, 0 2px 4px rgba(0,0,0,0.8)`,
                         }}
                       >
                         {spot.playerName}
                         {spot.heatNumber && (
-                          <span className="ml-1 opacity-50">H{spot.heatNumber}</span>
+                          <span className="ml-1 opacity-70">H{spot.heatNumber}</span>
                         )}
                       </div>
                     )}
