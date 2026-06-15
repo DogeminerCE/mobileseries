@@ -214,8 +214,15 @@ export default function DropMap() {
           });
           
           if (!res.ok) {
-            const errData = await res.json().catch(() => ({}));
-            throw new Error(errData.error || 'Failed to authenticate with Epic Games server');
+            const errText = await res.text().catch(() => '');
+            let errMsg = 'Failed to authenticate with Epic Games server';
+            try {
+              const errData = JSON.parse(errText);
+              errMsg = errData.message || errData.error || errData.details || errMsg;
+            } catch (e) {
+              errMsg = `Server error ${res.status}: ${errText.substring(0, 50)}`;
+            }
+            throw new Error(errMsg);
           }
           
           const { token, displayName } = await res.json();

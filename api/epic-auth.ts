@@ -2,6 +2,8 @@ import { VercelRequest, VercelResponse } from '@vercel/node';
 import { getApps, initializeApp, cert } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 
+let isFirebaseInitialized = false;
+
 // Initialize Firebase Admin SDK
 if (!getApps().length) {
   try {
@@ -9,9 +11,12 @@ if (!getApps().length) {
     initializeApp({
       credential: cert(serviceAccount)
     });
+    isFirebaseInitialized = true;
   } catch (error) {
     console.error("Firebase Admin Initialization Error:", error);
   }
+} else {
+  isFirebaseInitialized = true;
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -44,7 +49,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (!clientId || !clientSecret) {
     console.error("Missing Epic API credentials in env");
-    return res.status(500).json({ error: 'Server configuration error' });
+    return res.status(500).json({ error: 'Server configuration error: missing Epic credentials' });
+  }
+
+  if (!isFirebaseInitialized) {
+    console.error("Firebase Admin is not initialized.");
+    return res.status(500).json({ error: 'Server configuration error: Firebase Admin failed to initialize. Check the FIREBASE_SERVICE_ACCOUNT environment variable formatting.' });
   }
 
   try {
