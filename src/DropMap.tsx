@@ -163,32 +163,68 @@ export default function DropMap() {
     return () => unsub();
   }, [selectedRegion, selectedSession]);
 
-  // ─── Login with Epic Games (via custom token approach) ──────────────────────
-  // Note: Until Epic OAuth is configured, we use a simple name-based auth for dev
-  const handleLogin = async () => {
+  // ─── Login with Epic Games (OAuth) ──────────────────────────────────────────
+  const handleLogin = () => {
     setAuthError(null);
     try {
-      // For now, prompt for Epic username until OAuth is configured
-      const name = window.prompt('Enter your Epic Games username:');
-      if (!name) return;
+      // Redirect to Epic Games OAuth
+      const clientId = 'xyza7891WTyGsPLoyAH6ArhFryzcNpKu'; // Safe to expose
+      // Construct the exact redirect URI to come back to the drop map
+      const redirectUri = encodeURIComponent(window.location.origin + '/drop-map');
       
-      // Sign in anonymously for now, store the name
-      const { signInAnonymously } = await import('firebase/auth');
-      const cred = await signInAnonymously(auth);
-      
-      // Update profile with the entered name
-      const { updateProfile } = await import('firebase/auth');
-      await updateProfile(cred.user, { displayName: name });
-      
-      setEpicName(name);
-      
-      // Assign a random color
-      setMyColor(PLAYER_COLORS[Math.floor(Math.random() * PLAYER_COLORS.length)]);
+      const epicAuthUrl = `https://www.epicgames.com/id/authorize?client_id=${clientId}&response_type=code&scope=basic_profile&redirect_uri=${redirectUri}`;
+      window.location.href = epicAuthUrl;
     } catch (err: any) {
-      console.error('Login error:', err);
-      setAuthError(err.message || 'Failed to sign in');
+      console.error('Login redirect error:', err);
+      setAuthError('Failed to initiate login');
     }
   };
+
+  // ─── Process OAuth Callback ─────────────────────────────────────────────────
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+
+    if (code) {
+      setAuthError(null);
+      // Clean up URL to remove code
+      window.history.replaceState({}, document.title, window.location.pathname);
+      
+      const authenticateWithCode = async () => {
+        try {
+          const redirectUri = window.location.origin + '/drop-map';
+          
+          // Exchange code for Firebase Custom Token via our Vercel Serverless Function
+          const res = await fetch('/api/epic-auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code, redirectUri })
+          });
+          
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.error || 'Failed to authenticate with Epic Games server');
+          }
+          
+          const { token, displayName } = await res.json();
+          
+          const { signInWithCustomToken, updateProfile } = await import('firebase/auth');
+          const cred = await signInWithCustomToken(auth, token);
+          
+          // Update local profile with the fetched display name
+          await updateProfile(cred.user, { displayName });
+          
+          setEpicName(displayName);
+          setMyColor(PLAYER_COLORS[Math.floor(Math.random() * PLAYER_COLORS.length)]);
+        } catch (err: any) {
+          console.error('OAuth processing error:', err);
+          setAuthError(err.message || 'Failed to finish sign in');
+        }
+      };
+      
+      authenticateWithCode();
+    }
+  }, []);
 
   const handleLogout = async () => {
     await signOut(auth);
