@@ -185,10 +185,101 @@ const TESTCUP_PRIZE_TABLES: Record<string, Array<{ rank: number, prize: number }
 // Reload Duos Cash Cup Mobile prizing (using test cup structure)
 const RELOAD_PRIZE_TABLES = TESTCUP_PRIZE_TABLES;
 
+// Chapter 7 Heats Stage prizing (only for events AFTER Qualifier 11)
+const HEATS_PRIZE_TABLES: Record<string, Array<{ rank: number, prize: number }>> = {
+  'EU': [
+    { rank: 4, prize: 0 },
+    { rank: 8, prize: 200 },
+    { rank: 12, prize: 150 },
+    { rank: 16, prize: 100 },
+  ],
+  'NAC': [
+    { rank: 4, prize: 0 },
+    { rank: 8, prize: 200 },
+    { rank: 12, prize: 150 },
+    { rank: 16, prize: 100 },
+  ],
+  'NAW': [
+    { rank: 4, prize: 0 },
+    { rank: 8, prize: 150 },
+    { rank: 16, prize: 100 },
+  ],
+  'BR': [
+    { rank: 4, prize: 0 },
+    { rank: 8, prize: 150 },
+    { rank: 16, prize: 100 },
+  ],
+  'ASIA': [
+    { rank: 4, prize: 0 },
+    { rank: 8, prize: 150 },
+    { rank: 16, prize: 100 },
+  ],
+  'ME': [
+    { rank: 4, prize: 0 },
+    { rank: 8, prize: 150 },
+    { rank: 16, prize: 100 },
+  ],
+  'OCE': [
+    { rank: 4, prize: 0 },
+    { rank: 8, prize: 150 },
+    { rank: 16, prize: 100 },
+  ],
+};
+
+// Chapter 7 Qualifier prizing (after Heats, top 16 from each heat's top 4)
+const QUALIFIER_PRIZE_TABLES: Record<string, Array<{ rank: number, prize: number }>> = {
+  'EU': [
+    { rank: 1, prize: 1500 }, { rank: 2, prize: 1200 }, { rank: 3, prize: 1000 },
+    { rank: 4, prize: 900 }, { rank: 5, prize: 800 }, { rank: 6, prize: 750 },
+    { rank: 7, prize: 700 }, { rank: 8, prize: 650 },
+    { rank: 10, prize: 600 }, { rank: 12, prize: 500 },
+    { rank: 14, prize: 400 }, { rank: 16, prize: 300 },
+  ],
+  'NAC': [
+    { rank: 1, prize: 1500 }, { rank: 2, prize: 1200 }, { rank: 3, prize: 1000 },
+    { rank: 4, prize: 900 }, { rank: 5, prize: 800 }, { rank: 6, prize: 750 },
+    { rank: 7, prize: 700 }, { rank: 8, prize: 650 },
+    { rank: 10, prize: 600 }, { rank: 12, prize: 500 },
+    { rank: 14, prize: 400 }, { rank: 16, prize: 300 },
+  ],
+  'NAW': [
+    { rank: 1, prize: 1200 }, { rank: 2, prize: 1000 }, { rank: 3, prize: 800 },
+    { rank: 4, prize: 700 }, { rank: 6, prize: 600 }, { rank: 8, prize: 500 },
+    { rank: 10, prize: 400 }, { rank: 12, prize: 300 },
+    { rank: 14, prize: 250 }, { rank: 16, prize: 200 },
+  ],
+  'BR': [
+    { rank: 1, prize: 1200 }, { rank: 2, prize: 1000 }, { rank: 3, prize: 800 },
+    { rank: 4, prize: 700 }, { rank: 6, prize: 600 }, { rank: 8, prize: 500 },
+    { rank: 10, prize: 400 }, { rank: 12, prize: 300 },
+    { rank: 14, prize: 250 }, { rank: 16, prize: 200 },
+  ],
+  'ASIA': [
+    { rank: 1, prize: 1200 }, { rank: 2, prize: 1000 }, { rank: 3, prize: 800 },
+    { rank: 4, prize: 700 }, { rank: 6, prize: 600 }, { rank: 8, prize: 500 },
+    { rank: 10, prize: 400 }, { rank: 12, prize: 300 },
+    { rank: 14, prize: 250 }, { rank: 16, prize: 200 },
+  ],
+  'ME': [
+    { rank: 1, prize: 1200 }, { rank: 2, prize: 1000 }, { rank: 3, prize: 800 },
+    { rank: 4, prize: 700 }, { rank: 6, prize: 600 }, { rank: 8, prize: 500 },
+    { rank: 10, prize: 400 }, { rank: 12, prize: 300 },
+    { rank: 14, prize: 250 }, { rank: 16, prize: 200 },
+  ],
+  'OCE': [
+    { rank: 1, prize: 1200 }, { rank: 2, prize: 1000 }, { rank: 3, prize: 800 },
+    { rank: 4, prize: 700 }, { rank: 6, prize: 600 }, { rank: 8, prize: 500 },
+    { rank: 10, prize: 400 }, { rank: 12, prize: 300 },
+    { rank: 14, prize: 250 }, { rank: 16, prize: 200 },
+  ],
+};
+
 const DEFAULT_PRIZE_TABLE = [
   { rank: 1, prize: 100 },
   { rank: 16, prize: 100 },
 ];
+
+type EventCategory = 'series' | 'blitz' | 'testcup' | 'reload' | 'heats' | 'qualifier';
 
 function calculatePrize(rank: number, region: string, category: EventCategory = 'series'): number {
   const categoryTables: Record<EventCategory, Record<string, Array<{ rank: number, prize: number }>>> = {
@@ -196,6 +287,8 @@ function calculatePrize(rank: number, region: string, category: EventCategory = 
     blitz: BLITZ_PRIZE_TABLES,
     testcup: TESTCUP_PRIZE_TABLES,
     reload: RELOAD_PRIZE_TABLES,
+    heats: HEATS_PRIZE_TABLES,
+    qualifier: QUALIFIER_PRIZE_TABLES,
   };
   const table = (categoryTables[category] || categoryTables.series)[region] || DEFAULT_PRIZE_TABLE;
   const match = [...table].sort((a, b) => a.rank - b.rank).find(t => rank <= t.rank);
@@ -206,8 +299,6 @@ const REGION_LABEL_MAP: Record<string, string> = {
   'EU': 'EUROPE', 'NAC': 'NA-CENTRAL', 'NAW': 'NA-WEST',
   'BR': 'BRAZIL', 'ASIA': 'ASIA', 'OCE': 'OCEANIA', 'ME': 'MIDDLE EAST'
 };
-
-type EventCategory = 'series' | 'blitz' | 'testcup' | 'reload';
 
 async function aggregateMobileEarnings() {
   console.log("Starting verified global series aggregation (Sept 2023 - Present)...");
@@ -283,6 +374,10 @@ async function aggregateMobileEarnings() {
         return null;
       }
 
+      // Chapter 7 format: Heats & Qualifiers (post-Q11 events)
+      if (eid.includes('mobileseries') && (eid.includes('heat') || title.includes('heat'))) return 'heats';
+      if (eid.includes('mobileseries') && eid.includes('qualifierfinal')) return 'qualifier';
+
       // Mobile Series (including Dec blitz qualifiers titled "Mobile Series")
       if (title.includes('mobile series') || eid.includes('mobileseries')) return 'series';
       // Blitz Mobile Cup (but NOT the ones already matched as series above)
@@ -299,9 +394,9 @@ async function aggregateMobileEarnings() {
       .map((t: any) => ({ tourney: t, category: classifyTourney(t) }))
       .filter((x: any) => x.category !== null);
 
-    const counts = { series: 0, blitz: 0, testcup: 0, reload: 0 };
-    categorizedTourneys.forEach((x: any) => counts[x.category as EventCategory]++);
-    console.log(`[DATA] Found ${categorizedTourneys.length} mobile events in ${region} (series: ${counts.series}, blitz: ${counts.blitz}, testcup: ${counts.testcup}, reload: ${counts.reload})`);
+    const counts: Record<string, number> = { series: 0, blitz: 0, testcup: 0, reload: 0, heats: 0, qualifier: 0 };
+    categorizedTourneys.forEach((x: any) => counts[x.category as string]++);
+    console.log(`[DATA] Found ${categorizedTourneys.length} mobile events in ${region} (series: ${counts.series}, blitz: ${counts.blitz}, testcup: ${counts.testcup}, reload: ${counts.reload}, heats: ${counts.heats}, qualifier: ${counts.qualifier})`);
     
     const processedLeaderboards = new Set<string>();
 

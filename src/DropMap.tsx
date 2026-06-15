@@ -1,0 +1,663 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from "motion/react";
+import { useNavigate } from 'react-router-dom';
+import { 
+  Trophy, Globe, MapPin, Users, ChevronLeft, LogIn, LogOut, 
+  ZoomIn, ZoomOut, RotateCcw, Crosshair, Trash2, Eye, EyeOff, Info
+} from "lucide-react";
+import { auth, db } from './firebase';
+import { 
+  collection, addDoc, deleteDoc, doc, onSnapshot, query, where, getDocs, serverTimestamp 
+} from 'firebase/firestore';
+import { signInWithPopup, OAuthProvider, signOut, onAuthStateChanged, User } from 'firebase/auth';
+
+// ─── Types ──────────────────────────────────────────────────────────────────────
+
+interface DropSpot {
+  id?: string;
+  x: number; // percentage 0-100
+  y: number; // percentage 0-100
+  playerName: string;
+  epicAccountId: string;
+  region: string;
+  color: string;
+  heatNumber?: number;
+  createdAt?: any;
+}
+
+interface HeatPlayer {
+  name: string;
+  countryCode: string;
+  heatNumber: number;
+  rank: number; // rank in Round Series leaderboard
+  points: number;
+}
+
+// ─── Constants ──────────────────────────────────────────────────────────────────
+
+const DROP_MAP_REGIONS = ["EUROPE", "NA-CENTRAL", "NA-WEST", "MIDDLE EAST", "OCEANIA", "ASIA", "BRAZIL"];
+
+const HEAT_COLORS: Record<number, string> = {
+  1: '#FF4444', // Red
+  2: '#44AAFF', // Blue
+  3: '#44FF88', // Green
+  4: '#FFAA44', // Orange
+};
+
+const PLAYER_COLORS = [
+  '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD',
+  '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9', '#82E0AA', '#F8C471',
+  '#F1948A', '#85929E', '#AED6F1', '#A3E4D7', '#FAD7A0', '#D2B4DE',
+];
+
+// ─── Main Component ─────────────────────────────────────────────────────────────
+
+export default function DropMap() {
+  const navigate = useNavigate();
+  
+  // Auth state
+  const [user, setUser] = useState<User | null>(null);
+  const [epicName, setEpicName] = useState<string>('');
+  const [isQualified, setIsQualified] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
+  
+  // Map state
+  const [selectedRegion, setSelectedRegion] = useState('EUROPE');
+  const [dropSpots, setDropSpots] = useState<DropSpot[]>([]);
+  const [myColor, setMyColor] = useState(PLAYER_COLORS[0]);
+  const [isPlacing, setIsPlacing] = useState(false);
+  const [showLabels, setShowLabels] = useState(true);
+  const [hoveredSpot, setHoveredSpot] = useState<string | null>(null);
+  
+  // Map zoom/pan
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+  const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapImageRef = useRef<HTMLImageElement>(null);
+
+  // Heat players (qualified)
+  const [heatPlayers, setHeatPlayers] = useState<Record<string, HeatPlayer[]>>({});
+
+  // ─── Auth Listener ──────────────────────────────────────────────────────────
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+      if (firebaseUser) {
+        // Use displayName from Firebase Auth as Epic name
+        const name = firebaseUser.displayName || '';
+        setEpicName(name);
+        checkQualification(name);
+      } else {
+        setEpicName('');
+        setIsQualified(false);
+      }
+      setAuthLoading(false);
+    });
+    return () => unsub();
+  }, []);
+
+  // ─── Check Qualification Against leaderboard.json ───────────────────────────
+  const checkQualification = async (name: string) => {
+    try {
+      const res = await fetch('/leaderboard.json');
+      const data = await res.json();
+      const qualData = data.qualifications || {};
+      
+      // Check if this player appears in any qualifications list
+      const lowerName = name.toLowerCase();
+      let qualified = false;
+      for (const region of Object.keys(qualData)) {
+        const regionQuals = qualData[region] || [];
+        if (regionQuals.some((q: any) => q.player.toLowerCase() === lowerName)) {
+          qualified = true;
+          break;
+        }
+      }
+
+      // Also check if player is in players list (top earners may be heat-eligible)
+      if (!qualified && data.players) {
+        qualified = data.players.some((p: any) => p.name.toLowerCase() === lowerName);
+      }
+
+      setIsQualified(qualified);
+    } catch (err) {
+      console.error('Failed to check qualification:', err);
+      // Default to allowing placement if data can't be checked
+      setIsQualified(true);
+    }
+  };
+
+  // ─── Firestore Real-time Listener ───────────────────────────────────────────
+  useEffect(() => {
+    const q = query(
+      collection(db, 'dropSpots'),
+      where('region', '==', selectedRegion)
+    );
+    const unsub = onSnapshot(q, (snapshot) => {
+      const spots: DropSpot[] = [];
+      snapshot.forEach(docSnap => {
+        spots.push({ id: docSnap.id, ...docSnap.data() } as DropSpot);
+      });
+      setDropSpots(spots);
+    });
+    return () => unsub();
+  }, [selectedRegion]);
+
+  // ─── Login with Epic Games (via custom token approach) ──────────────────────
+  // Note: Until Epic OAuth is configured, we use a simple name-based auth for dev
+  const handleLogin = async () => {
+    setAuthError(null);
+    try {
+      // For now, prompt for Epic username until OAuth is configured
+      const name = window.prompt('Enter your Epic Games username:');
+      if (!name) return;
+      
+      // Sign in anonymously for now, store the name
+      const { signInAnonymously } = await import('firebase/auth');
+      const cred = await signInAnonymously(auth);
+      
+      // Update profile with the entered name
+      const { updateProfile } = await import('firebase/auth');
+      await updateProfile(cred.user, { displayName: name });
+      
+      setEpicName(name);
+      checkQualification(name);
+      
+      // Assign a random color
+      setMyColor(PLAYER_COLORS[Math.floor(Math.random() * PLAYER_COLORS.length)]);
+    } catch (err: any) {
+      console.error('Login error:', err);
+      setAuthError(err.message || 'Failed to sign in');
+    }
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    setEpicName('');
+    setIsQualified(false);
+  };
+
+  // ─── Place a Drop Spot ──────────────────────────────────────────────────────
+  const handleMapClick = useCallback(async (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isPlacing || !user || !isQualified) return;
+    
+    const container = mapContainerRef.current;
+    const img = mapImageRef.current;
+    if (!container || !img) return;
+
+    const rect = img.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    if (x < 0 || x > 100 || y < 0 || y > 100) return;
+
+    try {
+      // Remove existing spot for this user in this region
+      const existingQuery = query(
+        collection(db, 'dropSpots'),
+        where('epicAccountId', '==', user.uid),
+        where('region', '==', selectedRegion)
+      );
+      const existing = await getDocs(existingQuery);
+      for (const docSnap of existing.docs) {
+        await deleteDoc(doc(db, 'dropSpots', docSnap.id));
+      }
+
+      // Add new spot
+      await addDoc(collection(db, 'dropSpots'), {
+        x,
+        y,
+        playerName: epicName,
+        epicAccountId: user.uid,
+        region: selectedRegion,
+        color: myColor,
+        createdAt: serverTimestamp(),
+      });
+
+      setIsPlacing(false);
+    } catch (err) {
+      console.error('Failed to place drop spot:', err);
+    }
+  }, [isPlacing, user, isQualified, epicName, selectedRegion, myColor]);
+
+  // ─── Remove My Drop Spot ───────────────────────────────────────────────────
+  const handleRemoveMySpot = async () => {
+    if (!user) return;
+    try {
+      const q = query(
+        collection(db, 'dropSpots'),
+        where('epicAccountId', '==', user.uid),
+        where('region', '==', selectedRegion)
+      );
+      const snap = await getDocs(q);
+      for (const docSnap of snap.docs) {
+        await deleteDoc(doc(db, 'dropSpots', docSnap.id));
+      }
+    } catch (err) {
+      console.error('Failed to remove drop spot:', err);
+    }
+  };
+
+  // ─── Zoom/Pan Handlers ─────────────────────────────────────────────────────
+  const handleZoomIn = () => setZoom(z => Math.min(z + 0.25, 4));
+  const handleZoomOut = () => setZoom(z => Math.max(z - 0.25, 0.5));
+  const handleResetView = () => { setZoom(1); setPan({ x: 0, y: 0 }); };
+
+  const handleWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+    setZoom(z => Math.min(Math.max(z + delta, 0.5), 4));
+  }, []);
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    if (isPlacing) return;
+    setIsPanning(true);
+    setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+  }, [isPlacing, pan]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!isPanning) return;
+    setPan({ x: e.clientX - panStart.x, y: e.clientY - panStart.y });
+  }, [isPanning, panStart]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsPanning(false);
+  }, []);
+
+  // ─── My spot in this region ─────────────────────────────────────────────────
+  const mySpot = dropSpots.find(s => s.epicAccountId === user?.uid);
+
+  // ─── Render ─────────────────────────────────────────────────────────────────
+  return (
+    <div className="min-h-screen bg-[#0A0A0B] text-white flex flex-col">
+      {/* Top Bar */}
+      <header className="border-b border-white/10 bg-[#0A0A0B]/95 backdrop-blur-xl sticky top-0 z-50">
+        <div className="max-w-[1800px] mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => navigate('/')}
+                className="flex items-center gap-2 text-white/40 hover:text-[#FCE14B] transition-colors text-xs font-bold uppercase tracking-wider"
+              >
+                <ChevronLeft size={16} />
+                Leaderboard
+              </button>
+              <div className="h-5 w-px bg-white/10" />
+              <div className="flex items-center gap-2">
+                <MapPin size={16} className="text-[#FCE14B]" />
+                <h1 className="text-sm font-black italic uppercase tracking-tighter">
+                  Drop Map
+                </h1>
+              </div>
+            </div>
+
+            {/* Auth Section */}
+            <div className="flex items-center gap-3">
+              {authLoading ? (
+                <div className="text-xs text-white/30 uppercase tracking-wider">Loading...</div>
+              ) : user ? (
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: isQualified ? '#4ade80' : '#ef4444' }} />
+                    <span className="text-xs font-bold uppercase tracking-wider">
+                      {epicName}
+                    </span>
+                    {isQualified && (
+                      <span className="text-[8px] font-black uppercase tracking-widest bg-[#FCE14B]/10 text-[#FCE14B] px-2 py-0.5 border border-[#FCE14B]/30">
+                        QUALIFIED
+                      </span>
+                    )}
+                  </div>
+                  <button 
+                    onClick={handleLogout}
+                    className="p-2 text-white/30 hover:text-red-400 transition-colors"
+                    title="Sign Out"
+                  >
+                    <LogOut size={14} />
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  onClick={handleLogin}
+                  className="flex items-center gap-2 px-4 py-2 bg-[#FCE14B] text-black font-black italic uppercase text-xs tracking-tighter hover:bg-[#FCE14B]/80 transition-colors"
+                >
+                  <LogIn size={14} />
+                  Sign In with Epic Games
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Region Tabs */}
+          <div className="flex flex-wrap gap-1.5 mt-3">
+            {DROP_MAP_REGIONS.map(region => (
+              <button
+                key={region}
+                onClick={() => setSelectedRegion(region)}
+                className={`px-3 py-1 text-[9px] font-black tracking-tighter transition-all italic uppercase border ${
+                  selectedRegion === region 
+                  ? 'bg-[#FCE14B] text-black border-[#FCE14B]' 
+                  : 'bg-transparent text-white/40 border-white/10 hover:border-white/30'
+                }`}
+              >
+                {region}
+              </button>
+            ))}
+          </div>
+        </div>
+      </header>
+
+      {authError && (
+        <div className="bg-red-500/10 border-b border-red-500/30 px-4 py-2 text-red-400 text-xs text-center font-bold uppercase tracking-wider">
+          {authError}
+        </div>
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col lg:flex-row">
+        {/* Map Area */}
+        <div className="flex-1 relative overflow-hidden bg-[#0f0f11]">
+          {/* Map Controls */}
+          <div className="absolute top-4 right-4 z-20 flex flex-col gap-2">
+            <button 
+              onClick={handleZoomIn}
+              className="w-9 h-9 bg-[#141416]/90 border border-white/10 flex items-center justify-center hover:border-[#FCE14B]/30 transition-colors"
+              title="Zoom In"
+            >
+              <ZoomIn size={14} className="text-white/60" />
+            </button>
+            <button 
+              onClick={handleZoomOut}
+              className="w-9 h-9 bg-[#141416]/90 border border-white/10 flex items-center justify-center hover:border-[#FCE14B]/30 transition-colors"
+              title="Zoom Out"
+            >
+              <ZoomOut size={14} className="text-white/60" />
+            </button>
+            <button 
+              onClick={handleResetView}
+              className="w-9 h-9 bg-[#141416]/90 border border-white/10 flex items-center justify-center hover:border-[#FCE14B]/30 transition-colors"
+              title="Reset View"
+            >
+              <RotateCcw size={14} className="text-white/60" />
+            </button>
+            <div className="h-px bg-white/10" />
+            <button 
+              onClick={() => setShowLabels(!showLabels)}
+              className={`w-9 h-9 bg-[#141416]/90 border flex items-center justify-center transition-colors ${
+                showLabels ? 'border-[#FCE14B]/30 text-[#FCE14B]' : 'border-white/10 text-white/40'
+              }`}
+              title={showLabels ? "Hide Labels" : "Show Labels"}
+            >
+              {showLabels ? <Eye size={14} /> : <EyeOff size={14} />}
+            </button>
+          </div>
+
+          {/* Zoom Level Indicator */}
+          <div className="absolute bottom-4 right-4 z-20 text-[9px] uppercase tracking-widest font-mono text-white/20">
+            {Math.round(zoom * 100)}%
+          </div>
+
+          {/* The Map */}
+          <div
+            ref={mapContainerRef}
+            className={`w-full h-full min-h-[500px] lg:min-h-0 ${isPlacing ? 'cursor-crosshair' : isPanning ? 'cursor-grabbing' : 'cursor-grab'}`}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            onWheel={handleWheel}
+            onClick={handleMapClick}
+            style={{ touchAction: 'none' }}
+          >
+            <div
+              className="relative w-full h-full flex items-center justify-center"
+              style={{
+                transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+                transformOrigin: 'center center',
+                transition: isPanning ? 'none' : 'transform 0.2s ease-out',
+              }}
+            >
+              <img
+                ref={mapImageRef}
+                src="/venture-blitz-map.webp"
+                alt="Venture (Blitz) Island Map"
+                className="max-w-full max-h-[calc(100vh-140px)] object-contain select-none pointer-events-none"
+                draggable={false}
+              />
+              
+              {/* Drop Spot Markers */}
+              {dropSpots.map((spot) => (
+                <div
+                  key={spot.id}
+                  className="absolute group"
+                  style={{
+                    left: `${spot.x}%`,
+                    top: `${spot.y}%`,
+                    transform: 'translate(-50%, -100%)',
+                    zIndex: hoveredSpot === spot.id ? 30 : 10,
+                    pointerEvents: 'auto',
+                  }}
+                  onMouseEnter={() => setHoveredSpot(spot.id || null)}
+                  onMouseLeave={() => setHoveredSpot(null)}
+                >
+                  {/* Pin */}
+                  <div className="relative">
+                    <svg width="24" height="32" viewBox="0 0 24 32" fill="none">
+                      <path 
+                        d="M12 0C5.373 0 0 5.373 0 12c0 9 12 20 12 20s12-11 12-20c0-6.627-5.373-12-12-12z" 
+                        fill={spot.color}
+                        stroke="rgba(0,0,0,0.5)"
+                        strokeWidth="1"
+                      />
+                      <circle cx="12" cy="12" r="5" fill="rgba(0,0,0,0.3)" />
+                    </svg>
+                    
+                    {/* Pulse ring for own spot */}
+                    {spot.epicAccountId === user?.uid && (
+                      <div 
+                        className="absolute -inset-2 rounded-full animate-ping opacity-30"
+                        style={{ backgroundColor: spot.color }}
+                      />
+                    )}
+                  </div>
+
+                  {/* Label */}
+                  {(showLabels || hoveredSpot === spot.id) && (
+                    <div 
+                      className={`absolute left-1/2 -translate-x-1/2 bottom-full mb-1 whitespace-nowrap px-2 py-0.5 text-[9px] font-black uppercase tracking-wider border transition-all ${
+                        hoveredSpot === spot.id 
+                          ? 'opacity-100 scale-100' 
+                          : 'opacity-70 scale-95'
+                      }`}
+                      style={{
+                        backgroundColor: spot.color + '22',
+                        borderColor: spot.color + '66',
+                        color: spot.color,
+                      }}
+                    >
+                      {spot.playerName}
+                      {spot.heatNumber && (
+                        <span className="ml-1 opacity-50">H{spot.heatNumber}</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Placing Mode Overlay */}
+          {isPlacing && (
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 bg-[#FCE14B] text-black px-6 py-2 font-black italic uppercase text-xs tracking-tighter flex items-center gap-3 shadow-[0_0_30px_rgba(252,225,75,0.3)]">
+              <Crosshair size={14} className="animate-pulse" />
+              Click on the map to place your drop spot
+              <button 
+                onClick={() => setIsPlacing(false)}
+                className="ml-2 px-2 py-0.5 bg-black/20 hover:bg-black/40 transition-colors text-[10px]"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Sidebar */}
+        <div className="w-full lg:w-[340px] border-t lg:border-t-0 lg:border-l border-white/10 bg-[#0A0A0B] flex flex-col overflow-y-auto">
+          {/* Actions Panel */}
+          <div className="p-4 border-b border-white/10">
+            <div className="flex items-center gap-2 mb-3">
+              <Crosshair size={14} className="text-[#FCE14B]" />
+              <h3 className="text-[10px] font-black italic uppercase tracking-tighter text-[#FCE14B]">Actions</h3>
+            </div>
+
+            {user && isQualified ? (
+              <div className="space-y-2">
+                <button
+                  onClick={() => setIsPlacing(!isPlacing)}
+                  className={`w-full px-4 py-2.5 font-black italic uppercase text-xs tracking-tighter transition-all flex items-center justify-center gap-2 ${
+                    isPlacing 
+                      ? 'bg-red-500/20 text-red-400 border border-red-500/40' 
+                      : 'bg-[#FCE14B] text-black hover:bg-[#FCE14B]/80'
+                  }`}
+                >
+                  <MapPin size={14} />
+                  {isPlacing ? 'Cancel Placement' : mySpot ? 'Move My Drop Spot' : 'Place Drop Spot'}
+                </button>
+                
+                {mySpot && (
+                  <button
+                    onClick={handleRemoveMySpot}
+                    className="w-full px-4 py-2 bg-transparent border border-red-500/30 text-red-400 font-bold uppercase text-[9px] tracking-wider hover:bg-red-500/10 transition-all flex items-center justify-center gap-2"
+                  >
+                    <Trash2 size={12} />
+                    Remove My Spot
+                  </button>
+                )}
+
+                {/* Color Picker */}
+                <div className="mt-3">
+                  <div className="text-[9px] uppercase tracking-widest font-mono text-white/30 mb-2">Your Pin Color</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {PLAYER_COLORS.slice(0, 12).map(color => (
+                      <button
+                        key={color}
+                        onClick={() => setMyColor(color)}
+                        className={`w-6 h-6 transition-all ${
+                          myColor === color 
+                            ? 'ring-2 ring-white ring-offset-1 ring-offset-[#0A0A0B] scale-110' 
+                            : 'hover:scale-110'
+                        }`}
+                        style={{ backgroundColor: color }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : user && !isQualified ? (
+              <div className="text-center py-4">
+                <div className="text-xs text-white/40 uppercase tracking-wider mb-2">
+                  You are not qualified for heats
+                </div>
+                <p className="text-[9px] text-white/20 font-mono">
+                  Only players who have qualified for the Mobile Series Heats can place drop spots.
+                </p>
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <div className="text-xs text-white/40 uppercase tracking-wider mb-2">
+                  Sign in to place drop spots
+                </div>
+                <button 
+                  onClick={handleLogin}
+                  className="mt-2 px-4 py-2 bg-[#FCE14B] text-black font-black italic uppercase text-[10px] tracking-tighter hover:bg-[#FCE14B]/80 transition-colors"
+                >
+                  Sign In with Epic Games
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Drop Spots List */}
+          <div className="p-4 flex-1">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Users size={14} className="text-[#FCE14B]" />
+                <h3 className="text-[10px] font-black italic uppercase tracking-tighter text-[#FCE14B]">
+                  Drop Spots — {selectedRegion}
+                </h3>
+              </div>
+              <span className="text-[9px] font-mono text-white/20">
+                {dropSpots.length} placed
+              </span>
+            </div>
+
+            {dropSpots.length === 0 ? (
+              <div className="text-center py-8">
+                <MapPin size={24} className="mx-auto text-white/10 mb-3" />
+                <p className="text-[10px] text-white/20 uppercase tracking-wider">
+                  No drop spots placed yet
+                </p>
+                <p className="text-[9px] text-white/10 mt-1 font-mono">
+                  Qualified players can place their drop spots on the map
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-1">
+                {dropSpots.map(spot => (
+                  <div
+                    key={spot.id}
+                    className={`flex items-center gap-3 px-3 py-2 border transition-all cursor-default ${
+                      hoveredSpot === spot.id 
+                        ? 'border-white/20 bg-white/5' 
+                        : 'border-transparent hover:border-white/10'
+                    } ${spot.epicAccountId === user?.uid ? 'bg-[#FCE14B]/5' : ''}`}
+                    onMouseEnter={() => setHoveredSpot(spot.id || null)}
+                    onMouseLeave={() => setHoveredSpot(null)}
+                  >
+                    <div 
+                      className="w-3 h-3 rounded-full flex-shrink-0" 
+                      style={{ backgroundColor: spot.color }} 
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[10px] font-bold uppercase tracking-wider truncate">
+                        {spot.playerName}
+                        {spot.epicAccountId === user?.uid && (
+                          <span className="ml-1.5 text-[#FCE14B] opacity-60">(You)</span>
+                        )}
+                      </div>
+                      {spot.heatNumber && (
+                        <div className="text-[8px] font-mono text-white/20 uppercase">
+                          Heat {spot.heatNumber}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Info Footer */}
+          <div className="p-4 border-t border-white/5">
+            <div className="flex items-start gap-2">
+              <Info size={12} className="text-white/20 mt-0.5 flex-shrink-0" />
+              <p className="text-[8px] font-mono text-white/15 leading-relaxed">
+                Only players qualified for Mobile Series Heats can place drop spots. 
+                Each player gets one spot per region. The communal map updates in real-time 
+                for all viewers.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

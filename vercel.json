@@ -2,5 +2,8 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "installCommand": "npm install"
+  "installCommand": "npm install",
+  "rewrites": [
+    { "source": "/((?!api|leaderboard\\.json|venture-blitz-map|creator-assets|clans).*)", "destination": "/index.html" }
+  ]
 }

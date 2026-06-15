@@ -5,7 +5,8 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "motion/react";
-import { Trophy, Globe, DollarSign, Activity, Smartphone, Loader2, AlertCircle, RefreshCcw, Youtube, Twitter, MessageSquare, ChevronDown } from "lucide-react";
+import { Trophy, Globe, DollarSign, Activity, Smartphone, Loader2, AlertCircle, RefreshCcw, Youtube, Twitter, MessageSquare, ChevronDown, MapPin } from "lucide-react";
+import { Link } from 'react-router-dom';
 
 interface PlayerEvent {
   event: string;
@@ -250,6 +251,14 @@ export default function App() {
             <h1 className="text-4xl md:text-6xl font-black italic uppercase leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#FFF47C] to-[#EBA311] pr-2 pb-2">
               MOBILE SERIES.xyz
             </h1>
+            <Link 
+              to="/drop-map"
+              className="mt-2 flex items-center gap-2 px-4 py-2 bg-[#FCE14B]/10 border border-[#FCE14B]/30 text-[#FCE14B] hover:bg-[#FCE14B] hover:text-black transition-all font-black italic uppercase text-[10px] tracking-tighter w-fit group"
+            >
+              <MapPin size={14} className="group-hover:animate-bounce" />
+              Drop Map
+              <span className="text-[7px] font-mono tracking-widest opacity-50 ml-1">NEW</span>
+            </Link>
           </div>
           
           <div className="flex flex-col md:items-end gap-3 w-full md:w-auto">
