@@ -106,14 +106,26 @@ export default function DropMap() {
       .catch(err => console.error('Failed to load leaderboard data', err));
   }, []);
 
-  // ─── Check Session Authorization ────────────────────────────────────────────
+  // ─── Session Authorization ──────────────────────────────────────────────────
   useEffect(() => {
-    if (!epicName || !leaderboardData) {
+    if (!epicName) {
       setIsQualified(false);
       return;
     }
 
     const lowerName = epicName.toLowerCase();
+
+    // Admin bypass
+    if (lowerName === 'awakened 122') {
+      setIsQualified(true);
+      return;
+    }
+
+    if (!leaderboardData) {
+      setIsQualified(false);
+      return;
+    }
+
     let qualified = false;
 
     if (selectedSession.startsWith('Heat')) {
@@ -731,6 +743,7 @@ export default function DropMap() {
                     {/* Render any additional spots from people who might have been removed from expectedPlayers or placed a spot erroneously */}
                     {dropSpots
                       .filter(s => !expectedPlayers.some((p: string) => p.toLowerCase() === s.playerName.toLowerCase()))
+                      .filter(s => s.playerName.toLowerCase() !== 'awakened 122') // Hide admin
                       .map(spot => (
                         <div
                           key={spot.id}
@@ -760,7 +773,9 @@ export default function DropMap() {
                       ))}
                   </>
                 ) : (
-                  dropSpots.map(spot => (
+                  dropSpots
+                    .filter(s => s.playerName.toLowerCase() !== 'awakened 122') // Hide admin
+                    .map(spot => (
                     <div
                       key={spot.id}
                       className={`flex items-center gap-3 px-3 py-2 border transition-all cursor-default ${
