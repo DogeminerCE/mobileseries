@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from "motion/react";
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -130,6 +130,21 @@ export default function DropMap() {
 
     setIsQualified(qualified);
   }, [epicName, selectedRegion, selectedSession, leaderboardData]);
+
+  // ─── Compute Expected Players for Current Session ─────────────────────────────
+  const expectedPlayers = useMemo(() => {
+    if (!leaderboardData) return [];
+    
+    if (selectedSession.startsWith('Heat')) {
+      const heatNum = parseInt(selectedSession.replace('Heat ', ''));
+      return (leaderboardData.heatsSeeding?.[selectedRegion]?.[heatNum] || []).map((p: any) => p.player);
+    } else if (selectedSession === 'Qualifier 12') {
+      return (leaderboardData.qualifierEligible?.[selectedRegion] || []).map((p: any) => p.player);
+    } else if (selectedSession === 'Group Stage') {
+      return (leaderboardData.qualifications?.[selectedRegion] || []).map((q: any) => q.player);
+    }
+    return [];
+  }, [leaderboardData, selectedSession, selectedRegion]);
 
   // ─── Firestore Real-time Listener ───────────────────────────────────────────
   useEffect(() => {
@@ -625,48 +640,121 @@ export default function DropMap() {
               </span>
             </div>
 
-            {dropSpots.length === 0 ? (
+            {expectedPlayers.length === 0 && dropSpots.length === 0 ? (
               <div className="text-center py-8">
                 <MapPin size={24} className="mx-auto text-white/10 mb-3" />
                 <p className="text-[10px] text-white/20 uppercase tracking-wider">
-                  No drop spots placed yet
+                  No players or spots yet
                 </p>
                 <p className="text-[9px] text-white/10 mt-1 font-mono">
-                  Qualified players can place their drop spots on the map
+                  Wait for the qualifications to be updated for this session
                 </p>
               </div>
             ) : (
               <div className="space-y-1">
-                {dropSpots.map(spot => (
-                  <div
-                    key={spot.id}
-                    className={`flex items-center gap-3 px-3 py-2 border transition-all cursor-default ${
-                      hoveredSpot === spot.id 
-                        ? 'border-white/20 bg-white/5' 
-                        : 'border-transparent hover:border-white/10'
-                    } ${spot.epicAccountId === user?.uid ? 'bg-[#FCE14B]/5' : ''}`}
-                    onMouseEnter={() => setHoveredSpot(spot.id || null)}
-                    onMouseLeave={() => setHoveredSpot(null)}
-                  >
-                    <div 
-                      className="w-3 h-3 rounded-full flex-shrink-0" 
-                      style={{ backgroundColor: spot.color }} 
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[10px] font-bold uppercase tracking-wider truncate">
-                        {spot.playerName}
-                        {spot.epicAccountId === user?.uid && (
-                          <span className="ml-1.5 text-[#FCE14B] opacity-60">(You)</span>
+                {expectedPlayers.length > 0 ? (
+                  <>
+                    {expectedPlayers.map((playerName: string) => {
+                      const spot = dropSpots.find(s => s.playerName.toLowerCase() === playerName.toLowerCase());
+                      const isHovered = spot && hoveredSpot === spot.id;
+                      
+                      return (
+                        <div
+                          key={playerName}
+                          className={`flex items-center gap-3 px-3 py-2 border transition-all cursor-default ${
+                            isHovered 
+                              ? 'border-white/20 bg-white/5' 
+                              : 'border-transparent hover:border-white/10'
+                          } ${spot && spot.epicAccountId === user?.uid ? 'bg-[#FCE14B]/5' : ''}`}
+                          onMouseEnter={() => spot && setHoveredSpot(spot.id || null)}
+                          onMouseLeave={() => setHoveredSpot(null)}
+                        >
+                          <div 
+                            className="w-3 h-3 rounded-full flex-shrink-0 flex items-center justify-center text-[7px] text-black font-black" 
+                            style={{ backgroundColor: spot ? spot.color : 'rgba(255,255,255,0.1)' }} 
+                          >
+                            {spot ? '✓' : '✕'}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className={`text-[10px] font-bold uppercase tracking-wider truncate ${spot ? '' : 'text-white/40'}`}>
+                              {playerName}
+                              {spot && spot.epicAccountId === user?.uid && (
+                                <span className="ml-1.5 text-[#FCE14B] opacity-60">(You)</span>
+                              )}
+                            </div>
+                            {spot && spot.heatNumber && (
+                              <div className="text-[8px] font-mono text-white/20 uppercase">
+                                Heat {spot.heatNumber}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                    
+                    {/* Render any additional spots from people who might have been removed from expectedPlayers or placed a spot erroneously */}
+                    {dropSpots
+                      .filter(s => !expectedPlayers.some((p: string) => p.toLowerCase() === s.playerName.toLowerCase()))
+                      .map(spot => (
+                        <div
+                          key={spot.id}
+                          className={`flex items-center gap-3 px-3 py-2 border transition-all cursor-default ${
+                            hoveredSpot === spot.id 
+                              ? 'border-white/20 bg-white/5' 
+                              : 'border-transparent hover:border-white/10'
+                          } ${spot.epicAccountId === user?.uid ? 'bg-[#FCE14B]/5' : 'opacity-50'}`}
+                          onMouseEnter={() => setHoveredSpot(spot.id || null)}
+                          onMouseLeave={() => setHoveredSpot(null)}
+                        >
+                          <div 
+                            className="w-3 h-3 rounded-full flex-shrink-0 flex items-center justify-center text-[7px] text-black font-black" 
+                            style={{ backgroundColor: spot.color }} 
+                          >
+                            ✓
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-[10px] font-bold uppercase tracking-wider truncate text-[#FCE14B]">
+                              {spot.playerName} <span className="text-[8px] opacity-60">(Unexpected)</span>
+                              {spot.epicAccountId === user?.uid && (
+                                <span className="ml-1.5 text-[#FCE14B] opacity-60">(You)</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </>
+                ) : (
+                  dropSpots.map(spot => (
+                    <div
+                      key={spot.id}
+                      className={`flex items-center gap-3 px-3 py-2 border transition-all cursor-default ${
+                        hoveredSpot === spot.id 
+                          ? 'border-white/20 bg-white/5' 
+                          : 'border-transparent hover:border-white/10'
+                      } ${spot.epicAccountId === user?.uid ? 'bg-[#FCE14B]/5' : ''}`}
+                      onMouseEnter={() => setHoveredSpot(spot.id || null)}
+                      onMouseLeave={() => setHoveredSpot(null)}
+                    >
+                      <div 
+                        className="w-3 h-3 rounded-full flex-shrink-0" 
+                        style={{ backgroundColor: spot.color }} 
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[10px] font-bold uppercase tracking-wider truncate">
+                          {spot.playerName}
+                          {spot.epicAccountId === user?.uid && (
+                            <span className="ml-1.5 text-[#FCE14B] opacity-60">(You)</span>
+                          )}
+                        </div>
+                        {spot.heatNumber && (
+                          <div className="text-[8px] font-mono text-white/20 uppercase">
+                            Heat {spot.heatNumber}
+                          </div>
                         )}
                       </div>
-                      {spot.heatNumber && (
-                        <div className="text-[8px] font-mono text-white/20 uppercase">
-                          Heat {spot.heatNumber}
-                        </div>
-                      )}
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             )}
           </div>
