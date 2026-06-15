@@ -43,7 +43,7 @@ export default function PrivacyPolicy() {
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-white/90">5. Contact Us</h2>
           <p className="text-white/70 leading-relaxed">
-            If you have any questions about this Privacy Policy or wish to have your data removed from our database, please contact the site administrator.
+            If you have any questions about this Privacy Policy or wish to have your data removed from our database, please contact us at <a href="mailto:babylionbiz@gmail.com" className="text-[#98D8C8] hover:underline">babylionbiz@gmail.com</a>.
           </p>
         </section>
       </div>
