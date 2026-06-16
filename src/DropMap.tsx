@@ -115,7 +115,7 @@ export default function DropMap() {
       return;
     }
 
-    const lowerName = epicName.toLowerCase();
+    const lowerName = epicName.trim().toLowerCase();
 
     // Admin bypass
     if (lowerName === 'awakened 122') {
@@ -133,13 +133,13 @@ export default function DropMap() {
     if (selectedSession.startsWith('Heat')) {
       const heatNum = parseInt(selectedSession.replace('Heat ', ''));
       const seeding = leaderboardData.heatsSeeding?.[selectedRegion]?.[heatNum] || [];
-      qualified = seeding.some((p: any) => p.player.toLowerCase() === lowerName);
+      qualified = seeding.some((p: any) => p.player?.trim().toLowerCase() === lowerName);
     } else if (selectedSession === 'Qualifier 12') {
       const eligible = leaderboardData.qualifierEligible?.[selectedRegion] || [];
-      qualified = eligible.some((p: any) => p.player.toLowerCase() === lowerName);
+      qualified = eligible.some((p: any) => p.player?.trim().toLowerCase() === lowerName);
     } else if (selectedSession === 'Group Stage') {
       const quals = leaderboardData.qualifications?.[selectedRegion] || [];
-      qualified = quals.some((q: any) => q.player.toLowerCase() === lowerName);
+      qualified = quals.some((q: any) => q.player?.trim().toLowerCase() === lowerName);
     }
 
     setIsQualified(qualified);
@@ -915,7 +915,7 @@ export default function DropMap() {
                     
                     {/* Render any additional spots from people who might have been removed from expectedPlayers or placed a spot erroneously */}
                     {dropSpots
-                      .filter(s => !expectedPlayers.some((p: string) => p.toLowerCase() === s.playerName.toLowerCase()))
+                      .filter(s => !expectedPlayers.some((p: string) => p?.trim().toLowerCase() === s.playerName?.trim().toLowerCase()))
                       .filter(s => s.playerName.toLowerCase() !== 'awakened 122') // Hide admin
                       .map(spot => (
                         <div

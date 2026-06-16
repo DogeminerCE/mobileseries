@@ -26,9 +26,11 @@ service cloud.firestore {
                     && request.resource.data.epicAccountId == request.auth.uid
                     && request.resource.data.mapSession == resource.data.mapSession;
       
-      // Users can only delete their own spots
+      // Users can only delete their own spots, except admin
       allow delete: if request.auth != null
-                    && resource.data.epicAccountId == request.auth.uid;
+                    && (resource.data.epicAccountId == request.auth.uid
+                        || (request.auth.token.epic_display_name != null && request.auth.token.epic_display_name.lower() == 'awakened 122')
+                        || (request.auth.token.name != null && request.auth.token.name.lower() == 'awakened 122'));
     }
     
     match /{document=**} {
