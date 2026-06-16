@@ -677,6 +677,42 @@ async function aggregateMobileEarnings() {
       return { ...p, rank: idx + 1, primaryRegion: REGION_LABEL_MAP[topRegionKey] || 'GLOBAL', events };
     });
 
+  // ─── Fallback: Compute heatsSeeding from aggregated player data ──────────
+  // If the _series cumulative leaderboard wasn't found from Osirion, compute
+  // heats seeding from the aggregated earnings data using the same snake draft.
+  const HEATS_REGIONS = ['EUROPE', 'NA-CENTRAL', 'NA-WEST', 'MIDDLE EAST', 'OCEANIA', 'ASIA', 'BRAZIL'];
+  for (const region of HEATS_REGIONS) {
+    if (heatsSeeding[region] && heatsSeeding[region][1]?.length > 0) {
+      continue; // Already populated from _series board
+    }
+
+    const regionPlayers = aggregatedPlayers
+      .filter((p: any) => p.primaryRegion === region && p.earningsUSD > 0)
+      .sort((a: any, b: any) => b.earningsUSD - a.earningsUSD)
+      .slice(0, 64);
+
+    if (regionPlayers.length === 0) continue;
+
+    heatsSeeding[region] = { 1: [], 2: [], 3: [], 4: [] };
+    for (let i = 0; i < regionPlayers.length; i++) {
+      const p = regionPlayers[i];
+      const offset = i % 8;
+      let heat = 0;
+      if (offset === 0 || offset === 7) heat = 1;
+      else if (offset === 1 || offset === 6) heat = 2;
+      else if (offset === 2 || offset === 5) heat = 3;
+      else if (offset === 3 || offset === 4) heat = 4;
+
+      heatsSeeding[region][heat].push({
+        player: p.name,
+        countryCode: p.countryCode || 'un',
+        rank: i + 1,
+        points: p.earningsUSD,
+      });
+    }
+    console.log(`[HEATS] Computed fallback seeding for ${region}: ${regionPlayers.length} players`);
+  }
+
   const payload = {
     players: aggregatedPlayers,
     qualifications,
