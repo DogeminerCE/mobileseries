@@ -163,7 +163,7 @@ export default function App() {
     setError(null);
     try {
       // Check frontend cache first (30 min TTL — matches GitHub Actions cron frequency)
-      const cached = localStorage.getItem('leaderboard_cache_v2');
+      const cached = localStorage.getItem('leaderboard_cache_v3');
       if (cached && !isRetry) {
         const { players: cachedPlayers, qualifications: cachedQuals, heatsSeeding: cachedHeats, timestamp } = JSON.parse(cached);
         if (Date.now() - timestamp < 30 * 60 * 1000) {
@@ -178,7 +178,7 @@ export default function App() {
       }
 
       // Fetch the static pre-aggregated JSON (built by GitHub Actions)
-      const response = await fetch('/leaderboard.json');
+      const response = await fetch(`/leaderboard.json?_=${Date.now()}`, { cache: 'no-cache' });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
 
@@ -191,7 +191,7 @@ export default function App() {
         setLoading(false);
 
         // Cache locally
-        localStorage.setItem('leaderboard_cache_v2', JSON.stringify({
+        localStorage.setItem('leaderboard_cache_v3', JSON.stringify({
           players: data.players,
           qualifications: data.qualifications || {},
           heatsSeeding: data.heatsSeeding || {},
