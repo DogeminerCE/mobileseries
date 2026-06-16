@@ -697,7 +697,6 @@ export default function App() {
                                     />
                                     <span className="truncate uppercase font-bold italic">{hp.player}</span>
                                   </div>
-                                  <span className="text-[10px] text-white/40">{hp.points}pts</span>
                                 </div>
                               )) : (
                                 <div className="py-4 text-center text-white/20 text-[9px] italic uppercase">Pending</div>

@@ -305,6 +305,7 @@ async function aggregateMobileEarnings() {
   const regions = ['EU', 'NAC', 'NAW', 'BR', 'ASIA', 'OCE', 'ME'];
   const playerMap: Record<string, any> = {};
   const playerRegionEarnings: Record<string, Record<string, number>> = {};
+  const playerSeriesPoints: Record<string, Record<string, number>> = {};
   const playerEvents: Record<string, Array<{ event: string, region: string, placement: number, earnings: number, date: string, category: string }>> = {};
   const processedTourneys = new Set<string>();
 
@@ -361,6 +362,12 @@ async function aggregateMobileEarnings() {
       console.error(`[ERROR] Failed to fetch tournament list for region ${region} after 5 retries.`);
       continue;
     }
+
+    let maxSeason = 0;
+    tournaments.forEach(t => {
+      const m = t.eventId?.match(/S(\d+)_/i);
+      if (m) maxSeason = Math.max(maxSeason, parseInt(m[1], 10));
+    });
 
     // Classify each tournament into a category
     function classifyTourney(t: any): EventCategory | null {
@@ -481,6 +488,8 @@ async function aggregateMobileEarnings() {
           if (!lbData.success || !lbData.leaderboard?.entries) continue;
 
           const regionLabel = REGION_LABEL_MAP[region] || region;
+          const winIdParts = lbEventWindowId.match(/(?:Qualifier|Round|Final|Week|Event)\d*/i);
+          const windowLabel = winIdParts ? winIdParts[0] : '';
 
           // Process Heat Seeding from the cumulative series leaderboard
           if (category === 'series' && lbEventWindowId.toLowerCase().endsWith('_series')) {
@@ -545,8 +554,6 @@ async function aggregateMobileEarnings() {
           const eventTitle = tourney.displayData?.titleLine1 || 'Unknown Event';
           const eventDate = lbData.leaderboard.updatedAt || new Date().toISOString();
           // Build a human-readable event name from the window ID
-          const winIdParts = lbEventWindowId.match(/(?:Qualifier|Round|Final|Week|Event)\d*/i);
-          const windowLabel = winIdParts ? winIdParts[0] : '';
           const fullEventName = windowLabel 
             ? `${eventTitle} — ${windowLabel} (${REGION_LABEL_MAP[region] || region})`
             : `${eventTitle} (${REGION_LABEL_MAP[region] || region})`;
@@ -577,6 +584,12 @@ async function aggregateMobileEarnings() {
               if (!playerRegionEarnings[key]) playerRegionEarnings[key] = {};
               if (category === 'series') {
                 playerRegionEarnings[key][region] = (playerRegionEarnings[key][region] || 0) + prizeMoney;
+              }
+
+              const isCurrentSeason = tourney.eventId?.match(new RegExp(`S${maxSeason}_`, 'i'));
+              if (category === 'series' && isCurrentSeason && windowLabel.toLowerCase().includes('qualifier')) {
+                 if (!playerSeriesPoints[key]) playerSeriesPoints[key] = {};
+                 playerSeriesPoints[key][regionLabel] = (playerSeriesPoints[key][regionLabel] || 0) + entry.points;
               }
 
               // Track individual event results with category
@@ -679,16 +692,22 @@ async function aggregateMobileEarnings() {
 
   // ─── Fallback: Compute heatsSeeding from aggregated player data ──────────
   // If the _series cumulative leaderboard wasn't found from Osirion, compute
-  // heats seeding from the aggregated earnings data using the same snake draft.
+  // heats seeding from the current season's series points using the same snake draft.
   const HEATS_REGIONS = ['EUROPE', 'NA-CENTRAL', 'NA-WEST', 'MIDDLE EAST', 'OCEANIA', 'ASIA', 'BRAZIL'];
   for (const region of HEATS_REGIONS) {
     if (heatsSeeding[region] && heatsSeeding[region][1]?.length > 0) {
       continue; // Already populated from _series board
     }
 
-    const regionPlayers = aggregatedPlayers
-      .filter((p: any) => p.primaryRegion === region && p.earningsUSD > 0)
-      .sort((a: any, b: any) => b.earningsUSD - a.earningsUSD)
+    const regionPlayers = Object.keys(playerMap)
+      .map(key => ({
+        key,
+        name: playerMap[key].name,
+        countryCode: playerMap[key].countryCode,
+        seriesPoints: (playerSeriesPoints[key] || {})[region] || 0
+      }))
+      .filter(p => p.seriesPoints > 0)
+      .sort((a, b) => b.seriesPoints - a.seriesPoints)
       .slice(0, 64);
 
     if (regionPlayers.length === 0) continue;
@@ -707,10 +726,10 @@ async function aggregateMobileEarnings() {
         player: p.name,
         countryCode: p.countryCode || 'un',
         rank: i + 1,
-        points: p.earningsUSD,
+        points: p.seriesPoints,
       });
     }
-    console.log(`[HEATS] Computed fallback seeding for ${region}: ${regionPlayers.length} players`);
+    console.log(`[HEATS] Computed fallback seeding for ${region}: ${regionPlayers.length} players using Series Points`);
   }
 
   const payload = {
