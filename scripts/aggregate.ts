@@ -731,12 +731,46 @@ async function aggregateMobileEarnings() {
       return { ...p, rank: idx + 1, primaryRegion: REGION_LABEL_MAP[topRegionKey] || 'GLOBAL', events };
     });
 
-  // ─── Compute heatsSeeding from Opens Round 1 + Round 2 combined points ──────────
-  // Take the top 64 players by combined Round 1 + Round 2 points and snake-draft them into 4 heats.
+  // ─── Load official heats seeding from override file ──────────
+  // The official Epic heats account for banned players being replaced,
+  // which can't be derived from API data alone. Use the override file
+  // if it exists; otherwise fall back to computed Round 1+2 seeding.
+  const HEATS_OVERRIDE_FILE = path.join(process.cwd(), 'public', 'heats_override.json');
   const HEATS_REGIONS = ['EUROPE', 'NA-CENTRAL', 'NA-WEST', 'MIDDLE EAST', 'OCEANIA', 'ASIA', 'BRAZIL'];
+
+  if (fs.existsSync(HEATS_OVERRIDE_FILE)) {
+    try {
+      const overrideData = JSON.parse(fs.readFileSync(HEATS_OVERRIDE_FILE, 'utf-8'));
+      for (const region of HEATS_REGIONS) {
+        const regionOverride = overrideData[region];
+        if (!regionOverride) continue;
+
+        heatsSeeding[region] = { 1: [], 2: [], 3: [], 4: [] };
+        for (const heatNum of ['1', '2', '3', '4']) {
+          const players = regionOverride[heatNum] || [];
+          heatsSeeding[region][parseInt(heatNum, 10)] = players.map((name: string, idx: number) => {
+            // Try to find country code from playerMap
+            const key = name.toLowerCase();
+            const cc = playerMap[key]?.countryCode || 'un';
+            return {
+              player: name,
+              countryCode: cc,
+              rank: idx + 1,
+              points: 0, // Official seeding doesn't need points
+            };
+          });
+        }
+        console.log(`[HEATS] Loaded official heats for ${region} from override file (${heatsSeeding[region][1].length + heatsSeeding[region][2].length + heatsSeeding[region][3].length + heatsSeeding[region][4].length} players)`);
+      }
+    } catch (err) {
+      console.error('[HEATS] Failed to load heats_override.json:', err);
+    }
+  }
+
+  // Fallback: Compute from Opens Round 1+2 for any regions not in the override
   for (const region of HEATS_REGIONS) {
     if (heatsSeeding[region] && heatsSeeding[region][1]?.length > 0) {
-      continue; // Already populated from _series/_cumulative board
+      continue; // Already loaded from override or _series/_cumulative board
     }
 
     const regionOpens = opensRoundPoints[region] || {};
@@ -746,7 +780,7 @@ async function aggregateMobileEarnings() {
       .slice(0, 64);
 
     if (regionPlayers.length === 0) {
-      console.log(`[HEATS] No Opens Round 1+2 data found for ${region}, skipping heats seeding`);
+      console.log(`[HEATS] No heats data for ${region} (no override and no Opens Round 1+2 data)`);
       continue;
     }
 
@@ -767,7 +801,7 @@ async function aggregateMobileEarnings() {
         points: p.points,
       });
     }
-    console.log(`[HEATS] Computed heats seeding for ${region}: ${regionPlayers.length} players from Opens Round 1+2`);
+    console.log(`[HEATS] Computed fallback heats for ${region}: ${regionPlayers.length} players from Opens Round 1+2`);
   }
 
   const payload = {
