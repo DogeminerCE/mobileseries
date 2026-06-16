@@ -3,6 +3,15 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "installCommand": "npm install",
+  "headers": [
+    {
+      "source": "/leaderboard.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+        { "key": "Pragma", "value": "no-cache" }
+      ]
+    }
+  ],
   "rewrites": [
     { "source": "/((?!api|leaderboard\\.json|venture-blitz-map|creator-assets|clans).*)", "destination": "/index.html" }
   ]
