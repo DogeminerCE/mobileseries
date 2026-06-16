@@ -262,21 +262,39 @@ export default function DropMap() {
   }, [isDrawing, user, isQualified]);
 
   const handleConfirmArea = async () => {
-    if (currentPath.length < 3) return;
+    if (currentPath.length < 3 || !user) return;
+
+    // Calculate centroid
+    let sumX = 0;
+    let sumY = 0;
+    for (const p of currentPath) {
+      sumX += p.x;
+      sumY += p.y;
+    }
+    const centroidX = sumX / currentPath.length;
+    const centroidY = sumY / currentPath.length;
+
+    // Optimistic: show spot immediately
+    const optimisticSpot: DropSpot = {
+      id: '__optimistic__',
+      x: centroidX,
+      y: centroidY,
+      path: [...currentPath],
+      playerName: epicName,
+      epicAccountId: user.uid,
+      region: selectedRegion,
+      mapSession: selectedSession,
+      color: myColor,
+    };
+    setDropSpots(prev => [...prev.filter(s => s.epicAccountId !== user.uid), optimisticSpot]);
+    setIsDrawing(false);
+    setCurrentPath([]);
 
     try {
-      let sumX = 0;
-      let sumY = 0;
-      for (const p of currentPath) {
-        sumX += p.x;
-        sumY += p.y;
-      }
-      const centroidX = sumX / currentPath.length;
-      const centroidY = sumY / currentPath.length;
-
+      // Delete any existing spots for this user/region/session
       const existingQuery = query(
         collection(db, 'dropSpots'),
-        where('epicAccountId', '==', user?.uid),
+        where('epicAccountId', '==', user.uid),
         where('region', '==', selectedRegion),
         where('mapSession', '==', selectedSession)
       );
@@ -285,22 +303,22 @@ export default function DropMap() {
         await deleteDoc(doc(db, 'dropSpots', docSnap.id));
       }
 
+      // Save to Firestore (the onSnapshot listener will replace the optimistic spot with the real one)
       await addDoc(collection(db, 'dropSpots'), {
         x: centroidX,
         y: centroidY,
-        path: currentPath,
+        path: optimisticSpot.path,
         playerName: epicName,
-        epicAccountId: user?.uid,
+        epicAccountId: user.uid,
         region: selectedRegion,
         mapSession: selectedSession,
         color: myColor,
         createdAt: serverTimestamp(),
       });
-
-      setIsDrawing(false);
-      setCurrentPath([]);
     } catch (err) {
       console.error('Failed to place drop spot:', err);
+      // Rollback optimistic update on error
+      setDropSpots(prev => prev.filter(s => s.id !== '__optimistic__'));
     }
   };
 
