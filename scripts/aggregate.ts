@@ -323,6 +323,9 @@ async function aggregateMobileEarnings() {
   // Heat Seeding: Snake draft from cumulative Round Stages
   const heatsSeeding: Record<string, Record<number, Array<{ player: string, countryCode: string, rank: number, points: number }>>> = {};
 
+  // Opens Round 1 + Round 2 combined points tracker (for heats seeding only)
+  const opensRoundPoints: Record<string, Record<string, { name: string, countryCode: string, points: number }>> = {};
+
   // Qualifier Eligible: Top 4 from Heats
   const qualifierEligible: Record<string, Array<{ player: string, countryCode: string, fromHeat: string }>> = {};
 
@@ -558,8 +561,44 @@ async function aggregateMobileEarnings() {
             ? `${eventTitle} — ${windowLabel} (${REGION_LABEL_MAP[region] || region})`
             : `${eventTitle} (${REGION_LABEL_MAP[region] || region})`;
 
+          // Detect Opens Round 1/2 windows — these have NO prize money
+          const isOpensRound = lbEventWindowId.toLowerCase().includes('_round') && 
+            (lbEventWindowId.toLowerCase().includes('open') || 
+             tourney.eventId?.toLowerCase().includes('open'));
+          const opensRoundMatch = lbEventWindowId.match(/Round(\d+)/i);
+          const isOpensRound1or2 = isOpensRound && opensRoundMatch && 
+            (parseInt(opensRoundMatch[1], 10) === 1 || parseInt(opensRoundMatch[1], 10) === 2);
+
+          // Track Opens Round 1+2 points for heats seeding (current season only)
+          const isCurrentSeason = tourney.eventId?.match(new RegExp(`S${maxSeason}_`, 'i'));
+          if (isOpensRound1or2 && isCurrentSeason && category === 'series') {
+            const regionLabel2 = REGION_LABEL_MAP[region] || region;
+            if (!opensRoundPoints[regionLabel2]) opensRoundPoints[regionLabel2] = {};
+            
+            for (const entry of lbData.leaderboard.entries) {
+              for (const player of (entry.players || [])) {
+                const username = player.username;
+                if (!username) continue;
+                const acctId = player.accountId || username.toLowerCase();
+                const pts = entry.pointsEarned || entry.points || 0;
+                const cc = resolveCountryCode(player.flagToken);
+                
+                if (!opensRoundPoints[regionLabel2][acctId]) {
+                  opensRoundPoints[regionLabel2][acctId] = { name: username, countryCode: cc, points: 0 };
+                }
+                opensRoundPoints[regionLabel2][acctId].points += pts;
+                opensRoundPoints[regionLabel2][acctId].name = username; // use latest display name
+                opensRoundPoints[regionLabel2][acctId].countryCode = cc;
+              }
+            }
+          }
+
+          // For Opens rounds, skip earnings calculation entirely (no prize pool)
+          const prizeMoney = isOpensRound ? 0 : calculatePrize(0, region, category as EventCategory);
+
           lbData.leaderboard.entries.forEach((entry: any) => {
-            const prizeMoney = calculatePrize(entry.rank, region, category as EventCategory);
+            // Opens rounds have no prize pool — skip earnings
+            const entryPrize = isOpensRound ? 0 : calculatePrize(entry.rank, region, category as EventCategory);
             
             (entry.players || []).forEach((player: any) => {
               const username = player.username;
@@ -576,33 +615,34 @@ async function aggregateMobileEarnings() {
                 };
               }
 
-              // Only count Mobile Series earnings towards the base total
-              if (category === 'series') {
-                playerMap[key].earningsUSD += prizeMoney;
+              // Only count prized series earnings towards the base total
+              if (category === 'series' && !isOpensRound) {
+                playerMap[key].earningsUSD += entryPrize;
               }
 
               if (!playerRegionEarnings[key]) playerRegionEarnings[key] = {};
-              if (category === 'series') {
-                playerRegionEarnings[key][region] = (playerRegionEarnings[key][region] || 0) + prizeMoney;
+              if (category === 'series' && !isOpensRound) {
+                playerRegionEarnings[key][region] = (playerRegionEarnings[key][region] || 0) + entryPrize;
               }
 
-              const isCurrentSeason = tourney.eventId?.match(new RegExp(`S${maxSeason}_`, 'i'));
-              if (category === 'series' && isCurrentSeason && (windowLabel.toLowerCase().includes('qualifier') || windowLabel.toLowerCase().includes('round') || winIdParts?.input?.toLowerCase().includes('open'))) {
+              if (category === 'series' && isCurrentSeason && !isOpensRound && windowLabel.toLowerCase().includes('qualifier')) {
                  if (!playerSeriesPoints[key]) playerSeriesPoints[key] = {};
                  const pts = entry.pointsEarned || entry.points || 0;
                  playerSeriesPoints[key][regionLabel] = (playerSeriesPoints[key][regionLabel] || 0) + pts;
               }
 
-              // Track individual event results with category
+              // Track individual event results with category (skip $0 Opens rounds)
               if (!playerEvents[key]) playerEvents[key] = [];
-              playerEvents[key].push({
-                event: fullEventName,
-                region: REGION_LABEL_MAP[region] || region,
-                placement: entry.rank,
-                earnings: prizeMoney,
-                date: eventDate,
-                category: category as string,
-              });
+              if (!isOpensRound) {
+                playerEvents[key].push({
+                  event: fullEventName,
+                  region: REGION_LABEL_MAP[region] || region,
+                  placement: entry.rank,
+                  earnings: entryPrize,
+                  date: eventDate,
+                  category: category as string,
+                });
+              }
               
               const entryDate = new Date(eventDate).getTime();
               const existingDate = new Date(playerMap[key].lastActiveDate).getTime();
@@ -691,27 +731,24 @@ async function aggregateMobileEarnings() {
       return { ...p, rank: idx + 1, primaryRegion: REGION_LABEL_MAP[topRegionKey] || 'GLOBAL', events };
     });
 
-  // ─── Fallback: Compute heatsSeeding from aggregated player data ──────────
-  // If the _series cumulative leaderboard wasn't found from Osirion, compute
-  // heats seeding from the current season's series points using the same snake draft.
+  // ─── Compute heatsSeeding from Opens Round 1 + Round 2 combined points ──────────
+  // Take the top 64 players by combined Round 1 + Round 2 points and snake-draft them into 4 heats.
   const HEATS_REGIONS = ['EUROPE', 'NA-CENTRAL', 'NA-WEST', 'MIDDLE EAST', 'OCEANIA', 'ASIA', 'BRAZIL'];
   for (const region of HEATS_REGIONS) {
     if (heatsSeeding[region] && heatsSeeding[region][1]?.length > 0) {
-      continue; // Already populated from _series board
+      continue; // Already populated from _series/_cumulative board
     }
 
-    const regionPlayers = Object.keys(playerMap)
-      .map(key => ({
-        key,
-        name: playerMap[key].name,
-        countryCode: playerMap[key].countryCode,
-        seriesPoints: (playerSeriesPoints[key] || {})[region] || 0
-      }))
-      .filter(p => p.seriesPoints > 0)
-      .sort((a, b) => b.seriesPoints - a.seriesPoints)
+    const regionOpens = opensRoundPoints[region] || {};
+    const regionPlayers = Object.values(regionOpens)
+      .filter(p => p.points > 0)
+      .sort((a, b) => b.points - a.points)
       .slice(0, 64);
 
-    if (regionPlayers.length === 0) continue;
+    if (regionPlayers.length === 0) {
+      console.log(`[HEATS] No Opens Round 1+2 data found for ${region}, skipping heats seeding`);
+      continue;
+    }
 
     heatsSeeding[region] = { 1: [], 2: [], 3: [], 4: [] };
     for (let i = 0; i < regionPlayers.length; i++) {
@@ -727,10 +764,10 @@ async function aggregateMobileEarnings() {
         player: p.name,
         countryCode: p.countryCode || 'un',
         rank: i + 1,
-        points: p.seriesPoints,
+        points: p.points,
       });
     }
-    console.log(`[HEATS] Computed fallback seeding for ${region}: ${regionPlayers.length} players using Series Points`);
+    console.log(`[HEATS] Computed heats seeding for ${region}: ${regionPlayers.length} players from Opens Round 1+2`);
   }
 
   const payload = {
