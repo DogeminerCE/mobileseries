@@ -422,7 +422,7 @@ async function aggregateMobileEarnings() {
         
         // For Mobile Series: process qualifiers AND the cumulative _series leaderboard (for heats seeding)
         if (category === 'series') {
-          if (!winId.includes('qualifier') && !winId.endsWith('_series')) {
+          if (!winId.includes('qualifier') && !winId.includes('open') && !winId.endsWith('_series')) {
             continue;
           }
         } else {
@@ -587,9 +587,10 @@ async function aggregateMobileEarnings() {
               }
 
               const isCurrentSeason = tourney.eventId?.match(new RegExp(`S${maxSeason}_`, 'i'));
-              if (category === 'series' && isCurrentSeason && windowLabel.toLowerCase().includes('qualifier')) {
+              if (category === 'series' && isCurrentSeason && (windowLabel.toLowerCase().includes('qualifier') || windowLabel.toLowerCase().includes('round') || winIdParts?.input?.toLowerCase().includes('open'))) {
                  if (!playerSeriesPoints[key]) playerSeriesPoints[key] = {};
-                 playerSeriesPoints[key][regionLabel] = (playerSeriesPoints[key][regionLabel] || 0) + entry.points;
+                 const pts = entry.pointsEarned || entry.points || 0;
+                 playerSeriesPoints[key][regionLabel] = (playerSeriesPoints[key][regionLabel] || 0) + pts;
               }
 
               // Track individual event results with category
