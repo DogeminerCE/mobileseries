@@ -702,16 +702,6 @@ export default function DropMap() {
                       );
                     })()}
 
-                    {/* Admin Delete Button */}
-                    {isAdmin && spot.epicAccountId !== user?.uid && (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); if (spot.id) handleAdminDelete(spot.id); }}
-                        className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 hover:bg-red-500 rounded-full flex items-center justify-center text-white text-[8px] font-bold z-50 opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
-                        title={`Delete ${spot.playerName}'s spot`}
-                      >
-                        ✕
-                      </button>
-                    )}
 
                     {/* Contained Name Label */}
                     {(showLabels || hoveredSpot === spot.id) && (() => {
@@ -910,6 +900,15 @@ export default function DropMap() {
                               </div>
                             )}
                           </div>
+                          {isAdmin && spot && spot.epicAccountId !== user?.uid && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); if (spot.id) handleAdminDelete(spot.id); }}
+                              className="flex-shrink-0 w-5 h-5 bg-red-600/80 hover:bg-red-500 rounded flex items-center justify-center text-white text-[9px] font-bold transition-colors"
+                              title={`Delete ${playerName}'s spot`}
+                            >
+                              ✕
+                            </button>
+                          )}
                         </div>
                       );
                     })}
@@ -943,6 +942,15 @@ export default function DropMap() {
                               )}
                             </div>
                           </div>
+                          {isAdmin && spot.epicAccountId !== user?.uid && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); if (spot.id) handleAdminDelete(spot.id); }}
+                              className="flex-shrink-0 w-5 h-5 bg-red-600/80 hover:bg-red-500 rounded flex items-center justify-center text-white text-[9px] font-bold transition-colors"
+                              title={`Delete ${spot.playerName}'s spot`}
+                            >
+                              ✕
+                            </button>
+                          )}
                         </div>
                       ))}
                   </>
