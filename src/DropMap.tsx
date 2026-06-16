@@ -341,6 +341,17 @@ export default function DropMap() {
     }
   };
 
+  // ─── Admin: Remove Any Drop Spot ─────────────────────────────────────────────
+  const handleAdminDelete = async (spotId: string) => {
+    if (!user || epicName.toLowerCase() !== 'awakened 122') return;
+    try {
+      await deleteDoc(doc(db, 'dropSpots', spotId));
+      setDropSpots(prev => prev.filter(s => s.id !== spotId));
+    } catch (err) {
+      console.error('Failed to admin-delete drop spot:', err);
+    }
+  };
+
   // ─── Zoom/Pan Handlers ─────────────────────────────────────────────────────
   const handleZoomIn = () => setZoom(z => Math.min(z + 0.25, 4));
   const handleZoomOut = () => setZoom(z => Math.max(z - 0.25, 0.5));
@@ -368,6 +379,7 @@ export default function DropMap() {
   }, []);
 
   const mySpot = dropSpots.find(s => s.epicAccountId === user?.uid);
+  const isAdmin = epicName.toLowerCase() === 'awakened 122';
 
   // ─── Calculate Overlapping Polygons & Per-Spot Overlap Status ───────────────
   const { overlappingPolygons, spotHasOverlap } = useMemo(() => {
@@ -689,6 +701,17 @@ export default function DropMap() {
                         </div>
                       );
                     })()}
+
+                    {/* Admin Delete Button */}
+                    {isAdmin && spot.epicAccountId !== user?.uid && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); if (spot.id) handleAdminDelete(spot.id); }}
+                        className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 hover:bg-red-500 rounded-full flex items-center justify-center text-white text-[8px] font-bold z-50 opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+                        title={`Delete ${spot.playerName}'s spot`}
+                      >
+                        ✕
+                      </button>
+                    )}
 
                     {/* Contained Name Label */}
                     {(showLabels || hoveredSpot === spot.id) && (() => {
