@@ -61,7 +61,7 @@ export default function DropMap() {
   const [epicName, setEpicName] = useState<string>('');
   const [isQualified, setIsQualified] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
-  const [myColor, setMyColor] = useState<string>('#ffffff');
+
   const [authError, setAuthError] = useState<string | null>(null);
   
   // Map state
@@ -227,7 +227,7 @@ export default function DropMap() {
           await updateProfile(cred.user, { displayName });
           
           setEpicName(displayName);
-          setMyColor(PLAYER_COLORS[Math.floor(Math.random() * PLAYER_COLORS.length)]);
+
         } catch (err: any) {
           console.error('OAuth processing error:', err);
           setAuthError(err.message || 'Failed to finish sign in');
@@ -284,7 +284,7 @@ export default function DropMap() {
       epicAccountId: user.uid,
       region: selectedRegion,
       mapSession: selectedSession,
-      color: myColor,
+      color: '#4ade80',
     };
     setDropSpots(prev => [...prev.filter(s => s.epicAccountId !== user.uid), optimisticSpot]);
     setIsDrawing(false);
@@ -312,7 +312,7 @@ export default function DropMap() {
         epicAccountId: user.uid,
         region: selectedRegion,
         mapSession: selectedSession,
-        color: myColor,
+        color: '#4ade80',
         createdAt: serverTimestamp(),
       });
     } catch (err) {
@@ -369,9 +369,10 @@ export default function DropMap() {
 
   const mySpot = dropSpots.find(s => s.epicAccountId === user?.uid);
 
-  // ─── Calculate Overlapping Polygons ─────────────────────────────────────────
-  const overlappingPolygons = useMemo(() => {
+  // ─── Calculate Overlapping Polygons & Per-Spot Overlap Status ───────────────
+  const { overlappingPolygons, spotHasOverlap } = useMemo(() => {
     let overlaps: pc.Polygon[] = [];
+    const overlapSet = new Set<string>();
     
     // Extract valid polygons
     const validSpots = dropSpots.filter(s => s.path && s.path.length >= 3);
@@ -386,15 +387,33 @@ export default function DropMap() {
           const intersection = pc.intersection(p1, p2);
           if (intersection.length > 0) {
             overlaps = pc.union(overlaps, intersection);
+            if (validSpots[i].id) overlapSet.add(validSpots[i].id!);
+            if (validSpots[j].id) overlapSet.add(validSpots[j].id!);
           }
         } catch (e) {
-          // Polygon-clipping might throw if self-intersecting, ignore it
           console.warn('Polygon intersection failed', e);
         }
       }
     }
-    return overlaps;
+    return { overlappingPolygons: overlaps, spotHasOverlap: overlapSet };
   }, [dropSpots]);
+
+  // Get spot color: green if solo, red if overlapping
+  const getSpotColor = (spot: DropSpot) => {
+    return spotHasOverlap.has(spot.id || '') ? '#ef4444' : '#4ade80';
+  };
+
+  // Get bounding box of a polygon path (in percentages)
+  const getPathBounds = (path: {x: number, y: number}[]) => {
+    let minX = 100, maxX = 0, minY = 100, maxY = 0;
+    for (const p of path) {
+      if (p.x < minX) minX = p.x;
+      if (p.x > maxX) maxX = p.x;
+      if (p.y < minY) minY = p.y;
+      if (p.y > maxY) maxY = p.y;
+    }
+    return { minX, maxX, minY, maxY, width: maxX - minX, height: maxY - minY };
+  };
 
   return (
     <div className="min-h-screen bg-[#0A0A0B] text-white flex flex-col">
@@ -583,25 +602,29 @@ export default function DropMap() {
                   {isDrawing && currentPath.length > 0 && (
                     <polygon
                       points={currentPath.map(p => `${p.x},${p.y}`).join(' ')}
-                      fill={`${myColor}4D`}
-                      stroke={myColor}
+                      fill="rgba(74, 222, 128, 0.3)"
+                      stroke="#4ade80"
                       strokeWidth="0.5"
                       strokeDasharray="1 1"
                       vectorEffect="non-scaling-stroke"
                     />
                   )}
                   {/* Saved Polygons */}
-                  {dropSpots.map(spot => spot.path && spot.path.length > 0 && (
-                    <polygon
-                      key={`poly-${spot.id}`}
-                      points={spot.path.map(p => `${p.x},${p.y}`).join(' ')}
-                      fill={`${spot.color}4D`}
-                      stroke={spot.color}
-                      strokeWidth={hoveredSpot === spot.id ? "1" : "0.5"}
-                      vectorEffect="non-scaling-stroke"
-                      className="transition-all"
-                    />
-                  ))}
+                  {dropSpots.map(spot => {
+                    if (!spot.path || spot.path.length === 0) return null;
+                    const color = getSpotColor(spot);
+                    return (
+                      <polygon
+                        key={`poly-${spot.id}`}
+                        points={spot.path.map(p => `${p.x},${p.y}`).join(' ')}
+                        fill={`${color}4D`}
+                        stroke={color}
+                        strokeWidth={hoveredSpot === spot.id ? "1" : "0.5"}
+                        vectorEffect="non-scaling-stroke"
+                        className="transition-all"
+                      />
+                    );
+                  })}
                   
                   {/* Overlap Highlights (RED) */}
                   {overlappingPolygons.map((multiPoly, i) => 
@@ -634,55 +657,73 @@ export default function DropMap() {
                     onMouseEnter={() => setHoveredSpot(spot.id || null)}
                     onMouseLeave={() => setHoveredSpot(null)}
                   >
-                    {(!spot.path || spot.path.length === 0) ? (
-                      <div className="relative transform translate-y-[-50%]">
-                        <svg width="24" height="32" viewBox="0 0 24 32" fill="none">
-                          <path 
-                            d="M12 0C5.373 0 0 5.373 0 12c0 9 12 20 12 20s12-11 12-20c0-6.627-5.373-12-12-12z" 
-                            fill={spot.color}
-                            stroke="rgba(0,0,0,0.5)"
-                            strokeWidth="1"
-                          />
-                          <circle cx="12" cy="12" r="5" fill="rgba(0,0,0,0.3)" />
-                        </svg>
-                        {spot.epicAccountId === user?.uid && (
-                          <div 
-                            className="absolute -inset-2 rounded-full animate-ping opacity-30"
-                            style={{ backgroundColor: spot.color }}
-                          />
-                        )}
-                      </div>
-                    ) : (
-                      <div className="relative">
-                        <div className="w-2 h-2 rounded-full shadow-md" style={{ backgroundColor: spot.color }} />
-                        {spot.epicAccountId === user?.uid && (
-                          <div 
-                            className="absolute -inset-2 rounded-full animate-ping opacity-30"
-                            style={{ backgroundColor: spot.color }}
-                          />
-                        )}
-                      </div>
-                    )}
+                    {(() => {
+                      const color = getSpotColor(spot);
+                      return (!spot.path || spot.path.length === 0) ? (
+                        <div className="relative transform translate-y-[-50%]">
+                          <svg width="24" height="32" viewBox="0 0 24 32" fill="none">
+                            <path 
+                              d="M12 0C5.373 0 0 5.373 0 12c0 9 12 20 12 20s12-11 12-20c0-6.627-5.373-12-12-12z" 
+                              fill={color}
+                              stroke="rgba(0,0,0,0.5)"
+                              strokeWidth="1"
+                            />
+                            <circle cx="12" cy="12" r="5" fill="rgba(0,0,0,0.3)" />
+                          </svg>
+                          {spot.epicAccountId === user?.uid && (
+                            <div 
+                              className="absolute -inset-2 rounded-full animate-ping opacity-30"
+                              style={{ backgroundColor: color }}
+                            />
+                          )}
+                        </div>
+                      ) : (
+                        <div className="relative">
+                          <div className="w-2 h-2 rounded-full shadow-md" style={{ backgroundColor: color }} />
+                          {spot.epicAccountId === user?.uid && (
+                            <div 
+                              className="absolute -inset-2 rounded-full animate-ping opacity-30"
+                              style={{ backgroundColor: color }}
+                            />
+                          )}
+                        </div>
+                      );
+                    })()}
 
-                    {/* Centered Name Label */}
-                    {(showLabels || hoveredSpot === spot.id) && (
-                      <div 
-                        className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap px-2.5 py-1 text-[11px] font-black uppercase tracking-widest transition-all ${
-                          hoveredSpot === spot.id 
-                            ? 'opacity-100 scale-110 z-50' 
-                            : 'opacity-90 scale-100'
-                        }`}
-                        style={{
-                          color: '#FFFFFF',
-                          textShadow: `0 0 4px #000000, 0 0 10px ${spot.color}, 0 2px 4px rgba(0,0,0,0.8)`,
-                        }}
-                      >
-                        {spot.playerName}
-                        {spot.heatNumber && (
-                          <span className="ml-1 opacity-70">H{spot.heatNumber}</span>
-                        )}
-                      </div>
-                    )}
+                    {/* Contained Name Label */}
+                    {(showLabels || hoveredSpot === spot.id) && (() => {
+                      const color = getSpotColor(spot);
+                      const bounds = spot.path && spot.path.length >= 3 ? getPathBounds(spot.path) : null;
+                      // Compute a font size that fits within the polygon bounding box
+                      const fontSize = bounds ? Math.max(6, Math.min(11, bounds.width * 0.8, bounds.height * 2.5)) : 11;
+                      return (
+                        <div 
+                          className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center overflow-hidden transition-all ${
+                            hoveredSpot === spot.id 
+                              ? 'opacity-100 z-50' 
+                              : 'opacity-90'
+                          }`}
+                          style={{
+                            color: '#FFFFFF',
+                            textShadow: `0 0 4px #000000, 0 0 8px ${color}, 0 2px 3px rgba(0,0,0,0.9)`,
+                            maxWidth: bounds ? `${bounds.width}%` : '80px',
+                            maxHeight: bounds ? `${bounds.height}%` : '40px',
+                            fontSize: `${fontSize}px`,
+                            fontWeight: 900,
+                            fontStyle: 'italic',
+                            textTransform: 'uppercase' as const,
+                            letterSpacing: '0.02em',
+                            lineHeight: 1.1,
+                            wordBreak: 'break-all' as const,
+                          }}
+                        >
+                          {spot.playerName}
+                          {spot.heatNumber && (
+                            <span className="ml-0.5 opacity-70" style={{ fontSize: `${fontSize * 0.8}px` }}>H{spot.heatNumber}</span>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
                 ))}
               </div>
@@ -742,7 +783,6 @@ export default function DropMap() {
                 ) : (
                   <button 
                     onClick={() => {
-                      setMyColor(PLAYER_COLORS[Math.floor(Math.random() * PLAYER_COLORS.length)]);
                       setCurrentPath([]);
                       setIsDrawing(true);
                     }}
@@ -752,21 +792,10 @@ export default function DropMap() {
                     Draw Area
                   </button>
                 )}
-                <div className="mt-6 text-left">
-                  <div className="text-[9px] uppercase tracking-widest font-mono text-white/30 mb-2">Your Pin Color</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {PLAYER_COLORS.slice(0, 12).map(color => (
-                      <button
-                        key={color}
-                        onClick={() => setMyColor(color)}
-                        className={`w-6 h-6 transition-all ${
-                          myColor === color 
-                            ? 'ring-2 ring-white ring-offset-1 ring-offset-[#0A0A0B] scale-110' 
-                            : 'hover:scale-110'
-                        }`}
-                        style={{ backgroundColor: color }}
-                      />
-                    ))}
+                <div className="mt-4 text-center">
+                  <div className="flex items-center justify-center gap-4 text-[9px] uppercase tracking-widest font-mono text-white/30">
+                    <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-[#4ade80]"></span> Solo drop</span>
+                    <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-[#ef4444]"></span> Contested</span>
                   </div>
                 </div>
               </div>
