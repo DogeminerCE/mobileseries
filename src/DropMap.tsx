@@ -115,10 +115,11 @@ export default function DropMap() {
       return;
     }
 
-    const lowerName = epicName.trim().toLowerCase();
+    const normalizeName = (name: string) => (name || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+    const lowerName = normalizeName(epicName);
 
     // Admin bypass
-    if (lowerName === 'awakened 122') {
+    if (lowerName === 'awakened122') {
       setIsQualified(true);
       return;
     }
@@ -133,13 +134,13 @@ export default function DropMap() {
     if (selectedSession.startsWith('Heat')) {
       const heatNum = parseInt(selectedSession.replace('Heat ', ''));
       const seeding = leaderboardData.heatsSeeding?.[selectedRegion]?.[heatNum] || [];
-      qualified = seeding.some((p: any) => p.player?.trim().toLowerCase() === lowerName);
+      qualified = seeding.some((p: any) => normalizeName(p.player) === lowerName);
     } else if (selectedSession === 'Qualifier 12') {
       const eligible = leaderboardData.qualifierEligible?.[selectedRegion] || [];
-      qualified = eligible.some((p: any) => p.player?.trim().toLowerCase() === lowerName);
+      qualified = eligible.some((p: any) => normalizeName(p.player) === lowerName);
     } else if (selectedSession === 'Group Stage') {
       const quals = leaderboardData.qualifications?.[selectedRegion] || [];
-      qualified = quals.some((q: any) => q.player?.trim().toLowerCase() === lowerName);
+      qualified = quals.some((q: any) => normalizeName(q.player) === lowerName);
     }
 
     setIsQualified(qualified);
@@ -867,14 +868,14 @@ export default function DropMap() {
                 {expectedPlayers.length > 0 ? (
                   <>
                     {expectedPlayers.map((playerName: string) => {
-                      const spot = dropSpots.find(s => s.playerName.toLowerCase() === playerName.toLowerCase());
-                      const isHovered = spot && hoveredSpot === spot.id;
+                      const normalizeName = (name: string) => (name || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+                      const spot = dropSpots.find(s => normalizeName(s.playerName) === normalizeName(playerName));
                       
                       return (
                         <div
                           key={playerName}
                           className={`flex items-center gap-3 px-3 py-2 border transition-all cursor-default ${
-                            isHovered 
+                            hoveredSpot === spot?.id 
                               ? 'border-white/20 bg-white/5' 
                               : 'border-transparent hover:border-white/10'
                           } ${spot && spot.epicAccountId === user?.uid ? 'bg-[#FCE14B]/5' : ''}`}
@@ -914,10 +915,15 @@ export default function DropMap() {
                     })}
                     
                     {/* Render any additional spots from people who might have been removed from expectedPlayers or placed a spot erroneously */}
-                    {dropSpots
-                      .filter(s => !expectedPlayers.some((p: string) => p?.trim().toLowerCase() === s.playerName?.trim().toLowerCase()))
-                      .filter(s => s.playerName.toLowerCase() !== 'awakened 122') // Hide admin
-                      .map(spot => (
+                    {Array.from(new Map(
+                      dropSpots
+                        .filter(s => {
+                          const normalizeName = (name: string) => (name || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+                          return !expectedPlayers.some((p: string) => normalizeName(p) === normalizeName(s.playerName));
+                        })
+                        .filter(s => s.playerName.replace(/[^a-z0-9]/gi, '').toLowerCase() !== 'awakened122') // Hide admin
+                        .map(s => [s.playerName.replace(/[^a-z0-9]/gi, '').toLowerCase(), s]) // Deduplicate by normalized name
+                    ).values()).map(spot => (
                         <div
                           key={spot.id}
                           className={`flex items-center gap-3 px-3 py-2 border transition-all cursor-default ${
