@@ -422,7 +422,7 @@ async function aggregateMobileEarnings() {
         
         // For Mobile Series: process qualifiers AND the cumulative _series leaderboard (for heats seeding)
         if (category === 'series') {
-          if (!winId.includes('qualifier') && !winId.includes('open') && !winId.endsWith('_series')) {
+          if (!winId.includes('qualifier') && !winId.includes('open') && !winId.endsWith('_series') && !winId.endsWith('_cumulative')) {
             continue;
           }
         } else {
@@ -471,7 +471,7 @@ async function aggregateMobileEarnings() {
           if (
             processedLeaderboards.has(lbEventWindowId) ||
             processedLeaderboards.has(normalizedId) ||
-            (lbEventWindowId.toLowerCase().includes('_series') && category !== 'series')
+            ((lbEventWindowId.toLowerCase().includes('_series') || lbEventWindowId.toLowerCase().includes('_cumulative')) && category !== 'series')
           ) {
              continue;
           }
@@ -492,7 +492,7 @@ async function aggregateMobileEarnings() {
           const windowLabel = winIdParts ? winIdParts[0] : '';
 
           // Process Heat Seeding from the cumulative series leaderboard
-          if (category === 'series' && lbEventWindowId.toLowerCase().endsWith('_series')) {
+          if (category === 'series' && (lbEventWindowId.toLowerCase().endsWith('_series') || lbEventWindowId.toLowerCase().endsWith('_cumulative'))) {
             if (!heatsSeeding[regionLabel]) heatsSeeding[regionLabel] = { 1: [], 2: [], 3: [], 4: [] };
             
             // Only parse if empty (to avoid overwriting if multiple series boards exist)
@@ -516,11 +516,11 @@ async function aggregateMobileEarnings() {
                   player: username,
                   countryCode: cc,
                   rank: entry.rank,
-                  points: entry.points
+                  points: entry.pointsEarned || entry.points || 0
                 });
               }
             }
-            continue; // Skip earnings logic for cumulative boards
+            continue; // Skip calculating earnings for cumulative leaderboards
           }
 
           // Process Qualifier Eligibility from Top 4 of each Heat
