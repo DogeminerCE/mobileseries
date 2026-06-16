@@ -694,27 +694,29 @@ export default function DropMap() {
                     {(showLabels || hoveredSpot === spot.id) && (() => {
                       const color = getSpotColor(spot);
                       const bounds = spot.path && spot.path.length >= 3 ? getPathBounds(spot.path) : null;
-                      // Compute a font size that fits within the polygon bounding box
-                      const fontSize = bounds ? Math.max(6, Math.min(11, bounds.width * 0.8, bounds.height * 2.5)) : 11;
+                      // Scale font and max-width based on polygon size (bounds are in % of map)
+                      // A polygon spanning 10% of the map ≈ roughly 80px on a 800px wide map
+                      const pxWidth = bounds ? Math.max(50, bounds.width * 8) : 80;
+                      const fontSize = bounds ? Math.max(7, Math.min(12, bounds.width * 0.9)) : 11;
                       return (
                         <div 
                           className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center overflow-hidden transition-all ${
                             hoveredSpot === spot.id 
                               ? 'opacity-100 z-50' 
-                              : 'opacity-90'
+                              : 'opacity-80'
                           }`}
                           style={{
                             color: '#FFFFFF',
-                            textShadow: `0 0 4px #000000, 0 0 8px ${color}, 0 2px 3px rgba(0,0,0,0.9)`,
-                            maxWidth: bounds ? `${bounds.width}%` : '80px',
-                            maxHeight: bounds ? `${bounds.height}%` : '40px',
+                            textShadow: `0 0 6px #000000, 0 0 10px ${color}, 0 2px 4px rgba(0,0,0,0.9)`,
+                            width: `${pxWidth}px`,
+                            maxWidth: `${pxWidth}px`,
                             fontSize: `${fontSize}px`,
                             fontWeight: 900,
                             fontStyle: 'italic',
                             textTransform: 'uppercase' as const,
                             letterSpacing: '0.02em',
-                            lineHeight: 1.1,
-                            wordBreak: 'break-all' as const,
+                            lineHeight: 1.2,
+                            wordBreak: 'break-word' as const,
                           }}
                         >
                           {spot.playerName}
