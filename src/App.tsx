@@ -674,37 +674,8 @@ export default function App() {
                         Snake-draft seeding for the top 64 players into 4 Heats based on cumulative points.
                       </p>
                     </div>
-                    <div className="p-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                      {[1, 2, 3, 4].map(heatNum => {
-                        const regionHeats = heatsSeeding[selectedRegion === 'GLOBAL' ? 'EUROPE' : selectedRegion] || {};
-                        const heatPlayers = regionHeats[heatNum] || [];
-                        return (
-                          <div key={heatNum} className="border border-white/10 bg-[#0A0A0B]">
-                            <div className="bg-white/5 py-2 text-center text-xs font-black uppercase italic tracking-widest border-b border-white/10 text-[#FCE14B]">
-                              Heat {heatNum}
-                            </div>
-                            <div className="p-2 space-y-1">
-                              {heatPlayers.length > 0 ? heatPlayers.map((hp, i) => (
-                                <div key={hp.player} className="flex items-center justify-between px-2 py-1.5 bg-[#141416] hover:bg-white/5 text-xs font-mono border-b border-white/5 last:border-0">
-                                  <div className="flex items-center gap-2 overflow-hidden">
-                                    <span className="text-[9px] text-[#FCE14B] opacity-80 min-w-[14px]">#{hp.rank}</span>
-                                    <img
-                                      src={`https://flagcdn.com/w20/${hp.countryCode.toLowerCase()}.png`}
-                                      alt={hp.countryCode}
-                                      className="w-3 h-auto opacity-80"
-                                      referrerPolicy="no-referrer"
-                                      onError={(e) => (e.currentTarget.style.display = 'none')}
-                                    />
-                                    <span className="truncate uppercase font-bold italic">{hp.player}</span>
-                                  </div>
-                                </div>
-                              )) : (
-                                <div className="py-4 text-center text-white/20 text-[9px] italic uppercase">Pending</div>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
+                    <div className="p-10 text-center text-white/50 font-black italic uppercase tracking-widest">
+                      Come back next month after Round Stage to see who qualified!
                     </div>
                   </div>
                 ) : (

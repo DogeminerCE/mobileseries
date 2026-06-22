@@ -36,7 +36,7 @@ interface DropSpot {
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
 const DROP_MAP_REGIONS = ["EUROPE", "NA-CENTRAL", "NA-WEST", "MIDDLE EAST", "OCEANIA", "ASIA", "BRAZIL"];
-const MAP_SESSIONS = ["Group Stage", "Qualifier 12", "Heat 1", "Heat 2", "Heat 3", "Heat 4"];
+const MAP_SESSIONS = ["Group Stage", "Qualifier 12"];
 
 const HEAT_COLORS: Record<number, string> = {
   1: '#FF4444', // Red
