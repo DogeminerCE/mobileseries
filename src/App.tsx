@@ -205,21 +205,6 @@ export default function App() {
     if (!isRetry) setLoading(true);
     setError(null);
     try {
-      // Check frontend cache first (30 min TTL — matches GitHub Actions cron frequency)
-      const cached = localStorage.getItem('leaderboard_cache_v3');
-      if (cached && !isRetry) {
-        const { players: cachedPlayers, qualifications: cachedQuals, heatsSeeding: cachedHeats, timestamp } = JSON.parse(cached);
-        if (Date.now() - timestamp < 30 * 60 * 1000) {
-          setPlayers(cachedPlayers);
-          if (cachedQuals) setQualifications(cachedQuals);
-          if (cachedHeats) setHeatsSeeding(cachedHeats);
-          setLastUpdated(new Date(timestamp).toLocaleTimeString());
-          setDataSource('local-cache');
-          setLoading(false);
-          return;
-        }
-      }
-
       // Fetch the static pre-aggregated JSON (built by GitHub Actions)
       const response = await fetch(`/leaderboard.json?_=${Date.now()}`, { cache: 'no-cache' });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -232,14 +217,6 @@ export default function App() {
         setLastUpdated(new Date(data.lastUpdated || Date.now()).toLocaleTimeString());
         setDataSource(data.source || 'osirion-aggregated');
         setLoading(false);
-
-        // Cache locally
-        localStorage.setItem('leaderboard_cache_v3', JSON.stringify({
-          players: data.players,
-          qualifications: data.qualifications || {},
-          heatsSeeding: data.heatsSeeding || {},
-          timestamp: Date.now()
-        }));
       } else {
         throw new Error('Empty leaderboard response');
       }
