@@ -291,7 +291,7 @@ export default function App() {
 
   const getFilteredEvents = (player: Player, region: string): PlayerEvent[] | undefined => {
     if (!player.events) return player.events;
-    return player.events.filter(e => activeCategories.has(e.category || 'series') && (region === 'GLOBAL' || e.region === region));
+    return player.events.filter(e => e.earnings > 0 && activeCategories.has(e.category || 'series') && (region === 'GLOBAL' || e.region === region));
   };
 
   const filteredAndSortedPlayers = players
