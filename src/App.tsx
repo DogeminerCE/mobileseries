@@ -133,6 +133,33 @@ function ClanBadge({ clan, className }: { clan: string, className?: string }) {
   );
 }
 
+const AnimatedCounter = ({ value }: { value: number }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let startTime: number;
+    let animationFrame: number;
+    const duration = 1500; // 1.5s
+
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      
+      const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      setCount(Math.floor(easeProgress * value));
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(step);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [value]);
+
+  return <>{count.toLocaleString()}</>;
+};
+
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -309,7 +336,7 @@ export default function App() {
               <div className="flex flex-col">
                 <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Series Budget Used</span>
                 <span className="text-sm font-mono font-bold text-[#FCE14B]">
-                  ${totalSeriesEarnings.toLocaleString()} <span className="text-white/30 text-xs">/ $1,000,000</span>
+                  $<AnimatedCounter value={totalSeriesEarnings} /> <span className="text-white/30 text-xs">/ $1,000,000</span>
                 </span>
               </div>
             </div>
