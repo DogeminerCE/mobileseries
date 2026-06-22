@@ -457,11 +457,11 @@ export default function App() {
                 {activeTab === 'leaderboard' ? (
                   <>
                 {/* Podium Top 3 */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 h-fit">
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 h-fit">
                   {/* Rank 2 */}
                   {displayedPlayers[1] && (
-                    <div className="podium-card bg-[#141416] border-l-4 border-[#FCE14B] h-48 group hover:bg-[#1c1c1f] cursor-pointer" onClick={() => setExpandedPlayer(expandedPlayer === displayedPlayers[1].name ? null : displayedPlayers[1].name)}>
-                      <span className="podium-rank text-5xl">02</span>
+                    <div className="podium-card bg-[#141416] border-l-2 sm:border-l-4 border-[#FCE14B] h-32 sm:h-48 group hover:bg-[#1c1c1f] cursor-pointer p-2 sm:p-4" onClick={() => setExpandedPlayer(expandedPlayer === displayedPlayers[1].name ? null : displayedPlayers[1].name)}>
+                      <span className="podium-rank text-3xl sm:text-5xl">02</span>
                       <div className="flex items-center gap-2 mb-1">
                         {getClanIcon(displayedPlayers[1].name) && (
                           <ClanBadge clan={getClanIcon(displayedPlayers[1].name)!} className="w-5 h-auto object-contain" />
@@ -477,15 +477,15 @@ export default function App() {
                           {displayedPlayers[1].countryCode || 'GLOBAL'}
                         </div>
                       </div>
-                      <div className="text-xl font-black uppercase italic leading-tight break-words">{displayedPlayers[1].name}</div>
-                      <div className="text-xl font-mono opacity-80">${displayedPlayers[1].earningsUSD.toLocaleString()}</div>
+                      <div className="text-xs sm:text-xl font-black uppercase italic leading-tight break-words">{displayedPlayers[1].name}</div>
+                      <div className="text-[10px] sm:text-xl font-mono opacity-80">${displayedPlayers[1].earningsUSD.toLocaleString()}</div>
                     </div>
                   )}
 
                   {/* Rank 1 */}
                   {displayedPlayers[0] && (
-                    <div className="podium-card bg-gradient-to-b from-[#FFF47C] to-[#EBA311] text-black h-56 md:-mt-8 shadow-[0_20px_50px_rgba(252,225,75,0.2)] cursor-pointer" onClick={() => setExpandedPlayer(expandedPlayer === displayedPlayers[0].name ? null : displayedPlayers[0].name)}>
-                      <span className="podium-rank text-7xl opacity-30">01</span>
+                    <div className="podium-card bg-gradient-to-b from-[#FFF47C] to-[#EBA311] text-black h-40 sm:h-56 -mt-4 sm:-mt-8 shadow-[0_10px_30px_rgba(252,225,75,0.2)] sm:shadow-[0_20px_50px_rgba(252,225,75,0.2)] cursor-pointer p-2 sm:p-4" onClick={() => setExpandedPlayer(expandedPlayer === displayedPlayers[0].name ? null : displayedPlayers[0].name)}>
+                      <span className="podium-rank text-5xl sm:text-7xl opacity-30">01</span>
                       <div className="flex items-center gap-2 mb-1">
                         {getClanIcon(displayedPlayers[0].name) && (
                           <ClanBadge clan={getClanIcon(displayedPlayers[0].name)!} className="w-6 h-auto object-contain" />
@@ -501,15 +501,15 @@ export default function App() {
                           {displayedPlayers[0].countryCode || 'GLOBAL'}
                         </div>
                       </div>
-                      <div style={{ fontSize: 'clamp(1rem, 3.5vw, 2.25rem)', lineHeight: 1.1 }} className="font-black uppercase italic w-full break-words">{displayedPlayers[0].name}</div>
-                      <div className="text-2xl font-mono font-bold">${displayedPlayers[0].earningsUSD.toLocaleString()}</div>
+                      <div style={{ fontSize: 'clamp(0.75rem, 2.5vw, 2.25rem)', lineHeight: 1.1 }} className="font-black uppercase italic w-full break-words">{displayedPlayers[0].name}</div>
+                      <div className="text-sm sm:text-2xl font-mono font-bold">${displayedPlayers[0].earningsUSD.toLocaleString()}</div>
                     </div>
                   )}
 
                   {/* Rank 3 */}
                   {displayedPlayers[2] && (
-                    <div className="podium-card bg-[#141416] border-l-4 border-[#FCE14B] h-48 cursor-pointer" onClick={() => setExpandedPlayer(expandedPlayer === displayedPlayers[2].name ? null : displayedPlayers[2].name)}>
-                      <span className="podium-rank text-5xl">03</span>
+                    <div className="podium-card bg-[#141416] border-l-2 sm:border-l-4 border-[#FCE14B] h-32 sm:h-48 cursor-pointer p-2 sm:p-4" onClick={() => setExpandedPlayer(expandedPlayer === displayedPlayers[2].name ? null : displayedPlayers[2].name)}>
+                      <span className="podium-rank text-3xl sm:text-5xl">03</span>
                       <div className="flex items-center gap-2 mb-1">
                         {getClanIcon(displayedPlayers[2].name) && (
                           <ClanBadge clan={getClanIcon(displayedPlayers[2].name)!} className="w-5 h-auto object-contain" />
@@ -525,8 +525,8 @@ export default function App() {
                           {displayedPlayers[2].countryCode || 'GLOBAL'}
                         </div>
                       </div>
-                      <div className="text-xl font-black uppercase italic leading-tight break-words">{displayedPlayers[2].name}</div>
-                      <div className="text-xl font-mono opacity-80">${displayedPlayers[2].earningsUSD.toLocaleString()}</div>
+                      <div className="text-xs sm:text-xl font-black uppercase italic leading-tight break-words">{displayedPlayers[2].name}</div>
+                      <div className="text-[10px] sm:text-xl font-mono opacity-80">${displayedPlayers[2].earningsUSD.toLocaleString()}</div>
                     </div>
                   )}
                 </div>

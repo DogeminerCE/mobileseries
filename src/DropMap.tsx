@@ -380,20 +380,40 @@ export default function DropMap() {
     setZoom(z => Math.min(Math.max(z + delta, 0.5), 4));
   }, []);
 
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (isDrawing) return;
+  const pointerStartRef = useRef<{ x: number, y: number, isPan: boolean } | null>(null);
+
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
     setIsPanning(true);
     setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
-  }, [isDrawing, pan]);
+    pointerStartRef.current = { x: e.clientX, y: e.clientY, isPan: false };
+    
+    // Capture pointer to track movements outside the element if needed
+    e.currentTarget.setPointerCapture(e.pointerId);
+  }, [pan]);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
     if (!isPanning) return;
     setPan({ x: e.clientX - panStart.x, y: e.clientY - panStart.y });
+    
+    if (pointerStartRef.current) {
+      const dx = e.clientX - pointerStartRef.current.x;
+      const dy = e.clientY - pointerStartRef.current.y;
+      // If moved more than 5px, it's a pan, not a click
+      if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+        pointerStartRef.current.isPan = true;
+      }
+    }
   }, [isPanning, panStart]);
 
-  const handleMouseUp = useCallback(() => {
+  const handlePointerUp = useCallback((e: React.PointerEvent) => {
     setIsPanning(false);
-  }, []);
+    
+    if (isDrawing && pointerStartRef.current && !pointerStartRef.current.isPan) {
+      // Cast the pointer event to mouse event for handleMapClick
+      handleMapClick(e as unknown as React.MouseEvent<HTMLDivElement>);
+    }
+    pointerStartRef.current = null;
+  }, [isDrawing, handleMapClick]);
 
   const mySpot = dropSpots.find(s => s.epicAccountId === user?.uid);
   const isAdmin = epicName.toLowerCase() === 'awakened 122';
@@ -595,12 +615,11 @@ export default function DropMap() {
           <div
             ref={mapContainerRef}
             className={`w-full h-full min-h-[500px] lg:min-h-0 ${isDrawing ? 'cursor-crosshair' : isPanning ? 'cursor-grabbing' : 'cursor-grab'}`}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
             onWheel={handleWheel}
-            onClick={handleMapClick}
             style={{ touchAction: 'none' }}
           >
             <div
