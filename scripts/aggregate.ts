@@ -393,7 +393,7 @@ async function aggregateMobileEarnings() {
       // Chapter 7 format: Heats & Qualifiers (post-Q11 events)
       if (eid.includes('mobileseries') && (eid.includes('heat') || title.includes('heat'))) return 'heats';
       if (eid.includes('mobileseries') && eid.includes('qualifier')) return 'qualifier';
-      if (eid.includes('victorycup') || title.includes('victory cup')) return 'victorycup';
+      if ((eid.includes('victorycup') || title.includes('victory cup')) && (eid.includes('mobile') || title.includes('mobile'))) return 'victorycup';
 
       // Mobile Series (including Dec blitz qualifiers titled "Mobile Series")
       if (title.includes('mobile series') || eid.includes('mobileseries')) return 'series';
