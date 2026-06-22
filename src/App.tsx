@@ -762,7 +762,7 @@ export default function App() {
                     <div className="relative w-full overflow-hidden border-2 border-black" style={{ paddingBottom: '56.25%' }}>
                       <iframe
                         className="absolute inset-0 w-full h-full"
-                        src="https://www.youtube.com/embed/p06dgvbmA_4?start=6"
+                        src="https://www.youtube.com/embed/7v2mUcH7n3M"
                         title="Latest Video"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
