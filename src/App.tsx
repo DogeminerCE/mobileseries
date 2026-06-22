@@ -848,9 +848,14 @@ export default function App() {
             <span className="text-white/10">|</span>
             <a href="mailto:babylionbiz@gmail.com" className="text-white/40 hover:text-white/80 transition-colors">Contact</a>
           </div>
-          <span className="text-[10px] font-mono opacity-20 uppercase tracking-[0.4em]">
-            Real-time Data: Osirion API • Updated every 30 min
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-mono opacity-20 uppercase tracking-[0.4em]">
+              Real-time Data: Osirion API • Updated every 30 min
+            </span>
+            <span className="text-[10px] font-mono font-bold opacity-30 tracking-widest bg-white/5 px-1.5 py-0.5 rounded">
+              v2.0.0
+            </span>
+          </div>
         </div>
       </footer>
     </div>
