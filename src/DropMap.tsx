@@ -132,9 +132,8 @@ export default function DropMap() {
     let qualified = false;
 
     if (selectedSession.startsWith('Heat')) {
-      const heatNum = parseInt(selectedSession.replace('Heat ', ''));
-      const seeding = leaderboardData.heatsSeeding?.[selectedRegion]?.[heatNum] || [];
-      qualified = seeding.some((p: any) => normalizeName(p.player) === lowerName);
+      // Heats have ended, leaderboards closed
+      qualified = false;
     } else if (selectedSession === 'Qualifier 12') {
       const eligible = leaderboardData.qualifierEligible?.[selectedRegion] || [];
       qualified = eligible.some((p: any) => normalizeName(p.player) === lowerName);
@@ -265,6 +264,16 @@ export default function DropMap() {
   const handleConfirmArea = async () => {
     if (currentPath.length < 3 || !user) return;
 
+    const isAdmin = epicName.replace(/[^a-z0-9]/gi, '').toLowerCase() === 'awakened122';
+    let spotPlayerName = epicName;
+
+    if (isAdmin) {
+      const overrideName = window.prompt("Admin: Enter player name to place spot for (leave blank for yourself):", "");
+      if (overrideName && overrideName.trim() !== '') {
+        spotPlayerName = overrideName.trim();
+      }
+    }
+
     // Calculate centroid
     let sumX = 0;
     let sumY = 0;
@@ -281,21 +290,28 @@ export default function DropMap() {
       x: centroidX,
       y: centroidY,
       path: [...currentPath],
-      playerName: epicName,
+      playerName: spotPlayerName,
       epicAccountId: user.uid,
       region: selectedRegion,
       mapSession: selectedSession,
       color: '#4ade80',
     };
-    setDropSpots(prev => [...prev.filter(s => s.epicAccountId !== user.uid), optimisticSpot]);
+    
+    // Admin placing for someone else shouldn't replace their own spot optimistically
+    if (spotPlayerName === epicName) {
+      setDropSpots(prev => [...prev.filter(s => s.epicAccountId !== user.uid || s.playerName === spotPlayerName), optimisticSpot]);
+    } else {
+      setDropSpots(prev => [...prev.filter(s => s.playerName !== spotPlayerName), optimisticSpot]);
+    }
+    
     setIsDrawing(false);
     setCurrentPath([]);
 
     try {
-      // Delete any existing spots for this user/region/session
+      // Delete any existing spots for this player/region/session
       const existingQuery = query(
         collection(db, 'dropSpots'),
-        where('epicAccountId', '==', user.uid),
+        where('playerName', '==', spotPlayerName),
         where('region', '==', selectedRegion),
         where('mapSession', '==', selectedSession)
       );
@@ -309,7 +325,7 @@ export default function DropMap() {
         x: centroidX,
         y: centroidY,
         path: optimisticSpot.path,
-        playerName: epicName,
+        playerName: spotPlayerName,
         epicAccountId: user.uid,
         region: selectedRegion,
         mapSession: selectedSession,
@@ -901,7 +917,7 @@ export default function DropMap() {
                               </div>
                             )}
                           </div>
-                          {isAdmin && spot && spot.epicAccountId !== user?.uid && (
+                          {isAdmin && spot && (
                             <button
                               onClick={(e) => { e.stopPropagation(); if (spot.id) handleAdminDelete(spot.id); }}
                               className="flex-shrink-0 w-5 h-5 bg-red-600/80 hover:bg-red-500 rounded flex items-center justify-center text-white text-[9px] font-bold transition-colors"
@@ -948,7 +964,7 @@ export default function DropMap() {
                               )}
                             </div>
                           </div>
-                          {isAdmin && spot.epicAccountId !== user?.uid && (
+                          {isAdmin && (
                             <button
                               onClick={(e) => { e.stopPropagation(); if (spot.id) handleAdminDelete(spot.id); }}
                               className="flex-shrink-0 w-5 h-5 bg-red-600/80 hover:bg-red-500 rounded flex items-center justify-center text-white text-[9px] font-bold transition-colors"
