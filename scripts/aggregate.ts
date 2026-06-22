@@ -279,7 +279,7 @@ const DEFAULT_PRIZE_TABLE = [
   { rank: 16, prize: 100 },
 ];
 
-type EventCategory = 'series' | 'blitz' | 'testcup' | 'reload' | 'heats' | 'qualifier';
+type EventCategory = 'series' | 'blitz' | 'testcup' | 'reload' | 'heats' | 'qualifier' | 'victorycup';
 
 function calculatePrize(rank: number, region: string, category: EventCategory = 'series'): number {
   const categoryTables: Record<EventCategory, Record<string, Array<{ rank: number, prize: number }>>> = {
@@ -392,7 +392,8 @@ async function aggregateMobileEarnings() {
 
       // Chapter 7 format: Heats & Qualifiers (post-Q11 events)
       if (eid.includes('mobileseries') && (eid.includes('heat') || title.includes('heat'))) return 'heats';
-      if (eid.includes('mobileseries') && eid.includes('qualifierfinal')) return 'qualifier';
+      if (eid.includes('mobileseries') && eid.includes('qualifier')) return 'qualifier';
+      if (eid.includes('victorycup') || title.includes('victory cup')) return 'victorycup';
 
       // Mobile Series (including Dec blitz qualifiers titled "Mobile Series")
       if (title.includes('mobile series') || eid.includes('mobileseries')) return 'series';
@@ -410,9 +411,9 @@ async function aggregateMobileEarnings() {
       .map((t: any) => ({ tourney: t, category: classifyTourney(t) }))
       .filter((x: any) => x.category !== null);
 
-    const counts: Record<string, number> = { series: 0, blitz: 0, testcup: 0, reload: 0, heats: 0, qualifier: 0 };
+    const counts: Record<string, number> = { series: 0, blitz: 0, testcup: 0, reload: 0, heats: 0, qualifier: 0, victorycup: 0 };
     categorizedTourneys.forEach((x: any) => counts[x.category as string]++);
-    console.log(`[DATA] Found ${categorizedTourneys.length} mobile events in ${region} (series: ${counts.series}, blitz: ${counts.blitz}, testcup: ${counts.testcup}, reload: ${counts.reload}, heats: ${counts.heats}, qualifier: ${counts.qualifier})`);
+    console.log(`[DATA] Found ${categorizedTourneys.length} mobile events in ${region} (series: ${counts.series}, blitz: ${counts.blitz}, testcup: ${counts.testcup}, reload: ${counts.reload}, heats: ${counts.heats}, qualifier: ${counts.qualifier}, victorycup: ${counts.victorycup})`);
     
     const processedLeaderboards = new Set<string>();
 
@@ -597,8 +598,26 @@ async function aggregateMobileEarnings() {
           const prizeMoney = isOpensRound ? 0 : calculatePrize(0, region, category as EventCategory);
 
           lbData.leaderboard.entries.forEach((entry: any) => {
-            // Opens rounds have no prize pool — skip earnings
-            const entryPrize = isOpensRound ? 0 : calculatePrize(entry.rank, region, category as EventCategory);
+            let entryPrize = 0;
+            if (category === 'victorycup') {
+              const isRound2 = lbEventWindowId.toLowerCase().includes('round2') || windowLabel?.toLowerCase().includes('round 2') || lbEventWindowId.toLowerCase().includes('final');
+              if (isRound2) {
+                const isMiniVenture = eventTitle.toLowerCase().includes('mini venture');
+                const pricePerWin = isMiniVenture ? 50 : 100;
+                let wins = 0;
+                if (entry.sessionHistory) {
+                  entry.sessionHistory.forEach((session: any) => {
+                    if (session.trackedStats && session.trackedStats.VICTORY_ROYALE_STAT) {
+                      wins += session.trackedStats.VICTORY_ROYALE_STAT;
+                    }
+                  });
+                }
+                entryPrize = wins * pricePerWin;
+              }
+            } else {
+              // Opens rounds have no prize pool — skip earnings
+              entryPrize = isOpensRound ? 0 : calculatePrize(entry.rank, region, category as EventCategory);
+            }
             
             (entry.players || []).forEach((player: any) => {
               const username = player.username;
@@ -656,7 +675,7 @@ async function aggregateMobileEarnings() {
           });
 
           // --- Qualification Tracking Collection (series qualifiers only) ---
-          if (category === 'series' && lbData.leaderboard.entries && lbData.leaderboard.entries.length > 0) {
+          if (category === 'series' && !isOpensRound && windowLabel.toLowerCase().includes('qualifier') && lbData.leaderboard.entries && lbData.leaderboard.entries.length > 0) {
             const qualMatch = lbEventWindowId.match(/Qualifier(\d+)/i);
             const qualLabel = qualMatch ? `Qualifier ${qualMatch[1]}` : lbEventWindowId;
             const qualNum = qualMatch ? parseInt(qualMatch[1], 10) : 999;

@@ -153,6 +153,7 @@ export default function App() {
   const [includeBlitz, setIncludeBlitz] = useState(false);
   const [includeTestCup, setIncludeTestCup] = useState(false);
   const [includeReload, setIncludeReload] = useState(false);
+  const [includeVictoryCup, setIncludeVictoryCup] = useState(false);
 
   const [qualifications, setQualifications] = useState<Record<string, Qualification[]>>({});
   const [heatsSeeding, setHeatsSeeding] = useState<Record<string, HeatsSeeding>>({});
@@ -215,13 +216,14 @@ export default function App() {
   // Reset page when filters change
   useEffect(() => {
     setPage(1);
-  }, [searchTerm, selectedRegion, sortBy, includeBlitz, includeTestCup, includeReload]);
+  }, [searchTerm, selectedRegion, sortBy, includeBlitz, includeTestCup, includeReload, includeVictoryCup]);
 
   // Build active category set based on toggles
-  const activeCategories = new Set(['series']);
+  const activeCategories = new Set(['series', 'heats', 'qualifier']);
   if (includeBlitz) activeCategories.add('blitz');
   if (includeTestCup) activeCategories.add('testcup');
   if (includeReload) activeCategories.add('reload');
+  if (includeVictoryCup) activeCategories.add('victorycup');
 
   // Filter events by active categories
   const filterByCategory = (events: PlayerEvent[] | undefined): PlayerEvent[] | undefined => {
@@ -361,6 +363,15 @@ export default function App() {
                    includeReload ? 'border-[#FCE14B] bg-[#FCE14B]' : 'bg-transparent border-white/30'
                  }`}>{includeReload && <span className="text-black text-[7px] font-black">✓</span>}</div>
                  + Reload Cups
+               </label>
+               <label className={`flex items-center gap-1.5 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider cursor-pointer border transition-all ${
+                 includeVictoryCup ? 'bg-[#FCE14B]/10 border-[#FCE14B]/40 text-[#FCE14B]' : 'bg-transparent border-white/10 text-white/30 hover:border-white/20'
+               }`}>
+                 <input type="checkbox" checked={includeVictoryCup} onChange={e => setIncludeVictoryCup(e.target.checked)} className="sr-only" />
+                 <div className={`w-2.5 h-2.5 border flex items-center justify-center transition-all ${
+                   includeVictoryCup ? 'border-[#FCE14B] bg-[#FCE14B]' : 'bg-transparent border-white/30'
+                 }`}>{includeVictoryCup && <span className="text-black text-[7px] font-black">✓</span>}</div>
+                 + Victory Cups
                </label>
              </div>
           </div>
