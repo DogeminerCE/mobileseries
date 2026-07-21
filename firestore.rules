@@ -2,7 +2,19 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    
+
+    // The admin's Epic display name is "Blitzʼd Babylion", whose apostrophe is
+    // U+02BC rather than ASCII. Comparing the raw string would be one stray glyph
+    // away from silently losing admin, so strip to alphanumerics before matching.
+    function isAdminName(name) {
+      return name != null && name.lower().replace('[^a-z0-9]', '') == 'blitzdbabylion';
+    }
+
+    function isAdmin() {
+      return isAdminName(request.auth.token.epic_display_name)
+             || isAdminName(request.auth.token.name);
+    }
+
     match /dropSpots/{spotId} {
       // Anyone can read drop spots
       allow read: if true;
@@ -28,9 +40,7 @@ service cloud.firestore {
       
       // Users can only delete their own spots, except admin
       allow delete: if request.auth != null
-                    && (resource.data.epicAccountId == request.auth.uid
-                        || (request.auth.token.epic_display_name != null && request.auth.token.epic_display_name.lower() == 'awakened 122')
-                        || (request.auth.token.name != null && request.auth.token.name.lower() == 'awakened 122'));
+                    && (resource.data.epicAccountId == request.auth.uid || isAdmin());
     }
     
     match /{document=**} {

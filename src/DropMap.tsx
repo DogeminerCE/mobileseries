@@ -55,6 +55,14 @@ const HEAT_COLORS: Record<number, string> = {
   4: '#FFAA44', // Orange
 };
 
+// Epic display names carry glyphs that don't survive a naive comparison — the admin
+// account's name uses U+02BC (ʼ), not an ASCII apostrophe — so every identity check
+// runs against an alphanumeric-only form of the name.
+const normalizeName = (name: string) => (name || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+
+const ADMIN_ACCOUNT = normalizeName('Blitzʼd Babylion');
+const isAdminName = (name: string) => normalizeName(name) === ADMIN_ACCOUNT;
+
 const PLAYER_COLORS = [
   '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD',
   '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9', '#82E0AA', '#F8C471',
@@ -168,11 +176,10 @@ export default function DropMap() {
       return;
     }
 
-    const normalizeName = (name: string) => (name || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
     const lowerName = normalizeName(epicName);
 
     // Admin bypass
-    if (lowerName === 'awakened122') {
+    if (isAdminName(epicName)) {
       setIsQualified(true);
       return;
     }
@@ -213,7 +220,6 @@ export default function DropMap() {
   // Which Heat each player was seeded into, so drops on the Qualifier and Group Stage
   // maps can still be tagged with where the player came from.
   const heatByPlayer = useMemo(() => {
-    const normalizeName = (name: string) => (name || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
     const map: Record<string, number> = {};
     const regionSeeding = leaderboardData?.heatsSeeding?.[selectedRegion] || {};
     for (const heatNumber of [1, 2, 3, 4]) {
@@ -328,7 +334,7 @@ export default function DropMap() {
   const handleConfirmArea = async () => {
     if (currentPath.length < 3 || !user) return;
 
-    const isAdmin = epicName.replace(/[^a-z0-9]/gi, '').toLowerCase() === 'awakened122';
+    const isAdmin = isAdminName(epicName);
     let spotPlayerName = epicName;
 
     if (isAdmin) {
@@ -428,7 +434,7 @@ export default function DropMap() {
 
   // ─── Admin: Remove Any Drop Spot ─────────────────────────────────────────────
   const handleAdminDelete = async (spotId: string) => {
-    if (!user || epicName.toLowerCase() !== 'awakened 122') return;
+    if (!user || !isAdminName(epicName)) return;
     try {
       await deleteDoc(doc(db, 'dropSpots', spotId));
       setDropSpots(prev => prev.filter(s => s.id !== spotId));
@@ -484,7 +490,7 @@ export default function DropMap() {
   }, [isDrawing, handleMapClick]);
 
   const mySpot = dropSpots.find(s => s.epicAccountId === user?.uid);
-  const isAdmin = epicName.toLowerCase() === 'awakened 122';
+  const isAdmin = isAdminName(epicName);
 
   // ─── Calculate Overlapping Polygons & Per-Spot Overlap Status ───────────────
   const { overlappingPolygons, spotHasOverlap } = useMemo(() => {
@@ -984,7 +990,6 @@ export default function DropMap() {
                 {expectedPlayers.length > 0 ? (
                   <>
                     {expectedPlayers.map((playerName: string) => {
-                      const normalizeName = (name: string) => (name || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
                       const spot = dropSpots.find(s => normalizeName(s.playerName) === normalizeName(playerName));
                       
                       return (
@@ -1033,12 +1038,9 @@ export default function DropMap() {
                     {/* Render any additional spots from people who might have been removed from expectedPlayers or placed a spot erroneously */}
                     {Array.from(new Map(
                       dropSpots
-                        .filter(s => {
-                          const normalizeName = (name: string) => (name || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
-                          return !expectedPlayers.some((p: string) => normalizeName(p) === normalizeName(s.playerName));
-                        })
-                        .filter(s => s.playerName.replace(/[^a-z0-9]/gi, '').toLowerCase() !== 'awakened122') // Hide admin
-                        .map(s => [s.playerName.replace(/[^a-z0-9]/gi, '').toLowerCase(), s]) // Deduplicate by normalized name
+                        .filter(s => !expectedPlayers.some((p: string) => normalizeName(p) === normalizeName(s.playerName)))
+                        .filter(s => !isAdminName(s.playerName)) // Hide admin
+                        .map(s => [normalizeName(s.playerName), s]) // Deduplicate by normalized name
                     ).values()).map(spot => (
                         <div
                           key={spot.id}
@@ -1078,7 +1080,7 @@ export default function DropMap() {
                   </>
                 ) : (
                   dropSpots
-                    .filter(s => s.playerName.toLowerCase() !== 'awakened 122') // Hide admin
+                    .filter(s => !isAdminName(s.playerName)) // Hide admin
                     .map(spot => (
                     <div
                       key={spot.id}
