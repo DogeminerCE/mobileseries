@@ -300,6 +300,242 @@ const REGION_LABEL_MAP: Record<string, string> = {
   'BR': 'BRAZIL', 'ASIA': 'ASIA', 'OCE': 'OCEANIA', 'ME': 'MIDDLE EAST'
 };
 
+// ─── Heats Stage resolution ───────────────────────────────────────────────────
+// Each Open runs a pair of Round Stage sessions that share one cumulative "Round
+// Series Leaderboard" (…_1_cumulative for the first pair, …_2_cumulative for the
+// next, and so on). Once both rounds of a pair are done, the Top 64 of that
+// cumulative board are snake-drafted into Heats 1-4, which then feed the next
+// Qualifier. This resolves whichever pair is the most recently completed one, so
+// the site rolls over to the new Heats/Qualifier automatically each month.
+
+interface HeatsRegionMeta {
+  period: string;
+  openEventId: string;
+  cumulativeWindowId: string;
+  opensRounds: string[];
+  opensEndTime: string;
+  heatsStartTime: string | null;
+  heatsEndTime: string | null;
+  qualifierLabel: string | null;
+  qualifierStartTime: string | null;
+  qualifierEndTime: string | null;
+  seededPlayers: number;
+  source: 'cumulative' | 'override';
+}
+
+interface HeatsMeta {
+  period: string | null;
+  qualifierLabel: string | null;
+  regions: Record<string, HeatsRegionMeta>;
+}
+
+// 1-2-3-4-4-3-2-1 snake, repeating every 8 places down the Round Series Leaderboard.
+function heatForSeedIndex(index: number): number {
+  const offset = index % 8;
+  if (offset === 0 || offset === 7) return 1;
+  if (offset === 1 || offset === 6) return 2;
+  if (offset === 2 || offset === 5) return 3;
+  return 4;
+}
+
+function seasonOf(eventId: string): number {
+  const m = eventId?.match(/S(\d+)_/i);
+  return m ? parseInt(m[1], 10) : 0;
+}
+
+async function resolveCurrentHeats(
+  tournamentsByRegion: Record<string, any[]>,
+  heatsSeeding: Record<string, Record<number, Array<{ player: string, countryCode: string, rank: number, points: number }>>>,
+  playerMap: Record<string, any>
+): Promise<HeatsMeta> {
+  const HEATS_OVERRIDE_FILE = path.join(process.cwd(), 'public', 'heats_override.json');
+  let overrides: Record<string, any> = {};
+  if (fs.existsSync(HEATS_OVERRIDE_FILE)) {
+    try {
+      overrides = JSON.parse(fs.readFileSync(HEATS_OVERRIDE_FILE, 'utf-8'));
+    } catch (err) {
+      console.error('[HEATS] Failed to parse heats_override.json:', err);
+    }
+  }
+
+  // Previous run's output, used to ride out a rate-limited cumulative fetch without
+  // wiping a region's Heats (which would lock its players out of the Drop Map).
+  let previous: any = {};
+  if (fs.existsSync(CACHE_FILE)) {
+    try {
+      previous = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf-8'));
+    } catch (err) {
+      console.error('[HEATS] Could not read previous leaderboard.json:', err);
+    }
+  }
+
+  const now = Date.now();
+  const meta: HeatsMeta = { period: null, qualifierLabel: null, regions: {} };
+
+  for (const [region, tournaments] of Object.entries(tournamentsByRegion)) {
+    const regionLabel = REGION_LABEL_MAP[region] || region;
+    const maxSeason = tournaments.reduce((max, t) => Math.max(max, seasonOf(t.eventId || '')), 0);
+    const currentSeason = (t: any) => seasonOf(t.eventId || '') === maxSeason;
+
+    const openTourney = tournaments.find(t => /MobileSeriesOpen/i.test(t.eventId || '') && currentSeason(t));
+    if (!openTourney) {
+      console.log(`[HEATS] ${regionLabel}: no current-season Opens tournament found`);
+      continue;
+    }
+
+    // Group the Round Stage windows by the cumulative board they feed.
+    const groups: Record<string, { leaderboardEventId: string, rounds: string[], endTime: number }> = {};
+    for (const window of (openTourney.eventWindows || [])) {
+      const cumulative = (window.scoreLocations || []).find((s: any) =>
+        (s.leaderboardEventWindowId || '').toLowerCase().includes('_cumulative'));
+      if (!cumulative) continue;
+
+      const id = cumulative.leaderboardEventWindowId;
+      if (!groups[id]) {
+        groups[id] = { leaderboardEventId: cumulative.leaderboardEventId, rounds: [], endTime: 0 };
+      }
+      groups[id].rounds.push(window.eventWindowId);
+      groups[id].endTime = Math.max(groups[id].endTime, new Date(window.endTime).getTime());
+    }
+
+    // The Heats are seeded off the most recent pair of Rounds that has finished.
+    const completed = Object.entries(groups)
+      .filter(([, g]) => g.endTime > 0 && g.endTime <= now)
+      .sort((a, b) => b[1].endTime - a[1].endTime)[0];
+
+    if (!completed) {
+      console.log(`[HEATS] ${regionLabel}: no completed Round Stage pair yet`);
+      continue;
+    }
+    const [cumulativeWindowId, group] = completed;
+
+    // The Heats Stage session is the first one scheduled after those Rounds close.
+    // Its window id carries the period name, e.g. S41_MobileSeriesHeat1July_EU.
+    let heatsStart: number | null = null;
+    let heatsEnd: string | null = null;
+    let period: string | null = null;
+    for (const t of tournaments) {
+      if (!/MobileSeriesHeat\d/i.test(t.eventId || '') || !currentSeason(t)) continue;
+      for (const window of (t.eventWindows || [])) {
+        const begin = new Date(window.beginTime).getTime();
+        if (!(begin >= group.endTime)) continue;
+        if (heatsStart !== null && begin >= heatsStart) continue;
+        const periodMatch = (window.eventWindowId || '').match(/Heat\d([A-Za-z]+?)_/);
+        if (!periodMatch) continue;
+        heatsStart = begin;
+        heatsEnd = window.endTime;
+        period = periodMatch[1];
+      }
+    }
+
+    if (!period) {
+      console.log(`[HEATS] ${regionLabel}: could not resolve a Heats period after ${cumulativeWindowId}`);
+      continue;
+    }
+
+    // The Qualifier those Heats feed is the next Qualifier session after them.
+    let qualifierLabel: string | null = null;
+    let qualifierStart: number | null = null;
+    let qualifierEnd: string | null = null;
+    for (const t of tournaments) {
+      if (!/MobileSeriesCupQual/i.test(t.eventId || '') || !currentSeason(t)) continue;
+      for (const window of (t.eventWindows || [])) {
+        const begin = new Date(window.beginTime).getTime();
+        if (!(begin >= (heatsStart as number))) continue;
+        if (qualifierStart !== null && begin >= qualifierStart) continue;
+        const numMatch = (window.eventWindowId || '').match(/Qualifier(\d+)/i);
+        if (!numMatch) continue;
+        qualifierStart = begin;
+        qualifierEnd = window.endTime;
+        qualifierLabel = `Qualifier ${numMatch[1]}`;
+      }
+    }
+
+    const regionMeta: HeatsRegionMeta = {
+      period,
+      openEventId: openTourney.eventId,
+      cumulativeWindowId,
+      opensRounds: group.rounds,
+      opensEndTime: new Date(group.endTime).toISOString(),
+      heatsStartTime: heatsStart !== null ? new Date(heatsStart).toISOString() : null,
+      heatsEndTime: heatsEnd,
+      qualifierLabel,
+      qualifierStartTime: qualifierStart !== null ? new Date(qualifierStart).toISOString() : null,
+      qualifierEndTime: qualifierEnd,
+      seededPlayers: 0,
+      source: 'cumulative',
+    };
+
+    // A manual override wins when present — the official Heats can differ from the raw
+    // board if Epic removed a player and rolled the vacancy down to the next in line.
+    const override = overrides[period]?.[regionLabel];
+    if (override) {
+      heatsSeeding[regionLabel] = { 1: [], 2: [], 3: [], 4: [] };
+      for (const heatNum of [1, 2, 3, 4]) {
+        heatsSeeding[regionLabel][heatNum] = (override[String(heatNum)] || []).map((name: string, idx: number) => ({
+          player: name,
+          countryCode: playerMap[name.toLowerCase()]?.countryCode || 'un',
+          rank: idx + 1,
+          points: 0,
+        }));
+      }
+      regionMeta.seededPlayers = [1, 2, 3, 4].reduce((n, h) => n + heatsSeeding[regionLabel][h].length, 0);
+      regionMeta.source = 'override';
+      meta.regions[regionLabel] = regionMeta;
+      console.log(`[HEATS] ${regionLabel}: ${regionMeta.seededPlayers} players seeded for ${period} Heats from override file`);
+      continue;
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    const lbUrl = `${OSIRION_API}/tournaments/leaderboard?leaderboardEventId=${group.leaderboardEventId}&leaderboardEventWindowId=${cumulativeWindowId}`;
+    console.log(`[HEATS][${regionLabel}] ${lbUrl}`);
+    const lbData = await fetchWithRetry(lbUrl);
+
+    const entries = lbData?.leaderboard?.entries;
+    if (!lbData?.success || !Array.isArray(entries) || entries.length === 0) {
+      const previousMeta = previous.heatsMeta?.regions?.[regionLabel];
+      const previousSeeding = previous.heatsSeeding?.[regionLabel];
+      if (previousMeta?.period === period && previousSeeding) {
+        heatsSeeding[regionLabel] = previousSeeding;
+        meta.regions[regionLabel] = { ...regionMeta, seededPlayers: previousMeta.seededPlayers, source: previousMeta.source };
+        console.error(`[HEATS] ${regionLabel}: cumulative board ${cumulativeWindowId} returned no entries — reusing the previous ${period} seeding`);
+      } else {
+        console.error(`[HEATS] ${regionLabel}: cumulative board ${cumulativeWindowId} returned no entries and no matching previous seeding — skipping`);
+      }
+      continue;
+    }
+
+    const top64 = [...entries].sort((a: any, b: any) => a.rank - b.rank).slice(0, 64);
+    heatsSeeding[regionLabel] = { 1: [], 2: [], 3: [], 4: [] };
+    top64.forEach((entry: any, idx: number) => {
+      const player = (entry.players || [])[0];
+      if (!player?.username) return;
+      heatsSeeding[regionLabel][heatForSeedIndex(idx)].push({
+        player: player.username,
+        countryCode: resolveCountryCode(player.flagToken),
+        rank: entry.rank,
+        points: entry.pointsEarned || entry.points || 0,
+      });
+    });
+
+    regionMeta.seededPlayers = [1, 2, 3, 4].reduce((n, h) => n + heatsSeeding[regionLabel][h].length, 0);
+    meta.regions[regionLabel] = regionMeta;
+    console.log(`[HEATS] ${regionLabel}: ${regionMeta.seededPlayers} players seeded for ${period} Heats → ${qualifierLabel || 'next Qualifier'} (from ${group.rounds.join(' + ')})`);
+  }
+
+  // Surface the period/qualifier shared by most regions as the headline values.
+  const tally = (values: Array<string | null>) => {
+    const counts: Record<string, number> = {};
+    values.filter((v): v is string => !!v).forEach(v => { counts[v] = (counts[v] || 0) + 1; });
+    return Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || null;
+  };
+  const regionMetas = Object.values(meta.regions);
+  meta.period = tally(regionMetas.map(r => r.period));
+  meta.qualifierLabel = tally(regionMetas.map(r => r.qualifierLabel));
+
+  return meta;
+}
+
 async function aggregateMobileEarnings() {
   console.log("Starting verified global series aggregation (Sept 2023 - Present)...");
   const regions = ['EU', 'NAC', 'NAW', 'BR', 'ASIA', 'OCE', 'ME'];
@@ -323,10 +559,12 @@ async function aggregateMobileEarnings() {
   // Heat Seeding: Snake draft from cumulative Round Stages
   const heatsSeeding: Record<string, Record<number, Array<{ player: string, countryCode: string, rank: number, points: number }>>> = {};
 
-  // Opens Round 1 + Round 2 combined points tracker (for heats seeding only)
-  const opensRoundPoints: Record<string, Record<string, { name: string, countryCode: string, points: number }>> = {};
+  // Raw tournament lists per region, reused after the main loop to resolve the current Heats period
+  const tournamentsByRegion: Record<string, any[]> = {};
 
-  // Qualifier Eligible: Top 4 from Heats
+  // Qualifier Eligible: Top 4 from Heats, keyed by the heat leaderboard window it came from
+  // so it can be filtered down to the current Heats period (June/July/Aug/...) afterwards.
+  const heatsTop4: Record<string, Record<string, Array<{ player: string, countryCode: string, fromHeat: string }>>> = {};
   const qualifierEligible: Record<string, Array<{ player: string, countryCode: string, fromHeat: string }>> = {};
 
   for (const region of regions) {
@@ -366,11 +604,9 @@ async function aggregateMobileEarnings() {
       continue;
     }
 
-    let maxSeason = 0;
-    tournaments.forEach(t => {
-      const m = t.eventId?.match(/S(\d+)_/i);
-      if (m) maxSeason = Math.max(maxSeason, parseInt(m[1], 10));
-    });
+    tournamentsByRegion[region] = tournaments;
+
+    const maxSeason = tournaments.reduce((max, t) => Math.max(max, seasonOf(t.eventId || '')), 0);
 
     // Classify each tournament into a category
     function classifyTourney(t: any): EventCategory | null {
@@ -495,63 +731,33 @@ async function aggregateMobileEarnings() {
           const winIdParts = lbEventWindowId.match(/(?:Qualifier|Round|Final|Week|Event)\d*/i);
           const windowLabel = winIdParts ? winIdParts[0] : '';
 
-          // Process Heat Seeding from the cumulative series leaderboard
+          // Cumulative Round Series boards carry no prize money — heats seeding is derived
+          // from them separately (see resolveCurrentHeats below) so it can be scoped to the
+          // Opens period that actually feeds the upcoming Heats Stage.
           if (category === 'series' && (lbEventWindowId.toLowerCase().endsWith('_series') || lbEventWindowId.toLowerCase().endsWith('_cumulative'))) {
-            if (!heatsSeeding[regionLabel]) heatsSeeding[regionLabel] = { 1: [], 2: [], 3: [], 4: [] };
-            
-            // Only parse if empty (to avoid overwriting if multiple series boards exist)
-            if (heatsSeeding[regionLabel][1].length === 0) {
-              const sortedEntries = [...lbData.leaderboard.entries].sort((a: any, b: any) => a.rank - b.rank);
-              for (const entry of sortedEntries) {
-                if (entry.rank > 64) break; // Top 64 only
-                
-                const username = (entry.players || [])[0]?.username;
-                if (!username) continue;
-                
-                const cc = resolveCountryCode((entry.players || [])[0]?.flagToken);
-                const offset = (entry.rank - 1) % 8;
-                let heat = 0;
-                if (offset === 0 || offset === 7) heat = 1;
-                else if (offset === 1 || offset === 6) heat = 2;
-                else if (offset === 2 || offset === 5) heat = 3;
-                else if (offset === 3 || offset === 4) heat = 4;
-                
-                heatsSeeding[regionLabel][heat].push({
-                  player: username,
-                  countryCode: cc,
-                  rank: entry.rank,
-                  points: entry.pointsEarned || entry.points || 0
-                });
-              }
-            }
-            continue; // Skip calculating earnings for cumulative leaderboards
+            continue;
           }
 
           // Process Qualifier Eligibility from Top 4 of each Heat
           if (category === 'heats') {
-            if (!qualifierEligible[regionLabel]) qualifierEligible[regionLabel] = [];
-            
+            if (!heatsTop4[regionLabel]) heatsTop4[regionLabel] = {};
+            const windowTop4: Array<{ player: string, countryCode: string, fromHeat: string }> = [];
+
             const sortedEntries = [...lbData.leaderboard.entries].sort((a: any, b: any) => a.rank - b.rank);
             const eventTitle = tourney.displayData?.titleLine1 || 'Unknown Event';
-            const heatMatch = eventTitle.match(/Heat\s*(\d)/i) || lbEventWindowId.match(/Heat_?(\d)/i);
+            const heatMatch = lbEventWindowId.match(/Heat_?(\d)/i) || eventTitle.match(/Heat\s*(\d)/i);
             const heatName = heatMatch ? `Heat ${heatMatch[1]}` : 'Heat';
 
             for (const entry of sortedEntries) {
               if (entry.rank > 4) break; // Only top 4 advance to qualifier
-              
+
               const username = (entry.players || [])[0]?.username;
               if (!username) continue;
-              
-              // Only add if not already present
-              if (!qualifierEligible[regionLabel].some(q => q.player === username)) {
-                const cc = resolveCountryCode((entry.players || [])[0]?.flagToken);
-                qualifierEligible[regionLabel].push({
-                  player: username,
-                  countryCode: cc,
-                  fromHeat: heatName
-                });
-              }
+
+              const cc = resolveCountryCode((entry.players || [])[0]?.flagToken);
+              windowTop4.push({ player: username, countryCode: cc, fromHeat: heatName });
             }
+            heatsTop4[regionLabel][lbEventWindowId] = windowTop4;
             // Do NOT continue here; heats DO give earnings!
           }
 
@@ -562,37 +768,11 @@ async function aggregateMobileEarnings() {
             ? `${eventTitle} — ${windowLabel} (${REGION_LABEL_MAP[region] || region})`
             : `${eventTitle} (${REGION_LABEL_MAP[region] || region})`;
 
-          // Detect Opens Round 1/2 windows — these have NO prize money
-          const isOpensRound = lbEventWindowId.toLowerCase().includes('_round') && 
-            (lbEventWindowId.toLowerCase().includes('open') || 
+          // Detect Opens Round windows — these have NO prize money
+          const isOpensRound = lbEventWindowId.toLowerCase().includes('_round') &&
+            (lbEventWindowId.toLowerCase().includes('open') ||
              tourney.eventId?.toLowerCase().includes('open'));
-          const opensRoundMatch = lbEventWindowId.match(/Round(\d+)/i);
-          const isOpensRound1or2 = isOpensRound && opensRoundMatch && 
-            (parseInt(opensRoundMatch[1], 10) === 1 || parseInt(opensRoundMatch[1], 10) === 2);
-
-          // Track Opens Round 1+2 points for heats seeding (current season only)
-          const isCurrentSeason = tourney.eventId?.match(new RegExp(`S${maxSeason}_`, 'i'));
-          if (isOpensRound1or2 && isCurrentSeason && category === 'series') {
-            const regionLabel2 = REGION_LABEL_MAP[region] || region;
-            if (!opensRoundPoints[regionLabel2]) opensRoundPoints[regionLabel2] = {};
-            
-            for (const entry of lbData.leaderboard.entries) {
-              for (const player of (entry.players || [])) {
-                const username = player.username;
-                if (!username) continue;
-                const acctId = player.accountId || username.toLowerCase();
-                const pts = entry.pointsEarned || entry.points || 0;
-                const cc = resolveCountryCode(player.flagToken);
-                
-                if (!opensRoundPoints[regionLabel2][acctId]) {
-                  opensRoundPoints[regionLabel2][acctId] = { name: username, countryCode: cc, points: 0 };
-                }
-                opensRoundPoints[regionLabel2][acctId].points += pts;
-                opensRoundPoints[regionLabel2][acctId].name = username; // use latest display name
-                opensRoundPoints[regionLabel2][acctId].countryCode = cc;
-              }
-            }
-          }
+          const isCurrentSeason = seasonOf(tourney.eventId || '') === maxSeason;
 
           // For Opens rounds, skip earnings calculation entirely (no prize pool)
           const prizeMoney = isOpensRound ? 0 : calculatePrize(0, region, category as EventCategory);
@@ -750,83 +930,33 @@ async function aggregateMobileEarnings() {
       return { ...p, rank: idx + 1, primaryRegion: REGION_LABEL_MAP[topRegionKey] || 'GLOBAL', events };
     });
 
-  // ─── Load official heats seeding from override file ──────────
-  // The official Epic heats account for banned players being replaced,
-  // which can't be derived from API data alone. Use the override file
-  // if it exists; otherwise fall back to computed Round 1+2 seeding.
-  const HEATS_OVERRIDE_FILE = path.join(process.cwd(), 'public', 'heats_override.json');
-  const HEATS_REGIONS = ['EUROPE', 'NA-CENTRAL', 'NA-WEST', 'MIDDLE EAST', 'OCEANIA', 'ASIA', 'BRAZIL'];
+  // ─── Resolve the current Heats period and seed the Top 64 ──────────
+  const heatsMeta = await resolveCurrentHeats(tournamentsByRegion, heatsSeeding, playerMap);
 
-  if (fs.existsSync(HEATS_OVERRIDE_FILE)) {
-    try {
-      const overrideData = JSON.parse(fs.readFileSync(HEATS_OVERRIDE_FILE, 'utf-8'));
-      for (const region of HEATS_REGIONS) {
-        const regionOverride = overrideData[region];
-        if (!regionOverride) continue;
+  // Qualifier eligibility is the Top 4 of each Heat, but only from the Heats Stage that
+  // feeds the *upcoming* Qualifier — otherwise last month's advancers keep their access.
+  for (const [regionLabel, windows] of Object.entries(heatsTop4)) {
+    const period = heatsMeta.regions[regionLabel]?.period;
+    if (!period) continue;
 
-        heatsSeeding[region] = { 1: [], 2: [], 3: [], 4: [] };
-        for (const heatNum of ['1', '2', '3', '4']) {
-          const players = regionOverride[heatNum] || [];
-          heatsSeeding[region][parseInt(heatNum, 10)] = players.map((name: string, idx: number) => {
-            // Try to find country code from playerMap
-            const key = name.toLowerCase();
-            const cc = playerMap[key]?.countryCode || 'un';
-            return {
-              player: name,
-              countryCode: cc,
-              rank: idx + 1,
-              points: 0, // Official seeding doesn't need points
-            };
-          });
-        }
-        console.log(`[HEATS] Loaded official heats for ${region} from override file (${heatsSeeding[region][1].length + heatsSeeding[region][2].length + heatsSeeding[region][3].length + heatsSeeding[region][4].length} players)`);
+    const eligible: Array<{ player: string, countryCode: string, fromHeat: string }> = [];
+    for (const [windowId, top4] of Object.entries(windows)) {
+      if (!windowId.toLowerCase().includes(period.toLowerCase())) continue;
+      for (const p of top4) {
+        if (!eligible.some(q => q.player === p.player)) eligible.push(p);
       }
-    } catch (err) {
-      console.error('[HEATS] Failed to load heats_override.json:', err);
     }
-  }
-
-  // Fallback: Compute from Opens Round 1+2 for any regions not in the override
-  for (const region of HEATS_REGIONS) {
-    if (heatsSeeding[region] && heatsSeeding[region][1]?.length > 0) {
-      continue; // Already loaded from override or _series/_cumulative board
+    if (eligible.length > 0) {
+      qualifierEligible[regionLabel] = eligible;
+      console.log(`[QUALIFIER] ${regionLabel}: ${eligible.length} players advanced out of the ${period} Heats`);
     }
-
-    const regionOpens = opensRoundPoints[region] || {};
-    const regionPlayers = Object.values(regionOpens)
-      .filter(p => p.points > 0)
-      .sort((a, b) => b.points - a.points)
-      .slice(0, 64);
-
-    if (regionPlayers.length === 0) {
-      console.log(`[HEATS] No heats data for ${region} (no override and no Opens Round 1+2 data)`);
-      continue;
-    }
-
-    heatsSeeding[region] = { 1: [], 2: [], 3: [], 4: [] };
-    for (let i = 0; i < regionPlayers.length; i++) {
-      const p = regionPlayers[i];
-      const offset = i % 8;
-      let heat = 0;
-      if (offset === 0 || offset === 7) heat = 1;
-      else if (offset === 1 || offset === 6) heat = 2;
-      else if (offset === 2 || offset === 5) heat = 3;
-      else if (offset === 3 || offset === 4) heat = 4;
-
-      heatsSeeding[region][heat].push({
-        player: p.name,
-        countryCode: p.countryCode || 'un',
-        rank: i + 1,
-        points: p.points,
-      });
-    }
-    console.log(`[HEATS] Computed fallback heats for ${region}: ${regionPlayers.length} players from Opens Round 1+2`);
   }
 
   const payload = {
     players: aggregatedPlayers,
     qualifications,
     heatsSeeding,
+    heatsMeta,
     qualifierEligible,
     lastUpdated: new Date().toISOString(),
     source: 'github-actions'
@@ -838,15 +968,18 @@ async function aggregateMobileEarnings() {
     fs.mkdirSync(publicDir, { recursive: true });
   }
 
-  // Safety check: don't overwrite good data with incomplete data
-  if (fs.existsSync(CACHE_FILE)) {
+  // Safety check: don't overwrite good data with incomplete data.
+  // A deliberate narrowing of what counts as a mobile event (e.g. dropping non-mobile
+  // Victory Cups) shrinks the roster legitimately, and would otherwise wedge this guard
+  // shut forever — run with ALLOW_SHRINK=1 once to let the corrected baseline land.
+  if (fs.existsSync(CACHE_FILE) && process.env.ALLOW_SHRINK !== '1') {
     try {
       const existing = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf-8'));
       const existingCount = existing.players?.length || 0;
       const newCount = aggregatedPlayers.length;
       if (existingCount > 0 && newCount < existingCount * 0.7) {
         console.error(`[SAFETY] New data has ${newCount} players vs existing ${existingCount}. Likely rate-limited. Skipping overwrite.`);
-        console.error(`[SAFETY] Delete public/leaderboard.json manually and re-run if you want to force a fresh build.`);
+        console.error(`[SAFETY] If the drop is intentional, re-run with ALLOW_SHRINK=1 npm run aggregate.`);
         return;
       }
     } catch (e) {

@@ -46,10 +46,21 @@ interface HeatsSeeding {
   }>;
 }
 
+interface HeatsMeta {
+  period?: string | null;
+  qualifierLabel?: string | null;
+  regions?: Record<string, {
+    period: string;
+    heatsStartTime: string | null;
+    qualifierLabel: string | null;
+  }>;
+}
+
 interface LeaderboardData {
   players: Player[];
   qualifications?: Record<string, Qualification[]>;
   heatsSeeding?: Record<string, HeatsSeeding>;
+  heatsMeta?: HeatsMeta;
   lastUpdated?: string;
   source?: string;
 }
@@ -184,6 +195,7 @@ export default function App() {
 
   const [qualifications, setQualifications] = useState<Record<string, Qualification[]>>({});
   const [heatsSeeding, setHeatsSeeding] = useState<Record<string, HeatsSeeding>>({});
+  const [heatsMeta, setHeatsMeta] = useState<HeatsMeta | null>(null);
   const [activeTab, setActiveTab] = useState<'leaderboard' | 'heats' | 'qualifications'>('leaderboard');
 
   const totalSeriesEarnings = useMemo(() => {
@@ -214,6 +226,7 @@ export default function App() {
         setPlayers(data.players);
         if (data.qualifications) setQualifications(data.qualifications);
         if (data.heatsSeeding) setHeatsSeeding(data.heatsSeeding);
+        if (data.heatsMeta) setHeatsMeta(data.heatsMeta);
         setLastUpdated(new Date(data.lastUpdated || Date.now()).toLocaleTimeString());
         setDataSource(data.source || 'osirion-aggregated');
         setLoading(false);
@@ -701,20 +714,68 @@ export default function App() {
                 </div>
                 </>
                 ) : activeTab === 'heats' ? (
-                  <div className="border border-white/10 bg-[#141416]/50">
-                    <div className="p-5 border-b border-white/5">
-                      <div className="flex items-center gap-3 mb-1">
-                        <Trophy size={18} className="text-[#FCE14B]" />
-                        <h3 className="text-lg font-black italic uppercase tracking-tighter text-[#FCE14B]">Heats Seeding</h3>
+                  (() => {
+                    const heatsRegion = selectedRegion === 'GLOBAL' ? 'EUROPE' : selectedRegion;
+                    const regionHeats = heatsSeeding[heatsRegion] || {};
+                    const regionMeta = heatsMeta?.regions?.[heatsRegion];
+                    const period = regionMeta?.period || heatsMeta?.period;
+                    const qualifierLabel = regionMeta?.qualifierLabel || heatsMeta?.qualifierLabel;
+                    const hasSeeding = [1, 2, 3, 4].some(n => (regionHeats[n] || []).length > 0);
+
+                    return (
+                      <div className="border border-white/10 bg-[#141416]/50">
+                        <div className="p-5 border-b border-white/5">
+                          <div className="flex items-center gap-3 mb-1">
+                            <Trophy size={18} className="text-[#FCE14B]" />
+                            <h3 className="text-lg font-black italic uppercase tracking-tighter text-[#FCE14B]">
+                              {period ? `${period} Heats Seeding` : 'Heats Seeding'}
+                            </h3>
+                          </div>
+                          <p className="text-[10px] uppercase tracking-widest font-mono opacity-30 mt-1">
+                            Snake-draft seeding for the top 64 players into 4 Heats based on cumulative points.
+                            {qualifierLabel ? ` Top 4 of each Heat advance to ${qualifierLabel}.` : ''}
+                          </p>
+                        </div>
+                        {hasSeeding ? (
+                          <div className="p-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                            {[1, 2, 3, 4].map(heatNum => {
+                              const heatPlayers = regionHeats[heatNum] || [];
+                              return (
+                                <div key={heatNum} className="border border-white/10 bg-[#0A0A0B]">
+                                  <div className="bg-white/5 py-2 text-center text-xs font-black uppercase italic tracking-widest border-b border-white/10 text-[#FCE14B]">
+                                    Heat {heatNum}
+                                  </div>
+                                  <div className="p-2 space-y-1">
+                                    {heatPlayers.length > 0 ? heatPlayers.map(hp => (
+                                      <div key={hp.player} className="flex items-center justify-between px-2 py-1.5 bg-[#141416] hover:bg-white/5 text-xs font-mono border-b border-white/5 last:border-0">
+                                        <div className="flex items-center gap-2 overflow-hidden">
+                                          <span className="text-[9px] text-[#FCE14B] opacity-80 min-w-[14px]">#{hp.rank}</span>
+                                          <img
+                                            src={`https://flagcdn.com/w20/${hp.countryCode.toLowerCase()}.png`}
+                                            alt={hp.countryCode}
+                                            className="w-3 h-auto opacity-80"
+                                            referrerPolicy="no-referrer"
+                                            onError={(e) => (e.currentTarget.style.display = 'none')}
+                                          />
+                                          <span className="truncate uppercase font-bold italic">{hp.player}</span>
+                                        </div>
+                                      </div>
+                                    )) : (
+                                      <div className="py-4 text-center text-white/20 text-[9px] italic uppercase">Pending</div>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <div className="p-10 text-center text-white/50 font-black italic uppercase tracking-widest">
+                            Come back next month after Round Stage to see who qualified!
+                          </div>
+                        )}
                       </div>
-                      <p className="text-[10px] uppercase tracking-widest font-mono opacity-30 mt-1">
-                        Snake-draft seeding for the top 64 players into 4 Heats based on cumulative points.
-                      </p>
-                    </div>
-                    <div className="p-10 text-center text-white/50 font-black italic uppercase tracking-widest">
-                      Come back next month after Round Stage to see who qualified!
-                    </div>
-                  </div>
+                    );
+                  })()
                 ) : (
                 <div className="border border-white/10 bg-[#141416]/50">
                   {/* Group Stage Qualifications */}
@@ -879,7 +940,7 @@ export default function App() {
               Real-time Data: Osirion API • Updated every 30 min
             </span>
             <span className="text-[10px] font-mono font-bold opacity-30 tracking-widest bg-white/5 px-1.5 py-0.5 rounded">
-              v2.0.0
+              v2.1.0
             </span>
           </div>
         </div>

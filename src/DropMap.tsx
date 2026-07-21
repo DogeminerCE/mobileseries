@@ -36,7 +36,17 @@ interface DropSpot {
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
 const DROP_MAP_REGIONS = ["EUROPE", "NA-CENTRAL", "NA-WEST", "MIDDLE EAST", "OCEANIA", "ASIA", "BRAZIL"];
-const MAP_SESSIONS = ["Group Stage", "Qualifier 12"];
+
+// A session's `key` is what gets written to Firestore. Heats repeat every month, so the
+// key is namespaced by period ("July Heat 1") to keep each month's map a clean slate,
+// while the tab itself just reads "Heat 1".
+interface MapSession {
+  key: string;
+  label: string;
+  heatNumber: number | null;
+}
+
+const GROUP_STAGE_SESSION: MapSession = { key: 'Group Stage', label: 'Group Stage', heatNumber: null };
 
 const HEAT_COLORS: Record<number, string> = {
   1: '#FF4444', // Red
@@ -68,7 +78,7 @@ export default function DropMap() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentPath, setCurrentPath] = useState<{x: number, y: number}[]>([]);
   const [selectedRegion, setSelectedRegion] = useState('EUROPE');
-  const [selectedSession, setSelectedSession] = useState('Group Stage');
+  const [selectedSession, setSelectedSession] = useState(GROUP_STAGE_SESSION.key);
   const [dropSpots, setDropSpots] = useState<DropSpot[]>([]);
   const [showLabels, setShowLabels] = useState(true);
   const [hoveredSpot, setHoveredSpot] = useState<string | null>(null);
@@ -108,6 +118,49 @@ export default function DropMap() {
       .catch(err => console.error('Failed to load leaderboard data', err));
   }, []);
 
+  // ─── Available Sessions for the Current Heats Period ────────────────────────
+  // The aggregator resolves whichever Heats Stage the latest completed Round Stages
+  // feed into (e.g. July Heats → Qualifier 13), so the tabs roll over on their own.
+  const heatsMeta = leaderboardData?.heatsMeta;
+  const regionMeta = heatsMeta?.regions?.[selectedRegion];
+  const heatsPeriod: string | null = regionMeta?.period || heatsMeta?.period || null;
+  const qualifierLabel: string | null = regionMeta?.qualifierLabel || heatsMeta?.qualifierLabel || null;
+
+  const mapSessions = useMemo<MapSession[]>(() => {
+    const sessions: MapSession[] = [];
+    if (heatsPeriod) {
+      for (const heatNumber of [1, 2, 3, 4]) {
+        sessions.push({
+          key: `${heatsPeriod} Heat ${heatNumber}`,
+          label: `Heat ${heatNumber}`,
+          heatNumber,
+        });
+      }
+    }
+    if (qualifierLabel) {
+      sessions.push({ key: qualifierLabel, label: qualifierLabel, heatNumber: null });
+    }
+    sessions.push(GROUP_STAGE_SESSION);
+    return sessions;
+  }, [heatsPeriod, qualifierLabel]);
+
+  const activeSession = useMemo(
+    () => mapSessions.find(s => s.key === selectedSession) || GROUP_STAGE_SESSION,
+    [mapSessions, selectedSession]
+  );
+
+  // Once a Heats Stage session has finished its maps are frozen as a record of the day.
+  const isHeatsLocked = useMemo(() => {
+    if (activeSession.heatNumber === null || !regionMeta?.heatsEndTime) return false;
+    return Date.now() > new Date(regionMeta.heatsEndTime).getTime();
+  }, [activeSession, regionMeta]);
+
+  // Land on the first Heat as soon as seeding exists, rather than Group Stage.
+  useEffect(() => {
+    if (!heatsPeriod) return;
+    setSelectedSession(prev => (prev === GROUP_STAGE_SESSION.key ? `${heatsPeriod} Heat 1` : prev));
+  }, [heatsPeriod]);
+
   // ─── Session Authorization ──────────────────────────────────────────────────
   useEffect(() => {
     if (!epicName) {
@@ -131,34 +184,45 @@ export default function DropMap() {
 
     let qualified = false;
 
-    if (selectedSession.startsWith('Heat')) {
-      // Heats have ended, leaderboards closed
-      qualified = false;
-    } else if (selectedSession === 'Qualifier 12') {
-      const eligible = leaderboardData.qualifierEligible?.[selectedRegion] || [];
-      qualified = eligible.some((p: any) => normalizeName(p.player) === lowerName);
-    } else if (selectedSession === 'Group Stage') {
+    if (activeSession.heatNumber !== null) {
+      const seeded = leaderboardData.heatsSeeding?.[selectedRegion]?.[activeSession.heatNumber] || [];
+      qualified = !isHeatsLocked && seeded.some((p: any) => normalizeName(p.player) === lowerName);
+    } else if (activeSession.key === GROUP_STAGE_SESSION.key) {
       const quals = leaderboardData.qualifications?.[selectedRegion] || [];
       qualified = quals.some((q: any) => normalizeName(q.player) === lowerName);
+    } else {
+      const eligible = leaderboardData.qualifierEligible?.[selectedRegion] || [];
+      qualified = eligible.some((p: any) => normalizeName(p.player) === lowerName);
     }
 
     setIsQualified(qualified);
-  }, [epicName, selectedRegion, selectedSession, leaderboardData]);
+  }, [epicName, selectedRegion, activeSession, isHeatsLocked, leaderboardData]);
 
   // ─── Compute Expected Players for Current Session ─────────────────────────────
   const expectedPlayers = useMemo(() => {
     if (!leaderboardData) return [];
-    
-    if (selectedSession.startsWith('Heat')) {
-      const heatNum = parseInt(selectedSession.replace('Heat ', ''));
-      return (leaderboardData.heatsSeeding?.[selectedRegion]?.[heatNum] || []).map((p: any) => p.player);
-    } else if (selectedSession === 'Qualifier 12') {
-      return (leaderboardData.qualifierEligible?.[selectedRegion] || []).map((p: any) => p.player);
-    } else if (selectedSession === 'Group Stage') {
+
+    if (activeSession.heatNumber !== null) {
+      return (leaderboardData.heatsSeeding?.[selectedRegion]?.[activeSession.heatNumber] || []).map((p: any) => p.player);
+    } else if (activeSession.key === GROUP_STAGE_SESSION.key) {
       return (leaderboardData.qualifications?.[selectedRegion] || []).map((q: any) => q.player);
     }
-    return [];
-  }, [leaderboardData, selectedSession, selectedRegion]);
+    return (leaderboardData.qualifierEligible?.[selectedRegion] || []).map((p: any) => p.player);
+  }, [leaderboardData, activeSession, selectedRegion]);
+
+  // Which Heat each player was seeded into, so drops on the Qualifier and Group Stage
+  // maps can still be tagged with where the player came from.
+  const heatByPlayer = useMemo(() => {
+    const normalizeName = (name: string) => (name || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+    const map: Record<string, number> = {};
+    const regionSeeding = leaderboardData?.heatsSeeding?.[selectedRegion] || {};
+    for (const heatNumber of [1, 2, 3, 4]) {
+      for (const p of (regionSeeding[heatNumber] || [])) {
+        map[normalizeName(p.player)] = heatNumber;
+      }
+    }
+    return map;
+  }, [leaderboardData, selectedRegion]);
 
   // ─── Firestore Real-time Listener ───────────────────────────────────────────
   useEffect(() => {
@@ -284,6 +348,8 @@ export default function DropMap() {
     const centroidX = sumX / currentPath.length;
     const centroidY = sumY / currentPath.length;
 
+    const seededHeat = heatByPlayer[spotPlayerName.replace(/[^a-z0-9]/gi, '').toLowerCase()];
+
     // Optimistic: show spot immediately
     const optimisticSpot: DropSpot = {
       id: '__optimistic__',
@@ -295,6 +361,7 @@ export default function DropMap() {
       region: selectedRegion,
       mapSession: selectedSession,
       color: '#4ade80',
+      ...(seededHeat ? { heatNumber: seededHeat } : {}),
     };
     
     // Admin placing for someone else shouldn't replace their own spot optimistically
@@ -330,6 +397,7 @@ export default function DropMap() {
         region: selectedRegion,
         mapSession: selectedSession,
         color: '#4ade80',
+        ...(seededHeat ? { heatNumber: seededHeat } : {}),
         createdAt: serverTimestamp(),
       });
     } catch (err) {
@@ -539,29 +607,40 @@ export default function DropMap() {
           </div>
           
           <div className="flex flex-wrap gap-1.5 mt-2 pt-2 border-t border-white/10">
-            {MAP_SESSIONS.map(session => {
-              const isQual = session === 'Qualifier 12';
-              const qualEligible = leaderboardData?.qualifierEligible?.[selectedRegion] || [];
-              const isDisabled = isQual && qualEligible.length === 0;
+            {mapSessions.map(session => {
+              let disabledReason = '';
+              if (session.heatNumber !== null) {
+                const seeded = leaderboardData?.heatsSeeding?.[selectedRegion]?.[session.heatNumber] || [];
+                if (seeded.length === 0) disabledReason = 'Heats seeding not yet determined for this region';
+              } else if (session.key !== GROUP_STAGE_SESSION.key) {
+                const qualEligible = leaderboardData?.qualifierEligible?.[selectedRegion] || [];
+                if (qualEligible.length === 0) disabledReason = 'Qualifier eligibility not yet determined (Heats not finished)';
+              }
+              const isDisabled = disabledReason !== '';
 
               return (
                 <button
-                  key={session}
-                  onClick={() => !isDisabled && setSelectedSession(session)}
+                  key={session.key}
+                  onClick={() => !isDisabled && setSelectedSession(session.key)}
                   disabled={isDisabled}
                   className={`px-3 py-1 text-[9px] font-black tracking-tighter transition-all italic uppercase border ${
-                    selectedSession === session 
-                    ? 'bg-white text-black border-white' 
+                    selectedSession === session.key
+                    ? 'bg-white text-black border-white'
                     : isDisabled
                       ? 'bg-transparent text-white/10 border-white/5 cursor-not-allowed'
                       : 'bg-transparent text-white/40 border-white/10 hover:border-white/30'
                   }`}
-                  title={isDisabled ? "Qualifier eligibility not yet determined (Heats not finished)" : ""}
+                  title={disabledReason}
                 >
-                  {session}
+                  {session.label}
                 </button>
               );
             })}
+            {heatsPeriod && (
+              <span className="self-center ml-1 text-[9px] font-mono uppercase tracking-widest text-white/20">
+                {heatsPeriod} Heats
+              </span>
+            )}
           </div>
         </div>
       </header>
@@ -853,10 +932,12 @@ export default function DropMap() {
             ) : user && !isQualified ? (
               <div className="text-center py-4">
                 <div className="text-xs text-white/40 uppercase tracking-wider mb-2">
-                  You are not qualified for heats
+                  {isHeatsLocked ? `${activeSession.label} has concluded` : `You are not qualified for ${activeSession.label}`}
                 </div>
                 <p className="text-[9px] text-white/20 font-mono">
-                  Only players who have qualified for the Mobile Series Heats can place drop spots.
+                  {isHeatsLocked
+                    ? 'This map is now read-only. Pick the next session to plan your drop.'
+                    : `Only players seeded into ${activeSession.label} for ${selectedRegion} can place drop spots.`}
                 </p>
               </div>
             ) : (
@@ -880,7 +961,7 @@ export default function DropMap() {
               <div className="flex items-center gap-2">
                 <Users size={14} className="text-[#FCE14B]" />
                 <h3 className="text-[10px] font-black italic uppercase tracking-tighter text-[#FCE14B]">
-                  Drop Spots — {selectedRegion} — {selectedSession}
+                  Drop Spots — {selectedRegion} — {activeSession.label}
                 </h3>
               </div>
               <span className="text-[9px] font-mono text-white/20">
