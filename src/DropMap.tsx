@@ -163,11 +163,17 @@ export default function DropMap() {
     return Date.now() > new Date(regionMeta.heatsEndTime).getTime();
   }, [activeSession, regionMeta]);
 
-  // Land on the first Heat as soon as seeding exists, rather than Group Stage.
+  // Land on Qualifier if Heats have concluded or eligibility exists, otherwise land on Heat 1.
   useEffect(() => {
     if (!heatsPeriod) return;
-    setSelectedSession(prev => (prev === GROUP_STAGE_SESSION.key ? `${heatsPeriod} Heat 1` : prev));
-  }, [heatsPeriod]);
+    const heatsConcluded = regionMeta?.heatsEndTime ? Date.now() > new Date(regionMeta.heatsEndTime).getTime() : false;
+    const hasQualifierEligible = (leaderboardData?.qualifierEligible?.[selectedRegion] || []).length > 0;
+    if ((heatsConcluded || hasQualifierEligible) && qualifierLabel) {
+      setSelectedSession(prev => (prev === GROUP_STAGE_SESSION.key || prev.includes('Heat') ? qualifierLabel : prev));
+    } else {
+      setSelectedSession(prev => (prev === GROUP_STAGE_SESSION.key ? `${heatsPeriod} Heat 1` : prev));
+    }
+  }, [heatsPeriod, qualifierLabel, regionMeta, selectedRegion, leaderboardData]);
 
   // ─── Session Authorization ──────────────────────────────────────────────────
   useEffect(() => {
