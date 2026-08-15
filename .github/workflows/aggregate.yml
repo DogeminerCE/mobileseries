@@ -18,7 +18,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
+      - name: Trigger Vercel Redeploy on every push
+        if: github.event_name == 'push'
+        run: curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_URL }}"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
