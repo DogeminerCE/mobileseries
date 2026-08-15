@@ -628,7 +628,18 @@ async function aggregateMobileEarnings() {
 
       // Chapter 7 format: Heats & Qualifiers (post-Q11 events)
       if (eid.includes('mobileseries') && (eid.includes('heat') || title.includes('heat'))) return 'heats';
-      if (eid.includes('mobileseries') && eid.includes('qualifier')) return 'qualifier';
+      // Chapter 7 Qualifiers (Qualifier 12 onward) live in MobileSeriesCupQual events —
+      // the eventId says "CupQual", not "Qualifier", so the qualifier number comes from
+      // the window ids (e.g. S41_MobileSeriesCup_MarQualifier13_NAC). Qualifiers 1-11
+      // predate the Chapter 7 format and keep the legacy Mobile Series prize table.
+      if (eid.includes('mobileseries') && (eid.includes('qualifier') || eid.includes('cupqual'))) {
+        const qualNums = (t.eventWindows || [])
+          .map((w: any) => (w.eventWindowId || '').match(/Qualifier(\d+)/i))
+          .filter((m: RegExpMatchArray | null): m is RegExpMatchArray => m !== null)
+          .map((m: RegExpMatchArray) => parseInt(m[1], 10));
+        const maxQual = qualNums.length > 0 ? Math.max(...qualNums) : 0;
+        return maxQual >= 12 ? 'qualifier' : 'series';
+      }
       if ((eid.includes('victorycup') || title.includes('victory cup')) && (eid.includes('mobile') || title.includes('mobile'))) return 'victorycup';
 
       // Mobile Series (including Dec blitz qualifiers titled "Mobile Series")
@@ -854,8 +865,8 @@ async function aggregateMobileEarnings() {
             });
           });
 
-          // --- Qualification Tracking Collection (series qualifiers only) ---
-          if (category === 'series' && !isOpensRound && windowLabel.toLowerCase().includes('qualifier') && lbData.leaderboard.entries && lbData.leaderboard.entries.length > 0) {
+          // --- Qualification Tracking Collection (legacy series + Chapter 7 qualifiers) ---
+          if ((category === 'series' || category === 'qualifier') && !isOpensRound && windowLabel.toLowerCase().includes('qualifier') && lbData.leaderboard.entries && lbData.leaderboard.entries.length > 0) {
             const qualMatch = lbEventWindowId.match(/Qualifier(\d+)/i);
             const qualLabel = qualMatch ? `Qualifier ${qualMatch[1]}` : lbEventWindowId;
             const qualNum = qualMatch ? parseInt(qualMatch[1], 10) : 999;
@@ -879,35 +890,38 @@ async function aggregateMobileEarnings() {
 
     for (const qual of regionQualifiers) {
       const sortedEntries = [...qual.entries].sort((a: any, b: any) => a.rank - b.rank);
-      let qualifiedPlayer = null;
-      let originalWinner: string | null = null;
-      
+
+      // Chapter 7 (Qualifier 12 onward): the Top 3 of each Qualifier advance to the
+      // Group Stage. Earlier qualifiers advanced only the winner. If a player inside
+      // the advancement threshold already qualified, the spot rolls down to the
+      // next-highest scoring player who doesn't have one yet.
+      const spots = qual.qualNum >= 12 ? 3 : 1;
+      let advanced = 0;
+      let firstSkipped: string | null = null;
+
       for (const entry of sortedEntries) {
+        if (advanced >= spots) break;
         const username = (entry.players || [])[0]?.username;
         if (!username) continue;
         const playerKey = username.replace(/[\sㅤ\u3164\u200B-\u200D\uFEFF]+/g, '').toLowerCase();
-        
-        if (entry.rank === 1) {
-          originalWinner = username;
+
+        if (qualifiedPlayers[regionLabel].has(playerKey)) {
+          if (!firstSkipped) firstSkipped = username;
+          continue;
         }
-        
-        if (!qualifiedPlayers[regionLabel].has(playerKey)) {
-          qualifiedPlayers[regionLabel].add(playerKey);
-          const cc = resolveCountryCode((entry.players || [])[0]?.flagToken);
-          qualifiedPlayer = {
-            player: username,
-            countryCode: cc,
-            qualifier: qual.qualLabel,
-            qualifierDate: qual.eventDate,
-            originalWinner: entry.rank === 1,
-            rolledDownFrom: entry.rank === 1 ? null : (originalWinner || null),
-          };
-          break;
-        }
-      }
-      
-      if (qualifiedPlayer) {
-        qualifications[regionLabel].push(qualifiedPlayer);
+
+        qualifiedPlayers[regionLabel].add(playerKey);
+        const cc = resolveCountryCode((entry.players || [])[0]?.flagToken);
+        qualifications[regionLabel].push({
+          player: username,
+          countryCode: cc,
+          qualifier: qual.qualLabel,
+          qualifierDate: qual.eventDate,
+          originalWinner: entry.rank === 1,
+          // Beyond the threshold on the raw board → got in via roll-down
+          rolledDownFrom: entry.rank > spots ? firstSkipped : null,
+        });
+        advanced++;
       }
     }
   }

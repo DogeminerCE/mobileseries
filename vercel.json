@@ -13,6 +13,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/((?!api|leaderboard\\.json|venture-blitz-map|creator-assets|clans).*)", "destination": "/index.html" }
+    { "source": "/((?!api|leaderboard\\.json|venture-blitz-map|creator-assets).*)", "destination": "/index.html" }
   ]
 }

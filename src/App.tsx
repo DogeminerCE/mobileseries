@@ -83,67 +83,6 @@ interface LeaderboardData {
 
 const REGIONS = ["GLOBAL", "EUROPE", "NA-CENTRAL", "NA-WEST", "MIDDLE EAST", "OCEANIA", "ASIA", "BRAZIL"];
 
-const CLAN_MAPPINGS: Record<string, string> = {
-  'mtb andreshter-': 'MTB',
-  'MTB Assad': 'MTB',
-  'MTB Dizzy': 'MTB',
-  'MTB Frz': 'MTB',
-  'MTB H': 'MTB',
-  'MTB Keyxity ǃ': 'MTB',
-  'MTB Hashim': 'MTB',
-  'MTB Duy': 'MTB',
-  'MTB Hardman': 'MTB',
-  'Fear MTB Adniq': 'MTB',
-  'FNX IAMNOOB.': 'MTB',
-  'DC Greifer': 'DC',
-  'DC Ultra': 'DC',
-  'DC kunzite': 'DC',
-  'DC rayderr': 'DC',
-  'dogeeedagoon': 'DC',
-  'kals ngumoha': 'DC',
-  'revertaimassist': 'DC',
-  'HWP Mohanad': 'DC',
-  'DC Griefer': 'DC',
-  'defaultdagoon': 'DC',
-  'Yuan Khan': 'DC',
-  'qual arc papier!': 'DC',
-  'Ololo Lostytard7': 'Ololo',
-  'Ololo Ali': 'Ololo',
-  'Ololo ZizNtmFdp': 'Ololo',
-  'Ololo Chatpomme': 'Ololo',
-  'XSET Losty': 'Ololo',
-  'Evil Rowan Ψ': 'Ololo',
-  'Rowans Revenge': 'Ololo',
-  'Ololo KillerX': 'Ololo',
-  'Ololo Cousfishyy': 'Ololo',
-  'Ololo キャットアップル': 'Ololo',
-  'み Nikito Android': 'Origin',
-  'Origin EaeGui': 'Origin'
-};
-
-function getClanIcon(playerName: string) {
-  const lowerName = playerName.toLowerCase();
-  for (const [name, clan] of Object.entries(CLAN_MAPPINGS)) {
-    if (name.toLowerCase() === lowerName) return clan;
-  }
-  return null;
-}
-
-function ClanBadge({ clan, className }: { clan: string, className?: string }) {
-  return (
-    <div className="relative group flex items-center justify-center">
-      <img 
-        src={`/clans/${clan}.png`} 
-        alt={`${clan} Clan`}
-        className={className}
-      />
-      <div className="absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 px-2 py-1 bg-[#141416] border border-[#FCE14B]/30 text-[#FCE14B] text-[10px] uppercase font-black tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none shadow-[0_0_15px_rgba(252,225,75,0.15)] z-50">
-        {clan} Clan
-      </div>
-    </div>
-  );
-}
-
 const AnimatedCounter = ({ value }: { value: number }) => {
   const [count, setCount] = useState(0);
 
@@ -286,9 +225,7 @@ export default function App() {
 
   const filteredAndSortedPlayers = players
     .filter(p => {
-      const clanName = getClanIcon(p.name);
-      const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                           (clanName && clanName.toLowerCase().includes(searchTerm.toLowerCase()));
+      const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
       const earnings = getFilteredEarnings(p, selectedRegion);
       return matchesSearch && earnings > 0;
     })
@@ -502,11 +439,8 @@ export default function App() {
                     <div className="podium-card bg-[#141416] border-l-2 sm:border-l-4 border-[#FCE14B] h-32 sm:h-48 group hover:bg-[#1c1c1f] cursor-pointer p-2 sm:p-4" onClick={() => setExpandedPlayer(expandedPlayer === displayedPlayers[1].name ? null : displayedPlayers[1].name)}>
                       <span className="podium-rank text-3xl sm:text-5xl">02</span>
                       <div className="flex items-center gap-2 mb-1">
-                        {getClanIcon(displayedPlayers[1].name) && (
-                          <ClanBadge clan={getClanIcon(displayedPlayers[1].name)!} className="w-5 h-auto object-contain" />
-                        )}
-                        <img 
-                          src={`https://flagcdn.com/w40/${displayedPlayers[1].countryCode.toLowerCase()}.png`} 
+                        <img
+                          src={`https://flagcdn.com/w40/${displayedPlayers[1].countryCode.toLowerCase()}.png`}
                           alt={displayedPlayers[1].countryCode}
                           className="w-4 h-auto opacity-80"
                           referrerPolicy="no-referrer"
@@ -526,11 +460,8 @@ export default function App() {
                     <div className="podium-card bg-gradient-to-b from-[#FFF47C] to-[#EBA311] text-black h-40 sm:h-56 -mt-4 sm:-mt-8 shadow-[0_10px_30px_rgba(252,225,75,0.2)] sm:shadow-[0_20px_50px_rgba(252,225,75,0.2)] cursor-pointer p-2 sm:p-4" onClick={() => setExpandedPlayer(expandedPlayer === displayedPlayers[0].name ? null : displayedPlayers[0].name)}>
                       <span className="podium-rank text-5xl sm:text-7xl opacity-30">01</span>
                       <div className="flex items-center gap-2 mb-1">
-                        {getClanIcon(displayedPlayers[0].name) && (
-                          <ClanBadge clan={getClanIcon(displayedPlayers[0].name)!} className="w-6 h-auto object-contain" />
-                        )}
-                        <img 
-                          src={`https://flagcdn.com/w40/${displayedPlayers[0].countryCode.toLowerCase()}.png`} 
+                        <img
+                          src={`https://flagcdn.com/w40/${displayedPlayers[0].countryCode.toLowerCase()}.png`}
                           alt={displayedPlayers[0].countryCode}
                           className="w-5 h-auto"
                           referrerPolicy="no-referrer"
@@ -550,11 +481,8 @@ export default function App() {
                     <div className="podium-card bg-[#141416] border-l-2 sm:border-l-4 border-[#FCE14B] h-32 sm:h-48 cursor-pointer p-2 sm:p-4" onClick={() => setExpandedPlayer(expandedPlayer === displayedPlayers[2].name ? null : displayedPlayers[2].name)}>
                       <span className="podium-rank text-3xl sm:text-5xl">03</span>
                       <div className="flex items-center gap-2 mb-1">
-                        {getClanIcon(displayedPlayers[2].name) && (
-                          <ClanBadge clan={getClanIcon(displayedPlayers[2].name)!} className="w-5 h-auto object-contain" />
-                        )}
-                        <img 
-                          src={`https://flagcdn.com/w40/${displayedPlayers[2].countryCode.toLowerCase()}.png`} 
+                        <img
+                          src={`https://flagcdn.com/w40/${displayedPlayers[2].countryCode.toLowerCase()}.png`}
                           alt={displayedPlayers[2].countryCode}
                           className="w-4 h-auto opacity-80"
                           referrerPolicy="no-referrer"
@@ -636,9 +564,6 @@ export default function App() {
                           </div>
                           <div className="col-span-6 font-black uppercase italic tracking-tight flex flex-col justify-center">
                             <div className="flex items-center gap-2">
-                              {getClanIcon(player.name) && (
-                                <ClanBadge clan={getClanIcon(player.name)!} className="w-5 h-auto object-contain" />
-                              )}
                               <span>{player.name}</span>
                               <ChevronDown size={12} className={`opacity-30 transition-transform duration-200 ${expandedPlayer === player.name ? 'rotate-180' : ''}`} />
                             </div>
@@ -785,7 +710,7 @@ export default function App() {
                       <h3 className="text-lg font-black italic uppercase tracking-tighter text-[#FCE14B]">Group Stage Qualifications</h3>
                     </div>
                     <p className="text-[10px] uppercase tracking-widest font-mono opacity-30 mt-1">
-                      Winners of each Qualifier Round earn a Group Stage slot. If already qualified, slot rolls down.
+                      Top 3 of each Qualifier earn a Group Stage slot (winner only before Qualifier 12). If already qualified, the slot rolls down.
                     </p>
                   </div>
                     <div className="px-5 pb-5">
@@ -800,9 +725,6 @@ export default function App() {
                           <div key={`${q.player}-${q.qualifier}`} className="grid grid-cols-12 px-3 py-2.5 items-center bg-[#0f0f11] hover:bg-white/5 transition-colors border-b border-white/5 last:border-b-0">
                             <div className="col-span-1 font-mono text-[#FCE14B] text-sm">{i + 1}</div>
                             <div className="col-span-5 flex items-center gap-2">
-                              {getClanIcon(q.player) && (
-                                <ClanBadge clan={getClanIcon(q.player)!} className="w-4 h-auto object-contain" />
-                              )}
                               <img
                                 src={`https://flagcdn.com/w20/${q.countryCode.toLowerCase()}.png`}
                                 alt={q.countryCode}
@@ -816,8 +738,10 @@ export default function App() {
                             <div className="col-span-2 text-right">
                               {q.originalWinner ? (
                                 <span className="px-2 py-0.5 text-[9px] font-black uppercase bg-[#FCE14B]/10 text-[#FCE14B] border border-[#FCE14B]/20">Winner</span>
-                              ) : (
+                              ) : q.rolledDownFrom ? (
                                 <span className="px-2 py-0.5 text-[9px] font-black uppercase bg-white/5 text-white/40 border border-white/10" title={`Rolled down from ${q.rolledDownFrom}`}>Roll-down</span>
+                              ) : (
+                                <span className="px-2 py-0.5 text-[9px] font-black uppercase bg-white/5 text-white/60 border border-white/10">Top 3</span>
                               )}
                             </div>
                           </div>

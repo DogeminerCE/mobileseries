@@ -4,10 +4,11 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // The admin's Epic display name is "Blitzʼd Babylion", whose apostrophe is
-    // U+02BC rather than ASCII. Comparing the raw string would be one stray glyph
-    // away from silently losing admin, so strip to alphanumerics before matching.
+    // U+02BC (modifier letter apostrophe) rather than ASCII. Firestore rules'
+    // replace() only does literal replacement (no regex) so it can't strip that
+    // glyph; matches() does use RE2 regex, which is how we normalize the name.
     function isAdminName(name) {
-      return name != null && name.lower().replace('[^a-z0-9]', '') == 'blitzdbabylion';
+      return name != null && name.lower().matches('blitz.*babylion');
     }
 
     function isAdmin() {
