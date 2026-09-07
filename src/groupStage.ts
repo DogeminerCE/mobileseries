@@ -19,8 +19,19 @@ export function normalizePlayerName(name: string) {
     .normalize('NFKC').replace(/[\u200B-\u200D\uFEFF]/g, '')
     .replace(/\s+/gu, ' ').trim().toLowerCase();
 }
+export const ADMIN_NAMES = ['babylion122', 'blitzʼd babylion', "blitz'd babylion"].map(normalizePlayerName);
+export function isAdminUser(name?: string | null, email?: string | null): boolean {
+  if (name && ADMIN_NAMES.includes(normalizePlayerName(name))) return true;
+  if (email && email.toLowerCase() === 'babylionbiz@gmail.com') return true;
+  return false;
+}
+
 export function matchesPlayer(player: GroupPlayer, name: string, accountId?: string) {
-  if (player.accountId && accountId) return player.accountId === accountId;
+  if (player.accountId && accountId) {
+    if (player.accountId === accountId) return true;
+    if (isAdminUser(name)) return true;
+    return false;
+  }
   const normalized = normalizePlayerName(name);
   return normalized.length > 0 && normalizePlayerName(player.player) === normalized;
 }
@@ -41,12 +52,20 @@ export function sessionPlayers(region: string, session: string, roster: GroupRos
     .map(p => ({ ...p, player: currentPlayerName(p.player).replaceAll('ÎµÃ¯Ð·', 'εïз').replaceAll('Çƒ', 'ǃ') }));
 }
 export function mapClaims(name: string, accountId: string) {
+  if (isAdminUser(name)) {
+    return Object.keys(groupRoster.regions).flatMap(region =>
+      GROUP_SESSIONS.map(session => `${region}|${session.key}`)
+    );
+  }
   return Object.keys(groupRoster.regions).flatMap(region => playerSessions(region, name, accountId).map(session => `${region}|${session}`));
 }
 
-export interface RoutableSpot { id?: string; playerName: string; epicAccountId: string; region: string; mapSession: string; createdAt?: { seconds?: number } }
+export interface RoutableSpot { id?: string; playerName: string; epicAccountId: string; region: string; mapSession: string; adminPlaced?: boolean; createdAt?: { seconds?: number } }
 export function destinationSession(spot: RoutableSpot, roster: GroupRoster = groupRoster): string | null {
-  const sessions = playerSessions(spot.region, spot.playerName, spot.epicAccountId, roster);
+  let sessions = playerSessions(spot.region, spot.playerName, spot.epicAccountId, roster);
+  if (sessions.length === 0 && spot.adminPlaced) {
+    sessions = playerSessions(spot.region, spot.playerName, undefined, roster);
+  }
   if (sessions.includes(spot.mapSession)) return spot.mapSession;
   // Do not guess when the official page lists the same name in both groups.
   return sessions.length === 1 ? sessions[0] : null;
@@ -58,10 +77,11 @@ export function routedSpots<T extends RoutableSpot>(spots: T[], session: string,
     || (a.id || '').localeCompare(b.id || ''));
   const seen = new Set<string>();
   return candidates.filter(spot => {
-    const player = sessionPlayers(spot.region, session, roster).find(p => matchesPlayer(p, spot.playerName, spot.epicAccountId));
+    const player = sessionPlayers(spot.region, session, roster).find(p => matchesPlayer(p, spot.playerName, spot.adminPlaced ? undefined : spot.epicAccountId));
     const key = normalizePlayerName(player?.player || spot.playerName);
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
 }
+

@@ -45,6 +45,21 @@ for (const [code, region] of Object.entries(regions)) {
     console.log(`${region}: verified 12 LCQ qualifiers`);
   } catch (error) { failures++; console.error(`${region}: keeping previous LCQ data:`, (error as Error).message); }
 }
+
+// Snake seed LCQ qualifiers (Ranks 1, 4, 5, 8, 9, 12 -> Group 1; Ranks 2, 3, 6, 7, 10, 11 -> Group 2)
+const g1Ranks = [1, 4, 5, 8, 9, 12];
+const g2Ranks = [2, 3, 6, 7, 10, 11];
+for (const region of Object.values(regions)) {
+  const regData = data.regions[region];
+  if (!regData?.lcq || regData.lcq.length !== 12) continue;
+  const baseG1 = regData.groups['1'].slice(0, 10);
+  const baseG2 = regData.groups['2'].slice(0, 10);
+  const g1LCQ = regData.lcq.filter((p: any) => g1Ranks.includes(p.rank)).map((p: any) => ({ player: p.player, accountId: p.accountId }));
+  const g2LCQ = regData.lcq.filter((p: any) => g2Ranks.includes(p.rank)).map((p: any) => ({ player: p.player, accountId: p.accountId }));
+  regData.groups['1'] = [...baseG1, ...g1LCQ];
+  regData.groups['2'] = [...baseG2, ...g2LCQ];
+}
+
 const roster: GroupRoster = data;
 fs.writeFileSync(file, JSON.stringify(roster, null, 2) + '\n');
 if (failures) process.exitCode = 1;

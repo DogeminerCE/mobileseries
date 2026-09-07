@@ -11,7 +11,7 @@ import {
   ZoomIn, ZoomOut, RotateCcw, Crosshair, Trash2, Eye, EyeOff, Info, PenTool
 } from "lucide-react";
 import pc from 'polygon-clipping';
-import { GROUP_SESSIONS, matchesPlayer, normalizePlayerName, playerSessions, sessionPlayers, routedSpots, currentPlayerName } from './groupStage';
+import { GROUP_SESSIONS, matchesPlayer, normalizePlayerName, playerSessions, sessionPlayers, routedSpots, currentPlayerName, isAdminUser } from './groupStage';
 import SeriesCountdown from './SeriesCountdown';
 import { auth, db } from './firebase';
 import { 
@@ -31,6 +31,7 @@ interface DropSpot {
   region: string;
   mapSession: string;
   color: string;
+  adminPlaced?: boolean;
   createdAt?: any;
 }
 
@@ -41,8 +42,7 @@ const DROP_MAP_REGIONS = ["EUROPE", "NA-CENTRAL", "NA-WEST", "MIDDLE EAST", "OCE
 // Compare the Epic display name using the same normalization as player names.
 const normalizeName = normalizePlayerName;
 
-const ADMIN_ACCOUNT = normalizeName('Babylion122');
-const isAdminName = (name: string) => normalizeName(name) === ADMIN_ACCOUNT;
+const isAdminName = (name?: string | null, email?: string | null) => isAdminUser(name, email);
 
 // ─── Main Component ─────────────────────────────────────────────────────────────
 
@@ -57,6 +57,8 @@ export default function DropMap() {
 
   const [authorizedMaps, setAuthorizedMaps] = useState<string[]>([]);
   const [authError, setAuthError] = useState<string | null>(null);
+
+  const isAdmin = isAdminName(epicName) || isAdminName(user?.displayName) || isAdminName(null, user?.email);
   
   // Map state
   const [isDrawing, setIsDrawing] = useState(false);
@@ -102,10 +104,10 @@ export default function DropMap() {
   const expectedPlayers = useMemo(() => sessionPlayers(selectedRegion, selectedSession).map(p => p.player), [selectedRegion, selectedSession]);
 
   useEffect(() => {
-    setIsQualified(!!user && (isAdminName(epicName) || playerSessions(selectedRegion, epicName, user.uid).includes(selectedSession)));
+    setIsQualified(!!user && (isAdmin || playerSessions(selectedRegion, epicName, user.uid).includes(selectedSession)));
     setIsDrawing(false);
     setCurrentPath([]);
-  }, [user, epicName, selectedRegion, selectedSession]);
+  }, [user, epicName, selectedRegion, selectedSession, isAdmin]);
 
   // Route historical and pending LCQ drops using the latest official assignments.
   // Original documents stay intact; a saved drop on the destination map takes priority.
@@ -209,9 +211,8 @@ export default function DropMap() {
 
   const handleConfirmArea = async () => {
     if (currentPath.length < 3 || !user || !isQualified
-      || (!isAdminName(epicName) && !playerSessions(selectedRegion, epicName, user.uid).includes(selectedSession))) return;
+      || (!isAdmin && !playerSessions(selectedRegion, epicName, user.uid).includes(selectedSession))) return;
 
-    const isAdmin = isAdminName(epicName);
     let spotPlayerName = epicName;
 
     if (isAdmin) {
@@ -236,6 +237,12 @@ export default function DropMap() {
     const centroidX = sumX / currentPath.length;
     const centroidY = sumY / currentPath.length;
 
+    // Look up target player in current roster to get their accountId if available
+    const roster = sessionPlayers(selectedRegion, selectedSession);
+    const targetPlayer = roster.find(p => matchesPlayer(p, spotPlayerName));
+    const targetAccountId = (isAdmin && normalizeName(spotPlayerName) !== normalizeName(epicName) && targetPlayer?.accountId)
+      ? targetPlayer.accountId
+      : user.uid;
 
     // Optimistic: show spot immediately
     const optimisticSpot: DropSpot = {
@@ -244,17 +251,18 @@ export default function DropMap() {
       y: centroidY,
       path: [...currentPath],
       playerName: spotPlayerName,
-      epicAccountId: user.uid,
+      epicAccountId: targetAccountId,
       region: selectedRegion,
       mapSession: selectedSession,
       color: '#4ade80',
+      adminPlaced: isAdmin,
     };
     
     // Admin placing for someone else shouldn't replace their own spot optimistically
-    if (spotPlayerName === epicName) {
+    if (normalizeName(spotPlayerName) === normalizeName(epicName)) {
       setDropSpots(prev => [...prev.filter(s => s.epicAccountId !== user.uid), optimisticSpot]);
     } else {
-      setDropSpots(prev => [...prev.filter(s => s.playerName !== spotPlayerName), optimisticSpot]);
+      setDropSpots(prev => [...prev.filter(s => normalizeName(s.playerName) !== normalizeName(spotPlayerName)), optimisticSpot]);
     }
     
     setIsDrawing(false);
@@ -265,8 +273,9 @@ export default function DropMap() {
       const existing = await getDocs(query(collection(db, 'dropSpots'), where('region', '==', selectedRegion)));
       const matching = existing.docs.filter(d => {
         const spot = { id: d.id, ...d.data() } as DropSpot;
-        return (isAdmin ? normalizePlayerName(spot.playerName) === normalizePlayerName(spotPlayerName) : spot.epicAccountId === user.uid)
-          && routedSpots([spot], selectedSession).length > 0;
+        const nameMatches = normalizePlayerName(spot.playerName) === normalizePlayerName(spotPlayerName);
+        const accountMatches = spot.epicAccountId === user.uid || (targetPlayer?.accountId && spot.epicAccountId === targetPlayer.accountId);
+        return isAdmin ? (nameMatches || accountMatches) : (spot.epicAccountId === user.uid);
       });
 
       // Save to Firestore (the onSnapshot listener will replace the optimistic spot with the real one)
@@ -275,10 +284,11 @@ export default function DropMap() {
         y: centroidY,
         path: optimisticSpot.path,
         playerName: spotPlayerName,
-        epicAccountId: user.uid,
+        epicAccountId: targetAccountId,
         region: selectedRegion,
         mapSession: selectedSession,
         color: '#4ade80',
+        adminPlaced: isAdmin,
         createdAt: serverTimestamp(),
       });
       await Promise.all(matching.map(d => deleteDoc(d.ref)));
@@ -311,7 +321,7 @@ export default function DropMap() {
 
   // ─── Admin: Remove Any Drop Spot ─────────────────────────────────────────────
   const handleAdminDelete = async (spotId: string) => {
-    if (!user || !isAdminName(epicName)) return;
+    if (!user || !isAdmin) return;
     try {
       await deleteDoc(doc(db, 'dropSpots', spotId));
       setDropSpots(prev => prev.filter(s => s.id !== spotId));
@@ -367,7 +377,6 @@ export default function DropMap() {
   }, [isDrawing, handleMapClick]);
 
   const mySpot = dropSpots.find(s => s.epicAccountId === user?.uid);
-  const isAdmin = isAdminName(epicName);
 
   // ─── Calculate Overlapping Polygons & Per-Spot Overlap Status ───────────────
   const { overlappingPolygons, spotHasOverlap } = useMemo(() => {
@@ -765,9 +774,30 @@ export default function DropMap() {
             {user && isQualified ? (
               <div className="text-center py-4">
                 <div className="text-xs text-white/40 uppercase tracking-wider mb-2">
-                  Draw your drop area
+                  {isAdmin ? "Draw drop area (Admin)" : "Draw your drop area"}
                 </div>
-                {dropSpots.some(s => s.epicAccountId === user.uid) ? (
+                {isAdmin ? (
+                  <div className="flex flex-col gap-2 items-center">
+                    <button 
+                      onClick={() => {
+                        setCurrentPath([]);
+                        setIsDrawing(true);
+                      }}
+                      className="mt-2 px-4 py-2 bg-[#FCE14B] text-black font-black italic uppercase text-[10px] tracking-tighter hover:bg-[#FCE14B]/80 transition-colors flex items-center gap-2 mx-auto"
+                    >
+                      <PenTool size={12} />
+                      Draw Area
+                    </button>
+                    {dropSpots.some(s => s.epicAccountId === user.uid && normalizeName(s.playerName) === normalizeName(epicName)) && (
+                      <button 
+                        onClick={handleRemoveMySpot}
+                        className="px-3 py-1.5 border border-[#FF4444] text-[#FF4444] font-black italic uppercase text-[9px] tracking-tighter hover:bg-[#FF4444]/10 transition-colors"
+                      >
+                        Remove My Spot
+                      </button>
+                    )}
+                  </div>
+                ) : dropSpots.some(s => s.epicAccountId === user.uid) ? (
                   <button 
                     onClick={handleRemoveMySpot}
                     className="mt-2 px-4 py-2 border border-[#FF4444] text-[#FF4444] font-black italic uppercase text-[10px] tracking-tighter hover:bg-[#FF4444]/10 transition-colors"

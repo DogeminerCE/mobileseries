@@ -5,11 +5,11 @@ import { remainingTime, SERIES_END } from '../src/SeriesCountdown';
 
 const roster: GroupRoster = { regions: { EU: { groups: { '1': [{player: 'Seeded'}], '2': [{player: 'Other'}] }, lcq: [{player: 'LCQ', accountId: 'lcq-id', rank: 12}] } } };
 const spot = (name: string, session = 'Group Stage', id = name) => ({ id, playerName: name, epicAccountId: name, region: 'EU', mapSession: session, createdAt: {seconds: 1} });
-test('all seven regions have official groups and exactly ranks 1–12 from LCQ round 2', () => {
+test('all seven regions have official groups of 16 players and exactly ranks 1–12 from LCQ round 2', () => {
   assert.equal(Object.keys(groupRoster.regions).length, 7);
   for (const region of Object.values(groupRoster.regions)) {
-    assert.ok(region.groups['1'].length >= 10);
-    assert.ok(region.groups['2'].length >= 10);
+    assert.equal(region.groups['1'].length, 16);
+    assert.equal(region.groups['2'].length, 16);
     assert.deepEqual(region.lcq.map(p => p.rank), Array.from({length: 12}, (_, i) => i + 1));
     assert.equal(new Set(region.lcq.map(p => p.accountId)).size, 12);
     assert.match(region.lcqWindow!, /LCQ_Round2_/);
@@ -130,3 +130,96 @@ test('confirmed renames for amp, vediana, and mohanad preserve groups and drops'
   assert.equal(sessionPlayers('BRAZIL', 'Group Stage 1').some(p => p.player.includes('Keyxity')), false);
   assert.equal(sessionPlayers('BRAZIL', 'Group Stage 1').some(p => p.player === keyxityRenamed), true);
 });
+
+test('LCQ snake seeding distributes ranks 1, 4, 5, 8, 9, 12 to Group 1 and ranks 2, 3, 6, 7, 10, 11 to Group 2', () => {
+  const g1Ranks = [1, 4, 5, 8, 9, 12];
+  const g2Ranks = [2, 3, 6, 7, 10, 11];
+
+  for (const [regionName, regionData] of Object.entries(groupRoster.regions)) {
+    const lcqByRank = Object.fromEntries(regionData.lcq.map(p => [p.rank, p]));
+    const g1Players = regionData.groups['1'];
+    const g2Players = regionData.groups['2'];
+
+    for (const rank of g1Ranks) {
+      const p = lcqByRank[rank];
+      assert.ok(
+        g1Players.some(gp => gp.player === p.player && gp.accountId === p.accountId),
+        `${regionName}: Rank ${rank} (${p.player}) should be seeded into Group 1`
+      );
+    }
+
+    for (const rank of g2Ranks) {
+      const p = lcqByRank[rank];
+      assert.ok(
+        g2Players.some(gp => gp.player === p.player && gp.accountId === p.accountId),
+        `${regionName}: Rank ${rank} (${p.player}) should be seeded into Group 2`
+      );
+    }
+
+    // Awaiting group session should now have 0 players
+    assert.equal(sessionPlayers(regionName, 'Group Stage LCQ').length, 0);
+  }
+});
+
+test('LCQ qualifier drop routes to their seeded group map and retains coordinates', () => {
+  // EU Rank 1: 'all rise for jo' -> Group 1
+  const euRank1 = groupRoster.regions.EUROPE.lcq.find(p => p.rank === 1)!;
+  const dropRank1 = {
+    id: 'drop-g1',
+    playerName: euRank1.player,
+    epicAccountId: euRank1.accountId!,
+    region: 'EUROPE',
+    mapSession: 'Group Stage LCQ',
+    path: [{x: 20, y: 30}, {x: 25, y: 35}, {x: 22, y: 38}],
+    createdAt: { seconds: 10 }
+  };
+  assert.deepEqual(playerSessions('EUROPE', euRank1.player, euRank1.accountId), ['Group Stage 1']);
+  assert.equal(destinationSession(dropRank1), 'Group Stage 1');
+  const routedG1 = routedSpots([dropRank1], 'Group Stage 1');
+  assert.equal(routedG1.length, 1);
+  assert.deepEqual(routedG1[0].path, dropRank1.path);
+
+  // EU Rank 2: 'twitter alexiifn' -> Group 2
+  const euRank2 = groupRoster.regions.EUROPE.lcq.find(p => p.rank === 2)!;
+  const dropRank2 = {
+    id: 'drop-g2',
+    playerName: euRank2.player,
+    epicAccountId: euRank2.accountId!,
+    region: 'EUROPE',
+    mapSession: 'Group Stage LCQ',
+    path: [{x: 50, y: 60}, {x: 55, y: 65}, {x: 52, y: 68}],
+    createdAt: { seconds: 10 }
+  };
+  assert.deepEqual(playerSessions('EUROPE', euRank2.player, euRank2.accountId), ['Group Stage 2']);
+  assert.equal(destinationSession(dropRank2), 'Group Stage 2');
+  const routedG2 = routedSpots([dropRank2], 'Group Stage 2');
+  assert.equal(routedG2.length, 1);
+  assert.deepEqual(routedG2[0].path, dropRank2.path);
+});
+
+test('admin Babylion122 and aliases claim all maps and can mark for any player', () => {
+  const adminClaims = mapClaims('Babylion122', 'admin-id');
+  assert.ok(adminClaims.includes('EUROPE|Group Stage 1'));
+  assert.ok(adminClaims.includes('EUROPE|Group Stage 2'));
+  assert.ok(adminClaims.includes('BRAZIL|Group Stage 1'));
+  assert.ok(adminClaims.includes('NA-CENTRAL|Group Stage 2'));
+  // Blitz'd Babylion alias
+  assert.ok(mapClaims('Blitzʼd Babylion', 'admin-id').includes('EUROPE|Group Stage 1'));
+  assert.ok(mapClaims("Blitz'd Babylion", 'admin-id').includes('EUROPE|Group Stage 1'));
+
+  // Admin marking for an LCQ player with adminPlaced matches and routes
+  const lcqPlayer = groupRoster.regions.EUROPE.lcq[0]; // 'all rise for jo' (rank 1 -> Group 1)
+  const adminDrop = {
+    id: 'admin-marked',
+    playerName: lcqPlayer.player,
+    epicAccountId: 'admin-id',
+    adminPlaced: true,
+    region: 'EUROPE',
+    mapSession: 'Group Stage 1',
+    createdAt: { seconds: 100 }
+  };
+  const routed = routedSpots([adminDrop], 'Group Stage 1');
+  assert.equal(routed.length, 1);
+  assert.equal(routed[0].playerName, lcqPlayer.player);
+});
+

@@ -3,7 +3,15 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function isAdmin() {
       return request.auth != null
-        && request.auth.token.get('epic_display_name', '').lower() == 'babylion122';
+        && (
+          request.auth.token.get('epic_display_name', '').lower() == 'babylion122'
+          || request.auth.token.get('epic_display_name', '').lower() == 'blitzʼd babylion'
+          || request.auth.token.get('epic_display_name', '').lower() == "blitz'd babylion"
+          || request.auth.token.get('name', '').lower() == 'babylion122'
+          || request.auth.token.get('name', '').lower() == 'blitzʼd babylion'
+          || request.auth.token.get('name', '').lower() == "blitz'd babylion"
+          || request.auth.token.get('email', '').lower() == 'babylionbiz@gmail.com'
+        );
     }
     function canMark(data) {
       return isAdmin() || (
@@ -12,7 +20,7 @@ service cloud.firestore {
       );
     }
     function validSpot(data) {
-      return data.epicAccountId == request.auth.uid
+      return (data.epicAccountId == request.auth.uid || isAdmin())
         && data.playerName is string && data.region is string && data.mapSession is string
         && data.x is number && data.y is number
         && data.x >= 0 && data.x <= 100 && data.y >= 0 && data.y <= 100
@@ -22,7 +30,7 @@ service cloud.firestore {
       allow read: if true;
       allow create: if request.auth != null && validSpot(request.resource.data) && canMark(request.resource.data);
       allow update: if request.auth != null
-        && resource.data.epicAccountId == request.auth.uid
+        && (resource.data.epicAccountId == request.auth.uid || isAdmin())
         && validSpot(request.resource.data) && canMark(request.resource.data);
       allow delete: if request.auth != null
         && (resource.data.epicAccountId == request.auth.uid || isAdmin());
