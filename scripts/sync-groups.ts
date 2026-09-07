@@ -1,3 +1,4 @@
+import { currentPlayerName } from '../src/playerNames.js';
 import fs from 'node:fs';
 import { load } from 'cheerio';
 import type { GroupRoster } from '../src/groupStage';
@@ -17,7 +18,7 @@ try {
   $('h2').each((_, heading) => {
     const match = $(heading).text().trim().match(/^(ASIA|BR|EU|ME|NAC|NAW|OCE)\s*-\s*Group\s*([12])$/);
     if (!match) return;
-    const players = $(heading).nextUntil('h2').find('li').map((_, li) => ({player: $(li).text().trim()})).get();
+    const players = $(heading).nextUntil('h2').find('li').map((_, li) => ({player: currentPlayerName($(li).text().trim())})).get();
     (groups[regions[match[1]]] ||= {})[match[2]] = players;
   });
   if (!Object.values(regions).every(region => ['1', '2'].every(group => (groups[region]?.[group]?.length || 0) >= 10))) throw new Error('Incomplete official roster');
@@ -38,7 +39,7 @@ for (const [code, region] of Object.entries(regions)) {
     const response = await (await get(`${root}/tournaments/leaderboard?leaderboardEventId=${loc.leaderboardEventId}&leaderboardEventWindowId=${loc.leaderboardEventWindowId}`)).json();
     const entries = (response.leaderboard?.entries || []).filter((e: any) => e.rank >= 1 && e.rank <= 12).sort((a: any, b: any) => a.rank - b.rank);
     if (!response.success || entries.length !== 12 || new Set(entries.map((e: any) => e.rank)).size !== 12 || entries.some((e: any) => !e.players?.[0]?.accountId || !e.players[0].username)) throw new Error('Incomplete LCQ top 12');
-    data.regions[region].lcq = entries.map((e: any) => ({ player: e.players[0].username, accountId: e.players[0].accountId, rank: e.rank }));
+    data.regions[region].lcq = entries.map((e: any) => ({ player: currentPlayerName(e.players[0].username), accountId: e.players[0].accountId, rank: e.rank }));
     data.regions[region].lcqWindow = window.eventWindowId;
     data.regions[region].lcqEndTime = window.endTime;
     console.log(`${region}: verified 12 LCQ qualifiers`);

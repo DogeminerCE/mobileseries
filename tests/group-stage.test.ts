@@ -72,3 +72,19 @@ test('historical names for the same LCQ account produce only one marker', () => 
   const second = {...spot('LCQ', 'Group Stage LCQ', 'b'), epicAccountId: 'lcq-id', createdAt: {seconds: 10}};
   assert.deepEqual(routedSpots([first, second], 'Group Stage LCQ', roster), [second]);
 });
+
+test('confirmed dogeee rename preserves groups and historical drops without matching similar Chinese names', () => {
+  const renamed = '不组队就赢了不的猴子们';
+  const old = 'mtrx dogeee';
+  assert.equal(normalizePlayerName(old), normalizePlayerName(renamed));
+  assert.notEqual(normalizePlayerName(renamed), normalizePlayerName('不组队就赢不了的猴子们'));
+  assert.notEqual(normalizePlayerName(renamed), normalizePlayerName('不组队就赢不了的猴子'));
+  for (const region of Object.keys(groupRoster.regions)) {
+    assert.deepEqual(playerSessions(region, renamed), playerSessions(region, old));
+  }
+  assert.ok(mapClaims(renamed, 'id').includes('EUROPE|Group Stage 1'));
+  assert.equal(sessionPlayers('EUROPE', 'Group Stage 1').some(p => p.player === old), false);
+  assert.equal(sessionPlayers('EUROPE', 'Group Stage 1').some(p => p.player === renamed), true);
+  const historical = {...spot(old), region: 'EUROPE'};
+  assert.equal(destinationSession(historical), 'Group Stage 1');
+});

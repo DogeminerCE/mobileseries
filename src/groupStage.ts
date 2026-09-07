@@ -1,3 +1,5 @@
+import { currentPlayerName } from './playerNames.js';
+export { currentPlayerName } from './playerNames.js';
 import snapshot from './data/group-stage.json' with { type: 'json' };
 
 export interface GroupPlayer { player: string; accountId?: string; rank?: number }
@@ -13,7 +15,7 @@ export const GROUP_SESSIONS = [
 // Keep punctuation and non-Latin letters. Only normalize presentation whitespace
 // and the two mojibake sequences present in Epic's published seeding page.
 export function normalizePlayerName(name: string) {
-  return (name || '').replaceAll('ÎµÃ¯Ð·', 'εïз').replaceAll('Çƒ', 'ǃ')
+  return currentPlayerName(name || '').replaceAll('ÎµÃ¯Ð·', 'εïз').replaceAll('Çƒ', 'ǃ')
     .normalize('NFKC').replace(/[\u200B-\u200D\uFEFF]/g, '')
     .replace(/\s+/gu, ' ').trim().toLowerCase();
 }
@@ -36,7 +38,7 @@ export function sessionPlayers(region: string, session: string, roster: GroupRos
     ? data.lcq.filter(p => playerSessions(region, p.player, p.accountId, roster).includes(session))
     : data.groups[session.replace('Group Stage ', '')] || [];
   return players.filter((p, i) => players.findIndex(other => normalizePlayerName(other.player) === normalizePlayerName(p.player)) === i)
-    .map(p => ({ ...p, player: p.player.replaceAll('ÎµÃ¯Ð·', 'εïз').replaceAll('Çƒ', 'ǃ') }));
+    .map(p => ({ ...p, player: currentPlayerName(p.player).replaceAll('ÎµÃ¯Ð·', 'εïз').replaceAll('Çƒ', 'ǃ') }));
 }
 export function mapClaims(name: string, accountId: string) {
   return Object.keys(groupRoster.regions).flatMap(region => playerSessions(region, name, accountId).map(session => `${region}|${session}`));

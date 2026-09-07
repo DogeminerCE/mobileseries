@@ -9,6 +9,7 @@ import { Trophy, Globe, DollarSign, Activity, Smartphone, Loader2, AlertCircle, 
 import { Link } from 'react-router-dom';
 import SeriesCountdown from './SeriesCountdown';
 import GroupStageRoster from './GroupStageRoster';
+import { currentPlayerName } from './playerNames';
 
 interface PlayerEvent {
   event: string;
@@ -141,7 +142,7 @@ export default function App() {
       const data = await response.json();
 
       if (data.players && data.players.length > 0) {
-        setPlayers(data.players);
+        setPlayers(data.players.map((player: Player) => ({ ...player, name: currentPlayerName(player.name) })));
         if (data.qualifications) setQualifications(data.qualifications);
         setLastUpdated(new Date(data.lastUpdated || Date.now()).toLocaleTimeString());
         setDataSource(data.source || 'osirion-aggregated');

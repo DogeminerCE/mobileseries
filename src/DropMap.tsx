@@ -11,7 +11,7 @@ import {
   ZoomIn, ZoomOut, RotateCcw, Crosshair, Trash2, Eye, EyeOff, Info, PenTool
 } from "lucide-react";
 import pc from 'polygon-clipping';
-import { GROUP_SESSIONS, matchesPlayer, normalizePlayerName, playerSessions, sessionPlayers, routedSpots } from './groupStage';
+import { GROUP_SESSIONS, matchesPlayer, normalizePlayerName, playerSessions, sessionPlayers, routedSpots, currentPlayerName } from './groupStage';
 import SeriesCountdown from './SeriesCountdown';
 import { auth, db } from './firebase';
 import { 
@@ -217,7 +217,7 @@ export default function DropMap() {
     if (isAdmin) {
       const overrideName = window.prompt("Admin: Enter player name to place spot for (leave blank for yourself):", "");
       if (overrideName && overrideName.trim() !== '') {
-        spotPlayerName = overrideName.trim();
+        spotPlayerName = currentPlayerName(overrideName.trim());
       }
     }
 
