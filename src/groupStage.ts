@@ -9,7 +9,6 @@ export const groupRoster: GroupRoster = snapshot;
 export const GROUP_SESSIONS = [
   { key: 'Group Stage 1', label: 'Group 1' },
   { key: 'Group Stage 2', label: 'Group 2' },
-  { key: 'Group Stage LCQ', label: 'LCQ · Awaiting group' },
 ];
 
 // Keep punctuation and non-Latin letters. Only normalize presentation whitespace

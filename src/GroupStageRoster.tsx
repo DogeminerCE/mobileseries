@@ -2,13 +2,6 @@ import { Link } from 'react-router-dom';
 import { GROUP_SESSIONS, sessionPlayers } from './groupStage';
 
 export default function GroupStageRoster({ region }: { region: string }) {
-  const sessions = GROUP_SESSIONS.filter(session => {
-    if (session.key.endsWith('LCQ')) {
-      return sessionPlayers(region, session.key).length > 0;
-    }
-    return true;
-  });
-
   return (
     <div className="border border-white/10 bg-[#141416]/50 p-5">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
@@ -23,10 +16,10 @@ export default function GroupStageRoster({ region }: { region: string }) {
         </a>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {sessions.map(session => {
+        {GROUP_SESSIONS.map(session => {
           const players = sessionPlayers(region, session.key);
           return (
-            <section key={session.key} className={session.key.endsWith('LCQ') ? 'sm:col-span-2' : ''}>
+            <section key={session.key}>
               <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-2 mb-2">
                 <div className="flex items-center gap-2">
                   <h4 className="text-sm font-bold">{session.label}</h4>
@@ -41,11 +34,6 @@ export default function GroupStageRoster({ region }: { region: string }) {
                   View map →
                 </Link>
               </div>
-              {session.key.endsWith('LCQ') && (
-                <p className="text-xs text-white/50 mb-3">
-                  Top 12 from the LCQ final. Drops move when group assignments are published.
-                </p>
-              )}
               <ol className="divide-y divide-white/5">
                 {players.map((player, idx) => (
                   <li key={player.player} className="py-1.5 text-sm flex items-center justify-between gap-2">
@@ -64,7 +52,7 @@ export default function GroupStageRoster({ region }: { region: string }) {
                 ))}
               </ol>
               {players.length === 0 && (
-                <p className="text-sm text-white/50 py-3">No players awaiting assignment.</p>
+                <p className="text-sm text-white/50 py-3">No players assigned.</p>
               )}
             </section>
           );

@@ -520,7 +520,6 @@ export default function DropMap() {
       </header>
 
       <SeriesCountdown />
-      {selectedSession === 'Group Stage LCQ' && <p className="px-4 py-2 text-xs text-white/60 border-b border-white/10">LCQ top 12 · Drops move automatically when Epic assigns groups.</p>}
 
       {authError && (
         <div className="bg-red-500/10 border-b border-red-500/30 px-4 py-2 text-red-400 text-xs text-center font-bold uppercase tracking-wider">
@@ -997,8 +996,7 @@ export default function DropMap() {
             <div className="flex items-start gap-2">
               <Info size={12} className="text-white/20 mt-0.5 flex-shrink-0" />
               <p className="text-[8px] font-mono text-white/15 leading-relaxed">
-                Epic’s seeded players and the LCQ top 12 can mark their drops.
-                LCQ drops move to the assigned group when the roster is updated.
+                All 16 qualified players per group can mark their drops.
               </p>
             </div>
           </div>
