@@ -116,4 +116,17 @@ test('confirmed renames for amp, vediana, and mohanad preserve groups and drops'
   }
   assert.equal(sessionPlayers('EUROPE', 'Group Stage 1').some(p => p.player === 'Law Mohanad'), false);
   assert.equal(sessionPlayers('EUROPE', 'Group Stage 1').some(p => p.player === 'spk mohanad'), true);
+
+  // MTB Keyxity / MTB Keyxity. -> 不组队就不了的猴子们
+  const keyxityRenamed = '不组队就不了的猴子们';
+  assert.equal(normalizePlayerName('MTB Keyxity'), normalizePlayerName(keyxityRenamed));
+  assert.equal(normalizePlayerName('MTB Keyxity.'), normalizePlayerName(keyxityRenamed));
+  assert.notEqual(normalizePlayerName(keyxityRenamed), normalizePlayerName('不组队就赢了不的猴子们'));
+  assert.notEqual(normalizePlayerName(keyxityRenamed), normalizePlayerName('不组队就赢不了的猴子们'));
+  for (const region of Object.keys(groupRoster.regions)) {
+    assert.deepEqual(playerSessions(region, keyxityRenamed), playerSessions(region, 'MTB Keyxity.'));
+    assert.deepEqual(playerSessions(region, keyxityRenamed), playerSessions(region, 'MTB Keyxity'));
+  }
+  assert.equal(sessionPlayers('BRAZIL', 'Group Stage 1').some(p => p.player.includes('Keyxity')), false);
+  assert.equal(sessionPlayers('BRAZIL', 'Group Stage 1').some(p => p.player === keyxityRenamed), true);
 });
