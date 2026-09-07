@@ -1,6 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import jwt from 'jsonwebtoken';
-import { mapClaims } from '../src/groupStage';
+import { mapClaims } from '../src/groupStage.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS

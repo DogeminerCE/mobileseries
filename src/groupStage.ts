@@ -1,4 +1,4 @@
-import snapshot from './data/group-stage.json';
+import snapshot from './data/group-stage.json' with { type: 'json' };
 
 export interface GroupPlayer { player: string; accountId?: string; rank?: number }
 export interface GroupRegion { groups: Record<string, GroupPlayer[]>; lcq: GroupPlayer[]; lcqWindow?: string; lcqEndTime?: string }
