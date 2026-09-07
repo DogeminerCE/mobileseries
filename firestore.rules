@@ -1,49 +1,32 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // The admin's Epic display name is "Blitzʼd Babylion", whose apostrophe is
-    // U+02BC (modifier letter apostrophe) rather than ASCII. Firestore rules'
-    // replace() only does literal replacement (no regex) so it can't strip that
-    // glyph; matches() does use RE2 regex, which is how we normalize the name.
-    function isAdminName(name) {
-      return name != null && name.lower().matches('blitz.*babylion');
-    }
-
     function isAdmin() {
-      return isAdminName(request.auth.token.epic_display_name)
-             || isAdminName(request.auth.token.name);
+      return request.auth != null
+        && request.auth.token.get('epic_display_name', '') == 'Blitzʼd Babylion';
     }
-
+    function canMark(data) {
+      return isAdmin() || (
+        data.playerName == request.auth.token.get('epic_display_name', '')
+        && (data.region + '|' + data.mapSession) in request.auth.token.get('group_maps', [])
+      );
+    }
+    function validSpot(data) {
+      return data.epicAccountId == request.auth.uid
+        && data.playerName is string && data.region is string && data.mapSession is string
+        && data.x is number && data.y is number
+        && data.x >= 0 && data.x <= 100 && data.y >= 0 && data.y <= 100
+        && data.color is string && data.path is list && data.path.size() >= 3;
+    }
     match /dropSpots/{spotId} {
-      // Anyone can read drop spots
       allow read: if true;
-      
-      // Authenticated users can create their own drop spots
-      allow create: if request.auth != null 
-                    && request.resource.data.epicAccountId == request.auth.uid
-                    && request.resource.data.playerName is string
-                    && request.resource.data.region is string
-                    && request.resource.data.mapSession is string
-                    && request.resource.data.x is number
-                    && request.resource.data.y is number
-                    && request.resource.data.x >= 0 && request.resource.data.x <= 100
-                    && request.resource.data.y >= 0 && request.resource.data.y <= 100
-                    && request.resource.data.color is string
-                    && request.resource.data.path is list;
-      
-      // Users can only update their own spots
+      allow create: if request.auth != null && validSpot(request.resource.data) && canMark(request.resource.data);
       allow update: if request.auth != null
-                    && resource.data.epicAccountId == request.auth.uid
-                    && request.resource.data.epicAccountId == request.auth.uid
-                    && request.resource.data.mapSession == resource.data.mapSession;
-      
-      // Users can only delete their own spots, except admin
+        && resource.data.epicAccountId == request.auth.uid
+        && validSpot(request.resource.data) && canMark(request.resource.data);
       allow delete: if request.auth != null
-                    && (resource.data.epicAccountId == request.auth.uid || isAdmin());
+        && (resource.data.epicAccountId == request.auth.uid || isAdmin());
     }
-    
     match /{document=**} {
       allow read, write: if false;
     }

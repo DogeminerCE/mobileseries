@@ -1,5 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import jwt from 'jsonwebtoken';
+import { mapClaims } from '../src/groupStage';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
@@ -107,7 +108,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         uid: accountId,
         // Firebase Auth automatically sets this claim on the created user
         claims: {
-          epic_display_name: displayName
+          epic_display_name: displayName,
+          group_maps: mapClaims(displayName, accountId)
         }
       },
       serviceAccount.private_key,

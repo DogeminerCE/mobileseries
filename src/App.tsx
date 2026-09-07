@@ -7,6 +7,8 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from "motion/react";
 import { Trophy, Globe, DollarSign, Activity, Smartphone, Loader2, AlertCircle, RefreshCcw, Youtube, Twitter, MessageSquare, ChevronDown, MapPin } from "lucide-react";
 import { Link } from 'react-router-dom';
+import SeriesCountdown from './SeriesCountdown';
+import GroupStageRoster from './GroupStageRoster';
 
 interface PlayerEvent {
   event: string;
@@ -352,6 +354,7 @@ export default function App() {
              </div>
           </div>
         </header>
+        <div className="mb-6"><SeriesCountdown /></div>
 
         <AnimatePresence mode="wait">
           {loading || dataSource === 'loading' ? (
@@ -418,15 +421,15 @@ export default function App() {
               <div className="md:col-span-8 flex flex-col gap-6">
                 
                 {/* Navigation Tabs */}
-                <div className="flex gap-6 border-b border-white/10 pb-2 mb-6">
-                  <button onClick={() => setActiveTab('leaderboard')} className={`pb-2 font-black italic uppercase tracking-widest text-sm transition-all border-b-2 ${activeTab === 'leaderboard' ? 'text-[#FCE14B] border-[#FCE14B]' : 'text-white/40 border-transparent hover:text-white'}`}>
-                    Earnings Leaderboard
+                <div className="flex flex-wrap gap-3 sm:gap-6 border-b border-white/10 pb-2 mb-3">
+                  <button onClick={() => setActiveTab('leaderboard')} className={`pb-2 font-black italic uppercase tracking-wide text-xs sm:text-sm transition-all border-b-2 ${activeTab === 'leaderboard' ? 'text-[#FCE14B] border-[#FCE14B]' : 'text-white/40 border-transparent hover:text-white'}`}>
+                    Leaderboard
                   </button>
-                  <button onClick={() => setActiveTab('heats')} className={`pb-2 font-black italic uppercase tracking-widest text-sm transition-all border-b-2 ${activeTab === 'heats' ? 'text-[#FCE14B] border-[#FCE14B]' : 'text-white/40 border-transparent hover:text-white'}`}>
-                    Heats Seeding
+                  <button onClick={() => setActiveTab('heats')} className={`pb-2 font-black italic uppercase tracking-wide text-xs sm:text-sm transition-all border-b-2 ${activeTab === 'heats' ? 'text-[#FCE14B] border-[#FCE14B]' : 'text-white/40 border-transparent hover:text-white'}`}>
+                    Heats Archive
                   </button>
-                  <button onClick={() => setActiveTab('qualifications')} className={`pb-2 font-black italic uppercase tracking-widest text-sm transition-all border-b-2 ${activeTab === 'qualifications' ? 'text-[#FCE14B] border-[#FCE14B]' : 'text-white/40 border-transparent hover:text-white'}`}>
-                    Group Stage Quals
+                  <button onClick={() => setActiveTab('qualifications')} className={`pb-2 font-black italic uppercase tracking-wide text-xs sm:text-sm transition-all border-b-2 ${activeTab === 'qualifications' ? 'text-[#FCE14B] border-[#FCE14B]' : 'text-white/40 border-transparent hover:text-white'}`}>
+                    Group Stage
                   </button>
                 </div>
 
@@ -702,56 +705,7 @@ export default function App() {
                     );
                   })()
                 ) : (
-                <div className="border border-white/10 bg-[#141416]/50">
-                  {/* Group Stage Qualifications */}
-                  <div className="p-5 border-b border-white/5">
-                    <div className="flex items-center gap-3 mb-1">
-                      <Trophy size={18} className="text-[#FCE14B]" />
-                      <h3 className="text-lg font-black italic uppercase tracking-tighter text-[#FCE14B]">Group Stage Qualifications</h3>
-                    </div>
-                    <p className="text-[10px] uppercase tracking-widest font-mono opacity-30 mt-1">
-                      Top 3 of each Qualifier earn a Group Stage slot (winner only before Qualifier 12). If already qualified, the slot rolls down.
-                    </p>
-                  </div>
-                    <div className="px-5 pb-5">
-                      <div className="grid grid-cols-12 px-3 py-2 text-[9px] uppercase tracking-widest font-bold opacity-30 border-b border-white/10">
-                        <div className="col-span-1">#</div>
-                        <div className="col-span-5">Player</div>
-                        <div className="col-span-4">Qualifier</div>
-                        <div className="col-span-2 text-right">Status</div>
-                      </div>
-                      <div className="space-y-0.5">
-                        {(qualifications[selectedRegion === 'GLOBAL' ? 'EUROPE' : selectedRegion] || []).map((q, i) => (
-                          <div key={`${q.player}-${q.qualifier}`} className="grid grid-cols-12 px-3 py-2.5 items-center bg-[#0f0f11] hover:bg-white/5 transition-colors border-b border-white/5 last:border-b-0">
-                            <div className="col-span-1 font-mono text-[#FCE14B] text-sm">{i + 1}</div>
-                            <div className="col-span-5 flex items-center gap-2">
-                              <img
-                                src={`https://flagcdn.com/w20/${q.countryCode.toLowerCase()}.png`}
-                                alt={q.countryCode}
-                                className="w-4 h-auto opacity-80"
-                                referrerPolicy="no-referrer"
-                                onError={(e) => (e.currentTarget.style.display = 'none')}
-                              />
-                              <span className="font-bold uppercase italic text-sm truncate">{q.player}</span>
-                            </div>
-                            <div className="col-span-4 font-mono text-xs text-white/50">{q.qualifier}</div>
-                            <div className="col-span-2 text-right">
-                              {q.originalWinner ? (
-                                <span className="px-2 py-0.5 text-[9px] font-black uppercase bg-[#FCE14B]/10 text-[#FCE14B] border border-[#FCE14B]/20">Winner</span>
-                              ) : q.rolledDownFrom ? (
-                                <span className="px-2 py-0.5 text-[9px] font-black uppercase bg-white/5 text-white/40 border border-white/10" title={`Rolled down from ${q.rolledDownFrom}`}>Roll-down</span>
-                              ) : (
-                                <span className="px-2 py-0.5 text-[9px] font-black uppercase bg-white/5 text-white/60 border border-white/10">Top 3</span>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                        {(!qualifications[selectedRegion === 'GLOBAL' ? 'EUROPE' : selectedRegion] || qualifications[selectedRegion === 'GLOBAL' ? 'EUROPE' : selectedRegion]?.length === 0) && (
-                          <div className="py-8 text-center font-mono text-xs text-white/20 italic uppercase">No qualifications recorded for this region</div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                <GroupStageRoster region={selectedRegion === 'GLOBAL' ? 'EUROPE' : selectedRegion} />
                 )}
               </div>
 
@@ -824,18 +778,7 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="border border-white/10 p-6 space-y-6 bg-[#141416]/50">
-                  <div className="space-y-4">
-                    <div className="text-[10px] uppercase opacity-40 mb-3 tracking-widest font-bold">Network Status</div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#4ade80] shadow-[0_0_12px_#4ade80]"></div>
-                      <span className="text-[10px] uppercase tracking-widest font-bold text-[#4ade80]">Osirion API Cloud Sync</span>
-                    </div>
-                    <div className="text-[10px] uppercase opacity-40 italic font-mono">
-                      Feed Update: {lastUpdated || 'SYNCING...'}
-                    </div>
-                  </div>
-                </div>
+                <p className="text-xs text-white/40">Leaderboard updated {lastUpdated || '—'}</p>
 
                 <div className="mt-6 border-t border-white/5 pt-6 hidden md:block">
                   <p className="text-[10px] opacity-20 uppercase font-mono leading-relaxed">
@@ -861,7 +804,7 @@ export default function App() {
           </div>
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-mono opacity-20 uppercase tracking-[0.4em]">
-              Real-time Data: Osirion API • Updated every 30 min
+              Leaderboard data: Osirion • Refreshed every 30 min
             </span>
             <span className="text-[10px] font-mono font-bold opacity-30 tracking-widest bg-white/5 px-1.5 py-0.5 rounded">
               v2.1.0

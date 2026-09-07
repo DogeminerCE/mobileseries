@@ -31,6 +31,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
         
+      - name: Refresh group seeding and LCQ results
+        continue-on-error: true
+        run: npm run sync:groups
+
       - name: Run Aggregator
         run: npm run aggregate
         
@@ -38,7 +42,7 @@ jobs:
         run: |
           git config --global user.name "DogeminerCE"
           git config --global user.email "dogeminerdirectory@gmail.com"
-          git add public/leaderboard.json
+          git add public/leaderboard.json src/data/group-stage.json
           git diff --quiet && git diff --staged --quiet && echo "NO_CHANGE=true" >> $GITHUB_ENV || (git commit -m "chore: update aggregated leaderboard data" && git push)
 
       - name: Trigger Vercel Redeploy (only if data changed)

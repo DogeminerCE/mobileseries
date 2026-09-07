@@ -9,7 +9,10 @@
     "preview": "vite preview",
     "aggregate": "tsx scripts/aggregate.ts",
     "clean": "rm -rf dist",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "sync:groups": "tsx scripts/sync-groups.ts",
+    "test": "tsx --test tests/*.test.ts",
+    "migrate:drops": "tsx scripts/migrate-drops.ts"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
@@ -33,6 +36,7 @@
     "@types/node": "^22.14.0",
     "@vercel/node": "^5.8.17",
     "autoprefixer": "^10.4.21",
+    "cheerio": "^1.2.0",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

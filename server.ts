@@ -1,3 +1,5 @@
+import 'dotenv/config';
+import epicAuthHandler from './api/epic-auth';
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
@@ -413,6 +415,8 @@ if (process.env.NODE_ENV === 'production') {
 async function startServer() {
   const app = express();
   const PORT = 3000;
+  app.use(express.json());
+  app.post('/api/epic-auth', (req, res) => epicAuthHandler(req as any, res as any));
 
   // Health check
   app.get("/api/health", (req, res) => {

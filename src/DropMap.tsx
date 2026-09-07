@@ -11,11 +11,13 @@ import {
   ZoomIn, ZoomOut, RotateCcw, Crosshair, Trash2, Eye, EyeOff, Info, PenTool
 } from "lucide-react";
 import pc from 'polygon-clipping';
+import { GROUP_SESSIONS, matchesPlayer, normalizePlayerName, playerSessions, sessionPlayers, routedSpots } from './groupStage';
+import SeriesCountdown from './SeriesCountdown';
 import { auth, db } from './firebase';
 import { 
   collection, addDoc, deleteDoc, doc, onSnapshot, query, where, getDocs, serverTimestamp 
 } from 'firebase/firestore';
-import { signInWithPopup, OAuthProvider, signOut, onAuthStateChanged, User } from 'firebase/auth';
+import { signOut, onAuthStateChanged, User } from 'firebase/auth';
 
 // ─── Types ──────────────────────────────────────────────────────────────────────
 
@@ -29,7 +31,6 @@ interface DropSpot {
   region: string;
   mapSession: string;
   color: string;
-  heatNumber?: number;
   createdAt?: any;
 }
 
@@ -37,37 +38,11 @@ interface DropSpot {
 
 const DROP_MAP_REGIONS = ["EUROPE", "NA-CENTRAL", "NA-WEST", "MIDDLE EAST", "OCEANIA", "ASIA", "BRAZIL"];
 
-// A session's `key` is what gets written to Firestore. Heats repeat every month, so the
-// key is namespaced by period ("July Heat 1") to keep each month's map a clean slate,
-// while the tab itself just reads "Heat 1".
-interface MapSession {
-  key: string;
-  label: string;
-  heatNumber: number | null;
-}
-
-const GROUP_STAGE_SESSION: MapSession = { key: 'Group Stage', label: 'Group Stage', heatNumber: null };
-
-const HEAT_COLORS: Record<number, string> = {
-  1: '#FF4444', // Red
-  2: '#44AAFF', // Blue
-  3: '#44FF88', // Green
-  4: '#FFAA44', // Orange
-};
-
-// Epic display names carry glyphs that don't survive a naive comparison — the admin
-// account's name uses U+02BC (ʼ), not an ASCII apostrophe — so every identity check
-// runs against an alphanumeric-only form of the name.
-const normalizeName = (name: string) => (name || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+// Preserve Unicode identity, including the admin account's U+02BC apostrophe.
+const normalizeName = normalizePlayerName;
 
 const ADMIN_ACCOUNT = normalizeName('Blitzʼd Babylion');
 const isAdminName = (name: string) => normalizeName(name) === ADMIN_ACCOUNT;
-
-const PLAYER_COLORS = [
-  '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD',
-  '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9', '#82E0AA', '#F8C471',
-  '#85929E', '#AED6F1', '#A3E4D7', '#FAD7A0', '#D2B4DE',
-];
 
 // ─── Main Component ─────────────────────────────────────────────────────────────
 
@@ -80,13 +55,14 @@ export default function DropMap() {
   const [isQualified, setIsQualified] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
 
+  const [authorizedMaps, setAuthorizedMaps] = useState<string[]>([]);
   const [authError, setAuthError] = useState<string | null>(null);
   
   // Map state
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentPath, setCurrentPath] = useState<{x: number, y: number}[]>([]);
-  const [selectedRegion, setSelectedRegion] = useState('EUROPE');
-  const [selectedSession, setSelectedSession] = useState(GROUP_STAGE_SESSION.key);
+  const [selectedRegion, setSelectedRegion] = useState(() => { const region = new URLSearchParams(window.location.search).get('region') || (new URLSearchParams(window.location.search).has('code') ? sessionStorage.getItem('drop-map-region') : null); return region && DROP_MAP_REGIONS.includes(region) ? region : 'EUROPE'; });
+  const [selectedSession, setSelectedSession] = useState(() => { const session = new URLSearchParams(window.location.search).get('session') || (new URLSearchParams(window.location.search).has('code') ? sessionStorage.getItem('drop-map-session') : null); return GROUP_SESSIONS.some(s => s.key === session) ? session! : GROUP_SESSIONS[0].key; });
   const [dropSpots, setDropSpots] = useState<DropSpot[]>([]);
   const [showLabels, setShowLabels] = useState(true);
   const [hoveredSpot, setHoveredSpot] = useState<string | null>(null);
@@ -99,18 +75,21 @@ export default function DropMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapImageRef = useRef<HTMLImageElement>(null);
 
-  // Leaderboard data for Auth
-  const [leaderboardData, setLeaderboardData] = useState<any>(null);
-
   // ─── Firebase Auth State Listener ─────────────────────────────────────────────
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (currentUser) => {
+    const unsub = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        setEpicName(currentUser.displayName || '');
+        try {
+          const token = await currentUser.getIdTokenResult();
+          if (auth.currentUser?.uid !== currentUser.uid) return;
+          setEpicName(String(token.claims.epic_display_name || currentUser.displayName || ''));
+          setAuthorizedMaps(Array.isArray(token.claims.group_maps) ? token.claims.group_maps as string[] : []);
+        } catch { setAuthError('Could not verify your sign-in. Please sign in again.'); }
         setAuthLoading(false);
       } else {
         setEpicName('');
+        setAuthorizedMaps([]);
         setIsQualified(false);
         setAuthLoading(false);
       }
@@ -118,139 +97,28 @@ export default function DropMap() {
     return () => unsub();
   }, []);
 
-  // ─── Fetch Leaderboard Data ─────────────────────────────────────────────────
+  const mapSessions = GROUP_SESSIONS;
+  const activeSession = mapSessions.find(s => s.key === selectedSession) || mapSessions[0];
+  const expectedPlayers = useMemo(() => sessionPlayers(selectedRegion, selectedSession).map(p => p.player), [selectedRegion, selectedSession]);
+
   useEffect(() => {
-    fetch('/leaderboard.json')
-      .then(res => res.json())
-      .then(data => setLeaderboardData(data))
-      .catch(err => console.error('Failed to load leaderboard data', err));
-  }, []);
+    setIsQualified(!!user && (isAdminName(epicName) || playerSessions(selectedRegion, epicName, user.uid).includes(selectedSession)));
+    setIsDrawing(false);
+    setCurrentPath([]);
+  }, [user, epicName, selectedRegion, selectedSession]);
 
-  // ─── Available Sessions for the Current Heats Period ────────────────────────
-  // The aggregator resolves whichever Heats Stage the latest completed Round Stages
-  // feed into (e.g. July Heats → Qualifier 13), so the tabs roll over on their own.
-  const heatsMeta = leaderboardData?.heatsMeta;
-  const regionMeta = heatsMeta?.regions?.[selectedRegion];
-  const heatsPeriod: string | null = regionMeta?.period || heatsMeta?.period || null;
-  const qualifierLabel: string | null = regionMeta?.qualifierLabel || heatsMeta?.qualifierLabel || null;
-
-  const mapSessions = useMemo<MapSession[]>(() => {
-    const sessions: MapSession[] = [];
-    if (heatsPeriod) {
-      for (const heatNumber of [1, 2, 3, 4]) {
-        sessions.push({
-          key: `${heatsPeriod} Heat ${heatNumber}`,
-          label: `Heat ${heatNumber}`,
-          heatNumber,
-        });
-      }
-    }
-    if (qualifierLabel) {
-      sessions.push({ key: qualifierLabel, label: qualifierLabel, heatNumber: null });
-    }
-    sessions.push(GROUP_STAGE_SESSION);
-    return sessions;
-  }, [heatsPeriod, qualifierLabel]);
-
-  const activeSession = useMemo(
-    () => mapSessions.find(s => s.key === selectedSession) || GROUP_STAGE_SESSION,
-    [mapSessions, selectedSession]
-  );
-
-  // Once a Heats Stage session has finished its maps are frozen as a record of the day.
-  const isHeatsLocked = useMemo(() => {
-    if (activeSession.heatNumber === null || !regionMeta?.heatsEndTime) return false;
-    return Date.now() > new Date(regionMeta.heatsEndTime).getTime();
-  }, [activeSession, regionMeta]);
-
-  // Land on Qualifier if Heats have concluded or eligibility exists, otherwise land on Heat 1.
+  // Route historical and pending LCQ drops using the latest official assignments.
+  // Original documents stay intact; a saved drop on the destination map takes priority.
   useEffect(() => {
-    if (!heatsPeriod) return;
-    const heatsConcluded = regionMeta?.heatsEndTime ? Date.now() > new Date(regionMeta.heatsEndTime).getTime() : false;
-    const hasQualifierEligible = (leaderboardData?.qualifierEligible?.[selectedRegion] || []).length > 0;
-    if ((heatsConcluded || hasQualifierEligible) && qualifierLabel) {
-      setSelectedSession(prev => (prev === GROUP_STAGE_SESSION.key || prev.includes('Heat') ? qualifierLabel : prev));
-    } else {
-      setSelectedSession(prev => (prev === GROUP_STAGE_SESSION.key ? `${heatsPeriod} Heat 1` : prev));
-    }
-  }, [heatsPeriod, qualifierLabel, regionMeta, selectedRegion, leaderboardData]);
-
-  // ─── Session Authorization ──────────────────────────────────────────────────
-  useEffect(() => {
-    if (!epicName) {
-      setIsQualified(false);
-      return;
-    }
-
-    const lowerName = normalizeName(epicName);
-
-    // Admin bypass
-    if (isAdminName(epicName)) {
-      setIsQualified(true);
-      return;
-    }
-
-    if (!leaderboardData) {
-      setIsQualified(false);
-      return;
-    }
-
-    let qualified = false;
-
-    if (activeSession.heatNumber !== null) {
-      const seeded = leaderboardData.heatsSeeding?.[selectedRegion]?.[activeSession.heatNumber] || [];
-      qualified = !isHeatsLocked && seeded.some((p: any) => normalizeName(p.player) === lowerName);
-    } else if (activeSession.key === GROUP_STAGE_SESSION.key) {
-      const quals = leaderboardData.qualifications?.[selectedRegion] || [];
-      qualified = quals.some((q: any) => normalizeName(q.player) === lowerName);
-    } else {
-      const eligible = leaderboardData.qualifierEligible?.[selectedRegion] || [];
-      qualified = eligible.some((p: any) => normalizeName(p.player) === lowerName);
-    }
-
-    setIsQualified(qualified);
-  }, [epicName, selectedRegion, activeSession, isHeatsLocked, leaderboardData]);
-
-  // ─── Compute Expected Players for Current Session ─────────────────────────────
-  const expectedPlayers = useMemo(() => {
-    if (!leaderboardData) return [];
-
-    if (activeSession.heatNumber !== null) {
-      return (leaderboardData.heatsSeeding?.[selectedRegion]?.[activeSession.heatNumber] || []).map((p: any) => p.player);
-    } else if (activeSession.key === GROUP_STAGE_SESSION.key) {
-      return (leaderboardData.qualifications?.[selectedRegion] || []).map((q: any) => q.player);
-    }
-    return (leaderboardData.qualifierEligible?.[selectedRegion] || []).map((p: any) => p.player);
-  }, [leaderboardData, activeSession, selectedRegion]);
-
-  // Which Heat each player was seeded into, so drops on the Qualifier and Group Stage
-  // maps can still be tagged with where the player came from.
-  const heatByPlayer = useMemo(() => {
-    const map: Record<string, number> = {};
-    const regionSeeding = leaderboardData?.heatsSeeding?.[selectedRegion] || {};
-    for (const heatNumber of [1, 2, 3, 4]) {
-      for (const p of (regionSeeding[heatNumber] || [])) {
-        map[normalizeName(p.player)] = heatNumber;
-      }
-    }
-    return map;
-  }, [leaderboardData, selectedRegion]);
-
-  // ─── Firestore Real-time Listener ───────────────────────────────────────────
-  useEffect(() => {
-    const q = query(
-      collection(db, 'dropSpots'),
-      where('region', '==', selectedRegion),
-      where('mapSession', '==', selectedSession)
-    );
-    const unsub = onSnapshot(q, (snapshot) => {
-      const spots: DropSpot[] = [];
-      snapshot.forEach(docSnap => {
-        spots.push({ id: docSnap.id, ...docSnap.data() } as DropSpot);
-      });
-      setDropSpots(spots);
-    });
-    return () => unsub();
+    setDropSpots([]);
+    const q = query(collection(db, 'dropSpots'), where('region', '==', selectedRegion));
+    return onSnapshot(q, snapshot => {
+      const spots = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as DropSpot));
+      const roster = sessionPlayers(selectedRegion, selectedSession);
+      setDropSpots(routedSpots(spots, selectedSession).map(spot => ({ ...spot,
+        playerName: roster.find(p => matchesPlayer(p, spot.playerName, spot.epicAccountId))?.player || spot.playerName,
+      })));
+    }, () => setAuthError('Could not load drop spots. Please refresh to retry.'));
   }, [selectedRegion, selectedSession]);
 
   // ─── Login with Epic Games (OAuth) ──────────────────────────────────────────
@@ -260,6 +128,8 @@ export default function DropMap() {
       const clientId = 'xyza7891WTyGsPLoyAH6ArhFryzcNpKu';
       const redirectUri = encodeURIComponent(window.location.origin + '/drop-map');
       const epicAuthUrl = `https://www.epicgames.com/id/authorize?client_id=${clientId}&response_type=code&scope=basic_profile&redirect_uri=${redirectUri}`;
+      sessionStorage.setItem('drop-map-region', selectedRegion);
+      sessionStorage.setItem('drop-map-session', selectedSession);
       window.location.href = epicAuthUrl;
     } catch (err: any) {
       console.error('Login redirect error:', err);
@@ -338,7 +208,8 @@ export default function DropMap() {
   }, [isDrawing, user, isQualified]);
 
   const handleConfirmArea = async () => {
-    if (currentPath.length < 3 || !user) return;
+    if (currentPath.length < 3 || !user || !isQualified
+      || (!isAdminName(epicName) && !playerSessions(selectedRegion, epicName, user.uid).includes(selectedSession))) return;
 
     const isAdmin = isAdminName(epicName);
     let spotPlayerName = epicName;
@@ -348,6 +219,11 @@ export default function DropMap() {
       if (overrideName && overrideName.trim() !== '') {
         spotPlayerName = overrideName.trim();
       }
+    }
+
+    if (!isAdmin && !authorizedMaps.includes(`${selectedRegion}|${selectedSession}`)) {
+      setAuthError('Please sign out and sign in with Epic Games again to refresh your group access.');
+      return;
     }
 
     // Calculate centroid
@@ -360,7 +236,6 @@ export default function DropMap() {
     const centroidX = sumX / currentPath.length;
     const centroidY = sumY / currentPath.length;
 
-    const seededHeat = heatByPlayer[spotPlayerName.replace(/[^a-z0-9]/gi, '').toLowerCase()];
 
     // Optimistic: show spot immediately
     const optimisticSpot: DropSpot = {
@@ -373,12 +248,11 @@ export default function DropMap() {
       region: selectedRegion,
       mapSession: selectedSession,
       color: '#4ade80',
-      ...(seededHeat ? { heatNumber: seededHeat } : {}),
     };
     
     // Admin placing for someone else shouldn't replace their own spot optimistically
     if (spotPlayerName === epicName) {
-      setDropSpots(prev => [...prev.filter(s => s.epicAccountId !== user.uid || s.playerName === spotPlayerName), optimisticSpot]);
+      setDropSpots(prev => [...prev.filter(s => s.epicAccountId !== user.uid), optimisticSpot]);
     } else {
       setDropSpots(prev => [...prev.filter(s => s.playerName !== spotPlayerName), optimisticSpot]);
     }
@@ -387,17 +261,13 @@ export default function DropMap() {
     setCurrentPath([]);
 
     try {
-      // Delete any existing spots for this player/region/session
-      const existingQuery = query(
-        collection(db, 'dropSpots'),
-        where('playerName', '==', spotPlayerName),
-        where('region', '==', selectedRegion),
-        where('mapSession', '==', selectedSession)
-      );
-      const existing = await getDocs(existingQuery);
-      for (const docSnap of existing.docs) {
-        await deleteDoc(doc(db, 'dropSpots', docSnap.id));
-      }
+      // Include the historical documents routed into this map when replacing a drop.
+      const existing = await getDocs(query(collection(db, 'dropSpots'), where('region', '==', selectedRegion)));
+      const matching = existing.docs.filter(d => {
+        const spot = { id: d.id, ...d.data() } as DropSpot;
+        return (isAdmin ? normalizePlayerName(spot.playerName) === normalizePlayerName(spotPlayerName) : spot.epicAccountId === user.uid)
+          && routedSpots([spot], selectedSession).length > 0;
+      });
 
       // Save to Firestore (the onSnapshot listener will replace the optimistic spot with the real one)
       await addDoc(collection(db, 'dropSpots'), {
@@ -409,13 +279,14 @@ export default function DropMap() {
         region: selectedRegion,
         mapSession: selectedSession,
         color: '#4ade80',
-        ...(seededHeat ? { heatNumber: seededHeat } : {}),
         createdAt: serverTimestamp(),
       });
+      await Promise.all(matching.map(d => deleteDoc(d.ref)));
     } catch (err) {
       console.error('Failed to place drop spot:', err);
       // Rollback optimistic update on error
       setDropSpots(prev => prev.filter(s => s.id !== '__optimistic__'));
+      setAuthError('Could not save your drop. Try signing out and back in, then retry.');
     }
   };
 
@@ -426,11 +297,11 @@ export default function DropMap() {
       const q = query(
         collection(db, 'dropSpots'),
         where('epicAccountId', '==', user.uid),
-        where('region', '==', selectedRegion),
-        where('mapSession', '==', selectedSession)
+        where('region', '==', selectedRegion)
       );
       const snap = await getDocs(q);
       for (const docSnap of snap.docs) {
+        if (!routedSpots([{ id: docSnap.id, ...docSnap.data() } as DropSpot], selectedSession).length) continue;
         await deleteDoc(doc(db, 'dropSpots', docSnap.id));
       }
     } catch (err) {
@@ -500,7 +371,7 @@ export default function DropMap() {
 
   // ─── Calculate Overlapping Polygons & Per-Spot Overlap Status ───────────────
   const { overlappingPolygons, spotHasOverlap } = useMemo(() => {
-    let overlaps: pc.Polygon[] = [];
+    let overlaps: pc.MultiPolygon = [];
     const overlapSet = new Set<string>();
     
     // Extract valid polygons
@@ -510,8 +381,8 @@ export default function DropMap() {
     for (let i = 0; i < validSpots.length; i++) {
       for (let j = i + 1; j < validSpots.length; j++) {
         try {
-          const p1: pc.Polygon = [[validSpots[i].path!.map(p => [p.x, p.y] as pc.Pair)]];
-          const p2: pc.Polygon = [[validSpots[j].path!.map(p => [p.x, p.y] as pc.Pair)]];
+          const p1: pc.Polygon = [validSpots[i].path!.map(p => [p.x, p.y] as pc.Pair)];
+          const p2: pc.Polygon = [validSpots[j].path!.map(p => [p.x, p.y] as pc.Pair)];
           
           const intersection = pc.intersection(p1, p2);
           if (intersection.length > 0) {
@@ -548,7 +419,7 @@ export default function DropMap() {
     <div className="min-h-screen bg-[#0A0A0B] text-white flex flex-col">
       <header className="border-b border-white/10 bg-[#0A0A0B]/95 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-[1800px] mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-4">
               <button 
                 onClick={() => navigate('/')}
@@ -620,42 +491,27 @@ export default function DropMap() {
           
           <div className="flex flex-wrap gap-1.5 mt-2 pt-2 border-t border-white/10">
             {mapSessions.map(session => {
-              let disabledReason = '';
-              if (session.heatNumber !== null) {
-                const seeded = leaderboardData?.heatsSeeding?.[selectedRegion]?.[session.heatNumber] || [];
-                if (seeded.length === 0) disabledReason = 'Heats seeding not yet determined for this region';
-              } else if (session.key !== GROUP_STAGE_SESSION.key) {
-                const qualEligible = leaderboardData?.qualifierEligible?.[selectedRegion] || [];
-                if (qualEligible.length === 0) disabledReason = 'Qualifier eligibility not yet determined (Heats not finished)';
-              }
-              const isDisabled = disabledReason !== '';
-
               return (
                 <button
                   key={session.key}
-                  onClick={() => !isDisabled && setSelectedSession(session.key)}
-                  disabled={isDisabled}
+                  onClick={() => setSelectedSession(session.key)}
                   className={`px-3 py-1 text-[9px] font-black tracking-tighter transition-all italic uppercase border ${
                     selectedSession === session.key
                     ? 'bg-white text-black border-white'
-                    : isDisabled
-                      ? 'bg-transparent text-white/10 border-white/5 cursor-not-allowed'
-                      : 'bg-transparent text-white/40 border-white/10 hover:border-white/30'
+                    : 'bg-transparent text-white/40 border-white/10 hover:border-white/30'
                   }`}
-                  title={disabledReason}
                 >
                   {session.label}
                 </button>
               );
             })}
-            {heatsPeriod && (
-              <span className="self-center ml-1 text-[9px] font-mono uppercase tracking-widest text-white/20">
-                {heatsPeriod} Heats
-              </span>
-            )}
+
           </div>
         </div>
       </header>
+
+      <SeriesCountdown />
+      {selectedSession === 'Group Stage LCQ' && <p className="px-4 py-2 text-xs text-white/60 border-b border-white/10">LCQ top 12 · Drops move automatically when Epic assigns groups.</p>}
 
       {authError && (
         <div className="bg-red-500/10 border-b border-red-500/30 px-4 py-2 text-red-400 text-xs text-center font-bold uppercase tracking-wider">
@@ -766,19 +622,18 @@ export default function DropMap() {
                   })}
                   
                   {/* Overlap Highlights (RED) */}
-                  {overlappingPolygons.map((multiPoly, i) => 
-                    multiPoly.map((poly, j) => (
-                      <polygon
-                        key={`overlap-${i}-${j}`}
-                        points={poly[0].map(p => `${p[0]},${p[1]}`).join(' ')}
-                        fill="rgba(255, 0, 0, 0.6)"
-                        stroke="#FF0000"
-                        strokeWidth="1.5"
-                        vectorEffect="non-scaling-stroke"
-                        className="animate-pulse pointer-events-none"
-                      />
-                    ))
-                  )}
+                  {overlappingPolygons.map((polygon, i) => (
+                    <path
+                      key={`overlap-${i}`}
+                      d={polygon.map(ring => `M ${ring.map(p => `${p[0]},${p[1]}`).join(' L ')} Z`).join(' ')}
+                      fillRule="evenodd"
+                      fill="rgba(255, 0, 0, 0.6)"
+                      stroke="#FF0000"
+                      strokeWidth="1.5"
+                      vectorEffect="non-scaling-stroke"
+                      className="pointer-events-none"
+                    />
+                  ))}
                 </svg>
 
                 {/* Drop Spot Markers & Labels */}
@@ -860,9 +715,6 @@ export default function DropMap() {
                           }}
                         >
                           {spot.playerName}
-                          {spot.heatNumber && (
-                            <span className="ml-0.5 opacity-70" style={{ fontSize: `${fontSize * 0.8}px` }}>H{spot.heatNumber}</span>
-                          )}
                         </div>
                       );
                     })()}
@@ -944,12 +796,10 @@ export default function DropMap() {
             ) : user && !isQualified ? (
               <div className="text-center py-4">
                 <div className="text-xs text-white/40 uppercase tracking-wider mb-2">
-                  {isHeatsLocked ? `${activeSession.label} has concluded` : `You are not qualified for ${activeSession.label}`}
+                  {`You are not qualified for ${activeSession.label}`}
                 </div>
                 <p className="text-[9px] text-white/20 font-mono">
-                  {isHeatsLocked
-                    ? 'This map is now read-only. Pick the next session to plan your drop.'
-                    : `Only players seeded into ${activeSession.label} for ${selectedRegion} can place drop spots.`}
+                  {`Only players assigned to ${activeSession.label} for ${selectedRegion} can place drop spots.`}
                 </p>
               </div>
             ) : (
@@ -1022,11 +872,6 @@ export default function DropMap() {
                                 <span className="ml-1.5 text-[#FCE14B] opacity-60">(You)</span>
                               )}
                             </div>
-                            {spot && spot.heatNumber && (
-                              <div className="text-[8px] font-mono text-white/20 uppercase">
-                                Heat {spot.heatNumber}
-                              </div>
-                            )}
                           </div>
                           {isAdmin && spot && (
                             <button
@@ -1042,11 +887,11 @@ export default function DropMap() {
                     })}
                     
                     {/* Render any additional spots from people who might have been removed from expectedPlayers or placed a spot erroneously */}
-                    {Array.from(new Map(
+                    {Array.from(new Map<string, DropSpot>(
                       dropSpots
                         .filter(s => !expectedPlayers.some((p: string) => normalizeName(p) === normalizeName(s.playerName)))
                         .filter(s => !isAdminName(s.playerName)) // Hide admin
-                        .map(s => [normalizeName(s.playerName), s]) // Deduplicate by normalized name
+                        .map(s => [normalizeName(s.playerName), s] as [string, DropSpot]) // Deduplicate by normalized name
                     ).values()).map(spot => (
                         <div
                           key={spot.id}
@@ -1109,11 +954,6 @@ export default function DropMap() {
                             <span className="ml-1.5 text-[#FCE14B] opacity-60">(You)</span>
                           )}
                         </div>
-                        {spot.heatNumber && (
-                          <div className="text-[8px] font-mono text-white/20 uppercase">
-                            Heat {spot.heatNumber}
-                          </div>
-                        )}
                       </div>
                     </div>
                   ))
@@ -1127,9 +967,8 @@ export default function DropMap() {
             <div className="flex items-start gap-2">
               <Info size={12} className="text-white/20 mt-0.5 flex-shrink-0" />
               <p className="text-[8px] font-mono text-white/15 leading-relaxed">
-                Only players qualified for Mobile Series Heats can place drop spots. 
-                Each player gets one spot per region. The communal map updates in real-time 
-                for all viewers.
+                Epic’s seeded players and the LCQ top 12 can mark their drops.
+                LCQ drops move to the assigned group when the roster is updated.
               </p>
             </div>
           </div>

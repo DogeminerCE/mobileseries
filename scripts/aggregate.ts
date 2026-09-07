@@ -282,7 +282,7 @@ const DEFAULT_PRIZE_TABLE = [
 type EventCategory = 'series' | 'blitz' | 'testcup' | 'reload' | 'heats' | 'qualifier' | 'victorycup';
 
 function calculatePrize(rank: number, region: string, category: EventCategory = 'series'): number {
-  const categoryTables: Record<EventCategory, Record<string, Array<{ rank: number, prize: number }>>> = {
+  const categoryTables: Partial<Record<EventCategory, Record<string, Array<{ rank: number, prize: number }>>>> = {
     series: SERIES_PRIZE_TABLES,
     blitz: BLITZ_PRIZE_TABLES,
     testcup: TESTCUP_PRIZE_TABLES,

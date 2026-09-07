@@ -1,0 +1,930 @@
+{
+  "source": "https://www.fortnite.com/competitive/mobile-series-groups-seeding",
+  "updatedAt": "2026-09-07",
+  "regions": {
+    "ASIA": {
+      "groups": {
+        "1": [
+          {
+            "player": "Slursxz"
+          },
+          {
+            "player": "gents あくりあハンバーガー"
+          },
+          {
+            "player": "軍神 心湊 一希"
+          },
+          {
+            "player": "hardman."
+          },
+          {
+            "player": "MalinaCR7 εïз"
+          },
+          {
+            "player": "we_hit_arsenic"
+          },
+          {
+            "player": "不组队就赢不了的猴子们"
+          },
+          {
+            "player": "不组队就赢不了的猴子们"
+          },
+          {
+            "player": "KorvaxNC"
+          },
+          {
+            "player": "7VEN Parcafn ﾒ"
+          }
+        ],
+        "2": [
+          {
+            "player": "MTB Hashim"
+          },
+          {
+            "player": "ラーメンkopis-新宿駅前店"
+          },
+          {
+            "player": "kiched"
+          },
+          {
+            "player": "mtrx dogeee"
+          },
+          {
+            "player": "vediana 19ǃ"
+          },
+          {
+            "player": "Law Mohanad"
+          },
+          {
+            "player": "weetbix.frz"
+          },
+          {
+            "player": "cr67 EliBoi"
+          },
+          {
+            "player": "апаңа айтпа"
+          },
+          {
+            "player": "mtrx rises"
+          }
+        ]
+      },
+      "lcq": [
+        {
+          "player": "ARED KING 67",
+          "accountId": "c912ba45d8ef421aa5db12f283eb1377",
+          "rank": 1
+        },
+        {
+          "player": "cr67 kiwix",
+          "accountId": "6c2b85b1958148d8bcb9cc70f9c269dd",
+          "rank": 2
+        },
+        {
+          "player": "RXB Lucka",
+          "accountId": "b212fc63178440d6b664271ce1665f82",
+          "rank": 3
+        },
+        {
+          "player": "不组队就赢不了的猴子",
+          "accountId": "86a10a6afd714f1ca2f13f0c75ff7218",
+          "rank": 4
+        },
+        {
+          "player": "Hawkeyedx",
+          "accountId": "fcf415d085af4d53a4e8d958b2485dc6",
+          "rank": 5
+        },
+        {
+          "player": "User-1614671e65",
+          "accountId": "da547ecd20fd4df08a63fb893897f4cf",
+          "rank": 6
+        },
+        {
+          "player": "king luke99",
+          "accountId": "96a56022f86a41ae9684a918ee3b3491",
+          "rank": 7
+        },
+        {
+          "player": "okt x fnm 2026",
+          "accountId": "67b0f18e0a7a472c8bf57e823ea6b6e6",
+          "rank": 8
+        },
+        {
+          "player": "שًٍَِّ今際の際שًٍَِّ",
+          "accountId": "7a19efe1b04c47b19963a30a95276437",
+          "rank": 9
+        },
+        {
+          "player": "不组队就不了的猴子们",
+          "accountId": "2b7e97ed6df44fb0a53d19d9fc90af69",
+          "rank": 10
+        },
+        {
+          "player": "世界で最も偉大な",
+          "accountId": "35639d7205af4aa79196e8452ecf4857",
+          "rank": 11
+        },
+        {
+          "player": "Zehnitsu",
+          "accountId": "464e4c45655f4181a365c89092bd1819",
+          "rank": 12
+        }
+      ],
+      "lcqWindow": "S42_MobileSeriesLCQ_Round2_ASIA",
+      "lcqEndTime": "2026-09-06T09:15:00Z"
+    },
+    "BRAZIL": {
+      "groups": {
+        "1": [
+          {
+            "player": "Last Chancewan67"
+          },
+          {
+            "player": "mtrx rises"
+          },
+          {
+            "player": "FnX IAmNoob."
+          },
+          {
+            "player": "King Cr1ngeψ"
+          },
+          {
+            "player": "vediana 19ǃ"
+          },
+          {
+            "player": "不组队就赢不了的猴子们"
+          },
+          {
+            "player": "twitter alexiifn"
+          },
+          {
+            "player": "MTB Keyxity."
+          },
+          {
+            "player": "ナイト大好"
+          },
+          {
+            "player": "plahsmify"
+          }
+        ],
+        "2": [
+          {
+            "player": "GepardGOTY 7Çƒ"
+          },
+          {
+            "player": "gﱞhﱞоﱞst"
+          },
+          {
+            "player": "mtrx dogeee"
+          },
+          {
+            "player": "軍神 心湊 一希"
+          },
+          {
+            "player": "we_hit_arsenic"
+          },
+          {
+            "player": "amp x misty"
+          },
+          {
+            "player": "KorvaxNC"
+          },
+          {
+            "player": "만화 애호가"
+          },
+          {
+            "player": "不组队就赢不了的猴子"
+          },
+          {
+            "player": "AlbaXna"
+          }
+        ]
+      },
+      "lcq": [
+        {
+          "player": "King Kong ROOKI",
+          "accountId": "d6b01eaca347491fbd025965bd26e5c2",
+          "rank": 1
+        },
+        {
+          "player": "gents あくりあハンバーガー",
+          "accountId": "852a62b1d38b4072b1c201460f27a9ca",
+          "rank": 2
+        },
+        {
+          "player": "ELPQ brxzo 10ǃ",
+          "accountId": "e4df1595a039421a8d2739529e7698fc",
+          "rank": 3
+        },
+        {
+          "player": "cr67 antz",
+          "accountId": "9d72eee466c641e6bce44dc08e2cc652",
+          "rank": 4
+        },
+        {
+          "player": "来自未来的神秘复仇者",
+          "accountId": "4251c4647d074ed5ac430a88d7fa5a87",
+          "rank": 5
+        },
+        {
+          "player": "RXB Lucka",
+          "accountId": "b212fc63178440d6b664271ce1665f82",
+          "rank": 6
+        },
+        {
+          "player": "LCQ papier",
+          "accountId": "3107bf5dae3a45789f78590592c6e96e",
+          "rank": 7
+        },
+        {
+          "player": "hardman.",
+          "accountId": "22c5ba13831e4693b7aa78c4e8f4b838",
+          "rank": 8
+        },
+        {
+          "player": "cr67 Default",
+          "accountId": "035fd4194b634bd194baab1e68a56362",
+          "rank": 9
+        },
+        {
+          "player": "GingaSweats",
+          "accountId": "1e6cda5264424886be39ddb6fd81ff17",
+          "rank": 10
+        },
+        {
+          "player": "LastChanceLukey",
+          "accountId": "71ae40a28a784b2b896ee334f6d794c5",
+          "rank": 11
+        },
+        {
+          "player": "Zehnitsu",
+          "accountId": "464e4c45655f4181a365c89092bd1819",
+          "rank": 12
+        }
+      ],
+      "lcqWindow": "S42_MobileSeriesLCQ_Round2_BR",
+      "lcqEndTime": "2026-09-06T21:15:00Z"
+    },
+    "EUROPE": {
+      "groups": {
+        "1": [
+          {
+            "player": "Ololo Zinedine"
+          },
+          {
+            "player": "FnX IAmNoob."
+          },
+          {
+            "player": "GepardGOTY 7Çƒ"
+          },
+          {
+            "player": "軍神 心湊 一希"
+          },
+          {
+            "player": "Ololo Losty"
+          },
+          {
+            "player": "Law Mohanad"
+          },
+          {
+            "player": "Last Chancewan67"
+          },
+          {
+            "player": "mtrx dogeee"
+          },
+          {
+            "player": "Gardo 8."
+          },
+          {
+            "player": "KorvaxNC"
+          }
+        ],
+        "2": [
+          {
+            "player": "De_Tibbe"
+          },
+          {
+            "player": "mtrx rises"
+          },
+          {
+            "player": "7VEN Parcafn ﾒ"
+          },
+          {
+            "player": "ювзыиссосчоппед"
+          },
+          {
+            "player": "不组队就赢不了的猴子们"
+          },
+          {
+            "player": "MalinaCR7 ÎµÃ¯Ð·"
+          },
+          {
+            "player": "King Kong ROOKI"
+          },
+          {
+            "player": "今しかないǃSHTER23."
+          },
+          {
+            "player": "amp x misty"
+          },
+          {
+            "player": "vediana 19ǃ"
+          }
+        ]
+      },
+      "lcq": [
+        {
+          "player": "all rise for jo",
+          "accountId": "2cf65a55fe5f4654b84d82df389370c9",
+          "rank": 1
+        },
+        {
+          "player": "twitter alexiifn",
+          "accountId": "4ea1bcc90a0a48f78d65594f9a871434",
+          "rank": 2
+        },
+        {
+          "player": "LastChanceLukey",
+          "accountId": "71ae40a28a784b2b896ee334f6d794c5",
+          "rank": 3
+        },
+        {
+          "player": "瑞典式全怒瞄准六七",
+          "accountId": "06eea06c0dcb4aadb077ad133cdaf14a",
+          "rank": 4
+        },
+        {
+          "player": "LCQ papier",
+          "accountId": "3107bf5dae3a45789f78590592c6e96e",
+          "rank": 5
+        },
+        {
+          "player": "일당백의 용사",
+          "accountId": "aff5878ab327415083b899a8d1b6797d",
+          "rank": 6
+        },
+        {
+          "player": "Juvzy",
+          "accountId": "b0daa7bcc50e4f61943c16fd7a3a1db5",
+          "rank": 7
+        },
+        {
+          "player": "hardman.",
+          "accountId": "22c5ba13831e4693b7aa78c4e8f4b838",
+          "rank": 8
+        },
+        {
+          "player": "okt x fnm 2026",
+          "accountId": "67b0f18e0a7a472c8bf57e823ea6b6e6",
+          "rank": 9
+        },
+        {
+          "player": "Zehnitsu",
+          "accountId": "464e4c45655f4181a365c89092bd1819",
+          "rank": 10
+        },
+        {
+          "player": "cr67 antz",
+          "accountId": "9d72eee466c641e6bce44dc08e2cc652",
+          "rank": 11
+        },
+        {
+          "player": "Ripiano_farinoso",
+          "accountId": "060d60d264ca4739878683ac2a80d81f",
+          "rank": 12
+        }
+      ],
+      "lcqWindow": "S42_MobileSeriesLCQ_Round2_EU",
+      "lcqEndTime": "2026-09-06T17:15:00Z"
+    },
+    "MIDDLE EAST": {
+      "groups": {
+        "1": [
+          {
+            "player": "GepardGOTY 7Çƒ"
+          },
+          {
+            "player": "今しかないǃSHTER23."
+          },
+          {
+            "player": "SWT Samux7"
+          },
+          {
+            "player": "senser 8"
+          },
+          {
+            "player": "MalinaCR7 ÎµÃ¯Ð·"
+          },
+          {
+            "player": "Law Mohanad"
+          },
+          {
+            "player": "ELPQ brxzo 10ǃ"
+          },
+          {
+            "player": "AURA arxidz 7"
+          },
+          {
+            "player": "we_hit_arsenic"
+          },
+          {
+            "player": "amp x misty"
+          }
+        ],
+        "2": [
+          {
+            "player": "FnX IAmNoob."
+          },
+          {
+            "player": "hardman."
+          },
+          {
+            "player": "ラーメンkopis-新宿駅前店"
+          },
+          {
+            "player": "軍神 心湊 一希"
+          },
+          {
+            "player": "mtrx riseѕ"
+          },
+          {
+            "player": "mtrx rises"
+          },
+          {
+            "player": "mtb vladeal"
+          },
+          {
+            "player": "TAKEOVER 13000"
+          },
+          {
+            "player": "LastChanceLukey"
+          },
+          {
+            "player": "不组队就赢不了的猴子们"
+          }
+        ]
+      },
+      "lcq": [
+        {
+          "player": "BIG ADAHO SLAM",
+          "accountId": "a6684a10fca24d0fbb5bbe5ed3324e3b",
+          "rank": 1
+        },
+        {
+          "player": "TikTok AlekFNM.",
+          "accountId": "7ae7ff5c2b144361b495990074c37219",
+          "rank": 2
+        },
+        {
+          "player": "okt x fnm 2026",
+          "accountId": "67b0f18e0a7a472c8bf57e823ea6b6e6",
+          "rank": 3
+        },
+        {
+          "player": "瑞典式全怒瞄准六七",
+          "accountId": "06eea06c0dcb4aadb077ad133cdaf14a",
+          "rank": 4
+        },
+        {
+          "player": "RXB Lucka",
+          "accountId": "b212fc63178440d6b664271ce1665f82",
+          "rank": 5
+        },
+        {
+          "player": "Schmalibuca",
+          "accountId": "ec78504387d34429857bb1addd4026cd",
+          "rank": 6
+        },
+        {
+          "player": "不合作就赢不了的猴子",
+          "accountId": "96f44fffb825483999bb24c19b16c130",
+          "rank": 7
+        },
+        {
+          "player": "GW S1neD",
+          "accountId": "63b5c6f4e7974fde8065270477d4d388",
+          "rank": 8
+        },
+        {
+          "player": "снизу мокренький",
+          "accountId": "b2167b7fc9e6408294fd4c5296a572c5",
+          "rank": 9
+        },
+        {
+          "player": "twitter alexiifn",
+          "accountId": "4ea1bcc90a0a48f78d65594f9a871434",
+          "rank": 10
+        },
+        {
+          "player": "DX Magizz",
+          "accountId": "62462a25fae74334a669dd82228aeeb1",
+          "rank": 11
+        },
+        {
+          "player": "Twtr VestalixFN",
+          "accountId": "d2fa328254b4436ca5e9c9a92578762e",
+          "rank": 12
+        }
+      ],
+      "lcqWindow": "S42_MobileSeriesLCQ_Round2_ME",
+      "lcqEndTime": "2026-09-06T15:15:00Z"
+    },
+    "NA-CENTRAL": {
+      "groups": {
+        "1": [
+          {
+            "player": "alexPilatesxd"
+          },
+          {
+            "player": "mtrx dogeee"
+          },
+          {
+            "player": "hardman."
+          },
+          {
+            "player": "vediana 19Çƒ"
+          },
+          {
+            "player": "軍神 心湊 一希"
+          },
+          {
+            "player": "mtrx rises"
+          },
+          {
+            "player": "King Kong ROOKI"
+          },
+          {
+            "player": "jqicyxz"
+          },
+          {
+            "player": "7VEN Parcafn ﾒ"
+          },
+          {
+            "player": "cr67 EliBoi"
+          }
+        ],
+        "2": [
+          {
+            "player": "FnX IAmNoob."
+          },
+          {
+            "player": "Unrealiana"
+          },
+          {
+            "player": "Hawkeyedx"
+          },
+          {
+            "player": "amp x misty"
+          },
+          {
+            "player": "不组队就赢不了的猴子们"
+          },
+          {
+            "player": "Bxltz7"
+          },
+          {
+            "player": "cr67 Default"
+          },
+          {
+            "player": "GepardGOTY 7ǃ"
+          },
+          {
+            "player": "we_hit_arsenic"
+          },
+          {
+            "player": "Last Chancewan67"
+          }
+        ]
+      },
+      "lcq": [
+        {
+          "player": "Zehnitsu",
+          "accountId": "464e4c45655f4181a365c89092bd1819",
+          "rank": 1
+        },
+        {
+          "player": "RXB zigtra",
+          "accountId": "efd673d0326d4b78bbea434e3fcac6a1",
+          "rank": 2
+        },
+        {
+          "player": "世界で最も偉大な",
+          "accountId": "35639d7205af4aa79196e8452ecf4857",
+          "rank": 3
+        },
+        {
+          "player": "KorvaxNC",
+          "accountId": "0ffe51cc4c7f41fe9a27fab69b03b499",
+          "rank": 4
+        },
+        {
+          "player": "MalinaCR7 εïз",
+          "accountId": "7033bff4e02d4c058adc2daaef7678a5",
+          "rank": 5
+        },
+        {
+          "player": "不组队就不了的猴子们",
+          "accountId": "2b7e97ed6df44fb0a53d19d9fc90af69",
+          "rank": 6
+        },
+        {
+          "player": "Snakko Rage 67",
+          "accountId": "9d5dc416d7c8450eaa494511af0e7b21",
+          "rank": 7
+        },
+        {
+          "player": "gents あくりあハンバーガー",
+          "accountId": "852a62b1d38b4072b1c201460f27a9ca",
+          "rank": 8
+        },
+        {
+          "player": "NoobPlans IPAD",
+          "accountId": "9d636ce3b34644b890b342bca783349a",
+          "rank": 9
+        },
+        {
+          "player": "ARM tellez",
+          "accountId": "785cd613aaa04ff0b20ac7bc59a056c0",
+          "rank": 10
+        },
+        {
+          "player": "SPK Mohanad",
+          "accountId": "ad24e7a45fbe4711ba6e5593bdf85631",
+          "rank": 11
+        },
+        {
+          "player": "ラーメンkopis-新宿駅前店",
+          "accountId": "facede25f8fd4f47be4decb0796abd33",
+          "rank": 12
+        }
+      ],
+      "lcqWindow": "S42_MobileSeriesLCQ_Round2_NAC",
+      "lcqEndTime": "2026-09-06T23:15:00Z"
+    },
+    "NA-WEST": {
+      "groups": {
+        "1": [
+          {
+            "player": "drizzon7"
+          },
+          {
+            "player": "mtrx dogeee"
+          },
+          {
+            "player": "軍神 心湊 一希"
+          },
+          {
+            "player": "most hated koda"
+          },
+          {
+            "player": "vediana 19Çƒ"
+          },
+          {
+            "player": "hardman."
+          },
+          {
+            "player": "不组队就赢不了的猴子"
+          },
+          {
+            "player": "RXB zigtra"
+          },
+          {
+            "player": "世界で最も偉大な"
+          },
+          {
+            "player": "mtrx rises"
+          }
+        ],
+        "2": [
+          {
+            "player": "FnX IAmNoob."
+          },
+          {
+            "player": "MoetyIceman"
+          },
+          {
+            "player": "TikTok.JonFNM"
+          },
+          {
+            "player": "we_hit_arsenic"
+          },
+          {
+            "player": "不组队就赢不了的猴子们"
+          },
+          {
+            "player": "RXB zigtra"
+          },
+          {
+            "player": "Last Chancewan67"
+          },
+          {
+            "player": "amp x misty"
+          },
+          {
+            "player": "cr67 kiwix"
+          },
+          {
+            "player": "twitter alexiifn"
+          }
+        ]
+      },
+      "lcq": [
+        {
+          "player": "LastChanceLukey",
+          "accountId": "71ae40a28a784b2b896ee334f6d794c5",
+          "rank": 1
+        },
+        {
+          "player": "cr67 Default",
+          "accountId": "035fd4194b634bd194baab1e68a56362",
+          "rank": 2
+        },
+        {
+          "player": "jqicyxz",
+          "accountId": "793bb15b67d64e16981de7eee11b4df6",
+          "rank": 3
+        },
+        {
+          "player": "来自未来的神秘复仇者",
+          "accountId": "4251c4647d074ed5ac430a88d7fa5a87",
+          "rank": 4
+        },
+        {
+          "player": "lcq vladeal 67",
+          "accountId": "db7e6ad4ce8c4af68bc24f3217fa67df",
+          "rank": 5
+        },
+        {
+          "player": "gents あくりあハンバーガー",
+          "accountId": "852a62b1d38b4072b1c201460f27a9ca",
+          "rank": 6
+        },
+        {
+          "player": "а1alex",
+          "accountId": "5495d351b1224a88863572be2d261b14",
+          "rank": 7
+        },
+        {
+          "player": "madollarmakerǃ",
+          "accountId": "1f932ffa92a84c5891d9a84ddf0ade10",
+          "rank": 8
+        },
+        {
+          "player": "cr67 antz",
+          "accountId": "9d72eee466c641e6bce44dc08e2cc652",
+          "rank": 9
+        },
+        {
+          "player": "Snakko Rage 67",
+          "accountId": "9d5dc416d7c8450eaa494511af0e7b21",
+          "rank": 10
+        },
+        {
+          "player": "ˢˡʸ Faith ᵀᵀ",
+          "accountId": "a3739171c6774fb6a04eee374015451c",
+          "rank": 11
+        },
+        {
+          "player": "ARM tellez",
+          "accountId": "785cd613aaa04ff0b20ac7bc59a056c0",
+          "rank": 12
+        }
+      ],
+      "lcqWindow": "S42_MobileSeriesLCQ_Round2_NAW",
+      "lcqEndTime": "2026-09-07T01:15:00Z"
+    },
+    "OCEANIA": {
+      "groups": {
+        "1": [
+          {
+            "player": "sobaka pec zayr0"
+          },
+          {
+            "player": "ラーメンkopis-新宿駅前店"
+          },
+          {
+            "player": "mtrx dogeee"
+          },
+          {
+            "player": "mtrx rises"
+          },
+          {
+            "player": "vediana 19ǃ"
+          },
+          {
+            "player": "FnX IAmNoob."
+          },
+          {
+            "player": "gents あくりあハンバーガー"
+          },
+          {
+            "player": "RXB zigtra"
+          },
+          {
+            "player": "cr67 kiwix"
+          },
+          {
+            "player": "MTB Keyxity."
+          }
+        ],
+        "2": [
+          {
+            "player": "mum said bedtime"
+          },
+          {
+            "player": "hardman."
+          },
+          {
+            "player": "軍神 心湊 一希"
+          },
+          {
+            "player": "King Cr1ngeψ"
+          },
+          {
+            "player": "不组队就赢不了的猴子们"
+          },
+          {
+            "player": "hylnd amp"
+          },
+          {
+            "player": "MalinaCR7 εïз"
+          },
+          {
+            "player": "만화 애호가"
+          },
+          {
+            "player": "ARM tellez"
+          },
+          {
+            "player": "7VEN Parcafn ﾒ"
+          }
+        ]
+      },
+      "lcq": [
+        {
+          "player": "king luke99",
+          "accountId": "96a56022f86a41ae9684a918ee3b3491",
+          "rank": 1
+        },
+        {
+          "player": "senser 8",
+          "accountId": "36352e06ef8c48af8d3d3d81f00dba04",
+          "rank": 2
+        },
+        {
+          "player": "世界で最も偉大な",
+          "accountId": "35639d7205af4aa79196e8452ecf4857",
+          "rank": 3
+        },
+        {
+          "player": "AURA arxidz 7",
+          "accountId": "ab9792a25f3c4e0a996243a49582cc0e",
+          "rank": 4
+        },
+        {
+          "player": "ARED KING 67",
+          "accountId": "c912ba45d8ef421aa5db12f283eb1377",
+          "rank": 5
+        },
+        {
+          "player": "the big frz",
+          "accountId": "8c66fe52f9bd40ba8ef091c722603b01",
+          "rank": 6
+        },
+        {
+          "player": "FNX IAmNeegy",
+          "accountId": "f7712494944a4484b513036b29d74dec",
+          "rank": 7
+        },
+        {
+          "player": "GR zenith in blm",
+          "accountId": "3117887e72f64a96b05ea97a49a9e251",
+          "rank": 8
+        },
+        {
+          "player": "fixtiоn",
+          "accountId": "eb3b424ec884431c808b185a685f9d9d",
+          "rank": 9
+        },
+        {
+          "player": "Kооmse",
+          "accountId": "c564f089073d4706a93c2d25e51e1e58",
+          "rank": 10
+        },
+        {
+          "player": "1x copenhagen",
+          "accountId": "c6faaf29ed734f07a350250bf54168c5",
+          "rank": 11
+        },
+        {
+          "player": "we_hit_arsenic",
+          "accountId": "16674f694dd8417a9083c1f6d6ce3ada",
+          "rank": 12
+        }
+      ],
+      "lcqWindow": "S42_MobileSeriesLCQ_Round2_OCE",
+      "lcqEndTime": "2026-09-06T07:15:00Z"
+    }
+  }
+}
