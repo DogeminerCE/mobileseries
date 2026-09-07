@@ -38,10 +38,10 @@ interface DropSpot {
 
 const DROP_MAP_REGIONS = ["EUROPE", "NA-CENTRAL", "NA-WEST", "MIDDLE EAST", "OCEANIA", "ASIA", "BRAZIL"];
 
-// Preserve Unicode identity, including the admin account's U+02BC apostrophe.
+// Compare the Epic display name using the same normalization as player names.
 const normalizeName = normalizePlayerName;
 
-const ADMIN_ACCOUNT = normalizeName('Blitzʼd Babylion');
+const ADMIN_ACCOUNT = normalizeName('Babylion122');
 const isAdminName = (name: string) => normalizeName(name) === ADMIN_ACCOUNT;
 
 // ─── Main Component ─────────────────────────────────────────────────────────────

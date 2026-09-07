@@ -3,7 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function isAdmin() {
       return request.auth != null
-        && request.auth.token.get('epic_display_name', '') == 'Blitzʼd Babylion';
+        && request.auth.token.get('epic_display_name', '').lower() == 'babylion122';
     }
     function canMark(data) {
       return isAdmin() || (

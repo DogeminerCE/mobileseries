@@ -39,30 +39,9 @@ interface Qualification {
   rolledDownFrom: string | null;
 }
 
-interface HeatsSeeding {
-  [heatNum: string]: Array<{
-    rank: number;
-    player: string;
-    countryCode: string;
-    points: number;
-  }>;
-}
-
-interface HeatsMeta {
-  period?: string | null;
-  qualifierLabel?: string | null;
-  regions?: Record<string, {
-    period: string;
-    heatsStartTime: string | null;
-    qualifierLabel: string | null;
-  }>;
-}
-
 interface LeaderboardData {
   players: Player[];
   qualifications?: Record<string, Qualification[]>;
-  heatsSeeding?: Record<string, HeatsSeeding>;
-  heatsMeta?: HeatsMeta;
   lastUpdated?: string;
   source?: string;
 }
@@ -135,9 +114,7 @@ export default function App() {
   const [includeVictoryCup, setIncludeVictoryCup] = useState(false);
 
   const [qualifications, setQualifications] = useState<Record<string, Qualification[]>>({});
-  const [heatsSeeding, setHeatsSeeding] = useState<Record<string, HeatsSeeding>>({});
-  const [heatsMeta, setHeatsMeta] = useState<HeatsMeta | null>(null);
-  const [activeTab, setActiveTab] = useState<'leaderboard' | 'heats' | 'qualifications'>('leaderboard');
+  const [activeTab, setActiveTab] = useState<'leaderboard' | 'qualifications'>('leaderboard');
 
   const totalSeriesEarnings = useMemo(() => {
     let sum = 0;
@@ -166,8 +143,6 @@ export default function App() {
       if (data.players && data.players.length > 0) {
         setPlayers(data.players);
         if (data.qualifications) setQualifications(data.qualifications);
-        if (data.heatsSeeding) setHeatsSeeding(data.heatsSeeding);
-        if (data.heatsMeta) setHeatsMeta(data.heatsMeta);
         setLastUpdated(new Date(data.lastUpdated || Date.now()).toLocaleTimeString());
         setDataSource(data.source || 'osirion-aggregated');
         setLoading(false);
@@ -425,9 +400,6 @@ export default function App() {
                   <button onClick={() => setActiveTab('leaderboard')} className={`pb-2 font-black italic uppercase tracking-wide text-xs sm:text-sm transition-all border-b-2 ${activeTab === 'leaderboard' ? 'text-[#FCE14B] border-[#FCE14B]' : 'text-white/40 border-transparent hover:text-white'}`}>
                     Leaderboard
                   </button>
-                  <button onClick={() => setActiveTab('heats')} className={`pb-2 font-black italic uppercase tracking-wide text-xs sm:text-sm transition-all border-b-2 ${activeTab === 'heats' ? 'text-[#FCE14B] border-[#FCE14B]' : 'text-white/40 border-transparent hover:text-white'}`}>
-                    Heats Archive
-                  </button>
                   <button onClick={() => setActiveTab('qualifications')} className={`pb-2 font-black italic uppercase tracking-wide text-xs sm:text-sm transition-all border-b-2 ${activeTab === 'qualifications' ? 'text-[#FCE14B] border-[#FCE14B]' : 'text-white/40 border-transparent hover:text-white'}`}>
                     Group Stage
                   </button>
@@ -641,69 +613,6 @@ export default function App() {
                   </div>
                 </div>
                 </>
-                ) : activeTab === 'heats' ? (
-                  (() => {
-                    const heatsRegion = selectedRegion === 'GLOBAL' ? 'EUROPE' : selectedRegion;
-                    const regionHeats = heatsSeeding[heatsRegion] || {};
-                    const regionMeta = heatsMeta?.regions?.[heatsRegion];
-                    const period = regionMeta?.period || heatsMeta?.period;
-                    const qualifierLabel = regionMeta?.qualifierLabel || heatsMeta?.qualifierLabel;
-                    const hasSeeding = [1, 2, 3, 4].some(n => (regionHeats[n] || []).length > 0);
-
-                    return (
-                      <div className="border border-white/10 bg-[#141416]/50">
-                        <div className="p-5 border-b border-white/5">
-                          <div className="flex items-center gap-3 mb-1">
-                            <Trophy size={18} className="text-[#FCE14B]" />
-                            <h3 className="text-lg font-black italic uppercase tracking-tighter text-[#FCE14B]">
-                              {period ? `${period} Heats Seeding` : 'Heats Seeding'}
-                            </h3>
-                          </div>
-                          <p className="text-[10px] uppercase tracking-widest font-mono opacity-30 mt-1">
-                            Snake-draft seeding for the top 64 players into 4 Heats based on cumulative points.
-                            {qualifierLabel ? ` Top 4 of each Heat advance to ${qualifierLabel}.` : ''}
-                          </p>
-                        </div>
-                        {hasSeeding ? (
-                          <div className="p-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                            {[1, 2, 3, 4].map(heatNum => {
-                              const heatPlayers = regionHeats[heatNum] || [];
-                              return (
-                                <div key={heatNum} className="border border-white/10 bg-[#0A0A0B]">
-                                  <div className="bg-white/5 py-2 text-center text-xs font-black uppercase italic tracking-widest border-b border-white/10 text-[#FCE14B]">
-                                    Heat {heatNum}
-                                  </div>
-                                  <div className="p-2 space-y-1">
-                                    {heatPlayers.length > 0 ? heatPlayers.map(hp => (
-                                      <div key={hp.player} className="flex items-center justify-between px-2 py-1.5 bg-[#141416] hover:bg-white/5 text-xs font-mono border-b border-white/5 last:border-0">
-                                        <div className="flex items-center gap-2 overflow-hidden">
-                                          <span className="text-[9px] text-[#FCE14B] opacity-80 min-w-[14px]">#{hp.rank}</span>
-                                          <img
-                                            src={`https://flagcdn.com/w20/${hp.countryCode.toLowerCase()}.png`}
-                                            alt={hp.countryCode}
-                                            className="w-3 h-auto opacity-80"
-                                            referrerPolicy="no-referrer"
-                                            onError={(e) => (e.currentTarget.style.display = 'none')}
-                                          />
-                                          <span className="truncate uppercase font-bold italic">{hp.player}</span>
-                                        </div>
-                                      </div>
-                                    )) : (
-                                      <div className="py-4 text-center text-white/20 text-[9px] italic uppercase">Pending</div>
-                                    )}
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        ) : (
-                          <div className="p-10 text-center text-white/50 font-black italic uppercase tracking-widest">
-                            Come back next month after Round Stage to see who qualified!
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })()
                 ) : (
                 <GroupStageRoster region={selectedRegion === 'GLOBAL' ? 'EUROPE' : selectedRegion} />
                 )}
@@ -727,8 +636,8 @@ export default function App() {
                     <div className="relative w-full overflow-hidden border-2 border-black" style={{ paddingBottom: '56.25%' }}>
                       <iframe
                         className="absolute inset-0 w-full h-full"
-                        src="https://www.youtube.com/embed/7v2mUcH7n3M"
-                        title="Latest Video"
+                        src="https://www.youtube.com/embed/kofDex7CsGk"
+                        title="I Tried GeForce NOW in 2026.. (Fortnite Mobile)"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                       />
@@ -751,33 +660,6 @@ export default function App() {
                   </div>
                 </div>
                 
-                <div className="border border-white/10 p-5 bg-[#141416]/50">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Smartphone size={16} className="text-[#FCE14B]" />
-                    <h3 className="text-xs font-black italic uppercase tracking-tighter text-[#FCE14B]">Mobile Creators</h3>
-                  </div>
-                  <p className="text-[9px] uppercase tracking-widest font-mono opacity-30 mb-4">
-                    Download creator assets
-                  </p>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[1, 2, 3, 4, 5, 6].map(i => (
-                      <a
-                        key={i}
-                        href={`/creator-assets/Icon${i}.png`}
-                        download={`Icon${i}.png`}
-                        className="aspect-square bg-[#0f0f11] border border-white/10 flex items-center justify-center hover:border-[#FCE14B]/30 transition-colors cursor-pointer group overflow-hidden"
-                        title={`Download Icon ${i}`}
-                      >
-                        <img 
-                          src={`/creator-assets/Icon${i}.png`} 
-                          alt={`Creator Asset ${i}`}
-                          className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
-                        />
-                      </a>
-                    ))}
-                  </div>
-                </div>
-
                 <p className="text-xs text-white/40">Leaderboard updated {lastUpdated || '—'}</p>
 
                 <div className="mt-6 border-t border-white/5 pt-6 hidden md:block">
