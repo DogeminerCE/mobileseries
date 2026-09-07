@@ -1,6 +1,12 @@
-// Confirmed rename supplied by the site owner. Keep the old name for matching
-// historical drops and Epic's published seeding, which may still use it.
+// Confirmed renames supplied by the site owner. Keep old names for matching
+// historical drops and Epic's published seeding, which may still use them.
 export function currentPlayerName(name: string): string {
   if (!name) return '';
-  return name.trim().toLowerCase() === 'mtrx dogeee' ? '不组队就赢了不的猴子们' : name;
+  const lower = name.trim().toLowerCase();
+  if (lower === 'mtrx dogeee') return '不组队就赢了不的猴子们';
+  if (lower === 'amp x misty' || lower === 'hylnd amp') return 'hylnd amp';
+  if (lower === 'law mohanad' || lower === 'spk mohanad') return 'spk mohanad';
+  const v = lower.replaceAll('çƒ', 'ǃ').replaceAll('!', 'ǃ');
+  if (v === 'vediana 19ǃ' || lower === 'hylnd sc vediana') return 'HYLND SC VEDIANA';
+  return name;
 }

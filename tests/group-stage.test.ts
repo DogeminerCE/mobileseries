@@ -88,3 +88,32 @@ test('confirmed dogeee rename preserves groups and historical drops without matc
   const historical = {...spot(old), region: 'EUROPE'};
   assert.equal(destinationSession(historical), 'Group Stage 1');
 });
+
+test('confirmed renames for amp, vediana, and mohanad preserve groups and drops', () => {
+  // amp x misty -> hylnd amp
+  assert.equal(normalizePlayerName('amp x misty'), normalizePlayerName('hylnd amp'));
+  for (const region of Object.keys(groupRoster.regions)) {
+    assert.deepEqual(playerSessions(region, 'hylnd amp'), playerSessions(region, 'amp x misty'));
+  }
+  assert.equal(sessionPlayers('EUROPE', 'Group Stage 2').some(p => p.player === 'amp x misty'), false);
+  assert.equal(sessionPlayers('EUROPE', 'Group Stage 2').some(p => p.player === 'hylnd amp'), true);
+
+  // vediana 19! -> HYLND SC VEDIANA
+  assert.equal(normalizePlayerName('vediana 19!'), normalizePlayerName('HYLND SC VEDIANA'));
+  assert.equal(normalizePlayerName('vediana 19ǃ'), normalizePlayerName('HYLND SC VEDIANA'));
+  for (const region of Object.keys(groupRoster.regions)) {
+    assert.deepEqual(playerSessions(region, 'HYLND SC VEDIANA'), playerSessions(region, 'vediana 19!'));
+    assert.deepEqual(playerSessions(region, 'HYLND SC VEDIANA'), playerSessions(region, 'vediana 19ǃ'));
+  }
+  assert.equal(sessionPlayers('EUROPE', 'Group Stage 2').some(p => p.player.includes('vediana 19')), false);
+  assert.equal(sessionPlayers('EUROPE', 'Group Stage 2').some(p => p.player === 'HYLND SC VEDIANA'), true);
+
+  // Law Mohanad -> spk mohanad
+  assert.equal(normalizePlayerName('Law Mohanad'), normalizePlayerName('spk mohanad'));
+  assert.equal(normalizePlayerName('SPK Mohanad'), normalizePlayerName('spk mohanad'));
+  for (const region of Object.keys(groupRoster.regions)) {
+    assert.deepEqual(playerSessions(region, 'spk mohanad'), playerSessions(region, 'Law Mohanad'));
+  }
+  assert.equal(sessionPlayers('EUROPE', 'Group Stage 1').some(p => p.player === 'Law Mohanad'), false);
+  assert.equal(sessionPlayers('EUROPE', 'Group Stage 1').some(p => p.player === 'spk mohanad'), true);
+});
