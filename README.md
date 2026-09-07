@@ -24,6 +24,6 @@ Deploy the website and `api/epic-auth.ts` together through the existing Vercel d
 npx firebase-tools deploy --only firestore:rules --project mobileseriesxyz
 ```
 
-The rules use the `group_maps` claim issued by the updated sign-in endpoint. Deploying them before that endpoint would prevent existing users from placing marks. Players signed in before this release, or before a later group reassignment, should sign out and back in to refresh access. The rules were successfully compiled with Firebase's deployment dry run; they have not yet been released.
+The rules use the `group_maps` claim issued by the updated sign-in endpoint. Deploying them before that endpoint would prevent existing users from placing marks. Players signed in before this release, or before a later group reassignment, should sign out and back in to refresh access. The website, updated sign-in endpoint, and Firebase rules were released on September 7, 2026. The live endpoint passed its request-validation check after correcting Node ESM imports.
 
 The countdown ends at the end of October 25, 2026 in UTC (`2026-10-26T00:00:00Z`). This treats the supplied end date as inclusive; adjust `SERIES_END` when an exact final-match time is available.
