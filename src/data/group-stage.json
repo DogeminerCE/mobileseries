@@ -940,24 +940,24 @@
             "accountId": "71ae40a28a784b2b896ee334f6d794c5"
           },
           {
-            "player": "来自未来的神秘复仇者",
-            "accountId": "4251c4647d074ed5ac430a88d7fa5a87"
-          },
-          {
             "player": "ヴラディールは死そのものだ",
             "accountId": "db7e6ad4ce8c4af68bc24f3217fa67df"
           },
           {
-            "player": "MadolFN",
-            "accountId": "1f932ffa92a84c5891d9a84ddf0ade10"
+            "player": "gents あくりあハンバーガー",
+            "accountId": "852a62b1d38b4072b1c201460f27a9ca"
           },
           {
             "player": "cr67 antz",
             "accountId": "9d72eee466c641e6bce44dc08e2cc652"
           },
           {
-            "player": "不組隊就贏不了的猴子",
-            "accountId": "785cd613aaa04ff0b20ac7bc59a056c0"
+            "player": "Snakko Rage 67",
+            "accountId": "9d5dc416d7c8450eaa494511af0e7b21"
+          },
+          {
+            "player": "KorvaxNC",
+            "accountId": "0ffe51cc4c7f41fe9a27fab69b03b499"
           }
         ],
         "2": [
@@ -996,24 +996,24 @@
             "accountId": "035fd4194b634bd194baab1e68a56362"
           },
           {
-            "player": "jqicyxz",
-            "accountId": "793bb15b67d64e16981de7eee11b4df6"
-          },
-          {
-            "player": "gents あくりあハンバーガー",
-            "accountId": "852a62b1d38b4072b1c201460f27a9ca"
+            "player": "来自未来的神秘复仇者",
+            "accountId": "4251c4647d074ed5ac430a88d7fa5a87"
           },
           {
             "player": "а1alex",
             "accountId": "5495d351b1224a88863572be2d261b14"
           },
           {
-            "player": "Snakko Rage 67",
-            "accountId": "9d5dc416d7c8450eaa494511af0e7b21"
+            "player": "MadolFN",
+            "accountId": "1f932ffa92a84c5891d9a84ddf0ade10"
           },
           {
             "player": "ˢˡʸ Faith ᵀᵀ",
             "accountId": "a3739171c6774fb6a04eee374015451c"
+          },
+          {
+            "player": "不組隊就贏不了的猴子",
+            "accountId": "785cd613aaa04ff0b20ac7bc59a056c0"
           }
         ]
       },
@@ -1029,53 +1029,53 @@
           "rank": 2
         },
         {
-          "player": "jqicyxz",
-          "accountId": "793bb15b67d64e16981de7eee11b4df6",
-          "rank": 3
-        },
-        {
           "player": "来自未来的神秘复仇者",
           "accountId": "4251c4647d074ed5ac430a88d7fa5a87",
-          "rank": 4
+          "rank": 3
         },
         {
           "player": "ヴラディールは死そのものだ",
           "accountId": "db7e6ad4ce8c4af68bc24f3217fa67df",
-          "rank": 5
+          "rank": 4
         },
         {
           "player": "gents あくりあハンバーガー",
           "accountId": "852a62b1d38b4072b1c201460f27a9ca",
-          "rank": 6
+          "rank": 5
         },
         {
           "player": "а1alex",
           "accountId": "5495d351b1224a88863572be2d261b14",
-          "rank": 7
+          "rank": 6
         },
         {
           "player": "MadolFN",
           "accountId": "1f932ffa92a84c5891d9a84ddf0ade10",
-          "rank": 8
+          "rank": 7
         },
         {
           "player": "cr67 antz",
           "accountId": "9d72eee466c641e6bce44dc08e2cc652",
-          "rank": 9
+          "rank": 8
         },
         {
           "player": "Snakko Rage 67",
           "accountId": "9d5dc416d7c8450eaa494511af0e7b21",
-          "rank": 10
+          "rank": 9
         },
         {
           "player": "ˢˡʸ Faith ᵀᵀ",
           "accountId": "a3739171c6774fb6a04eee374015451c",
-          "rank": 11
+          "rank": 10
         },
         {
           "player": "不組隊就贏不了的猴子",
           "accountId": "785cd613aaa04ff0b20ac7bc59a056c0",
+          "rank": 11
+        },
+        {
+          "player": "KorvaxNC",
+          "accountId": "0ffe51cc4c7f41fe9a27fab69b03b499",
           "rank": 12
         }
       ],
